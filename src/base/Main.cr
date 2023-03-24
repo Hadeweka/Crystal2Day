@@ -20,6 +20,12 @@ module Crystal2Day
     end
   end
 
+  def self.run(debug : Bool = false)
+    Crystal2Day.init(debug: debug)
+    yield
+    Crystal2Day.quit
+  end
+
   def self.run(scene : Crystal2Day::Scene, debug : Bool = false)
     Crystal2Day.init(debug: debug)
     Crystal2Day.scene = scene

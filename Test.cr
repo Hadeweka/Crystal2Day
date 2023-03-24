@@ -26,4 +26,7 @@ class CustomScene < C2D::Scene
   end
 end
 
-C2D.run(CustomScene.new)
+C2D.run do
+  C2D.next_scene = CustomScene.new
+  C2D.main_routine
+end
