@@ -26,13 +26,6 @@ module Crystal2Day
     Crystal2Day.quit
   end
 
-  def self.run(scene : Crystal2Day::Scene, debug : Bool = false)
-    Crystal2Day.init(debug: debug)
-    Crystal2Day.scene = scene
-    Crystal2Day.main_routine
-    Crystal2Day.quit
-  end
-
   def self.main_routine
     @@limiter = Crystal2Day::Limiter.new
 

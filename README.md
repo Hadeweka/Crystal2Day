@@ -59,7 +59,7 @@ class MyOwnScene < Crystal2Day::Scene
 end
 
 Crystal2Day.run do
-  Crystal2Day.next_scene = MyOwnScene.new
+  Crystal2Day.scene = MyOwnScene.new
   Crystal2Day.main_routine
 end
 ```
