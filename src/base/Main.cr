@@ -5,6 +5,7 @@ module Crystal2Day
   class_property next_scene : Crystal2Day::Scene | Bool | Nil
   class_property limiter : Crystal2Day::Limiter?
   class_getter windows : Array(Crystal2Day::Window) = [] of Crystal2Day::Window
+  class_property clean_windows_on_scene_exit : Bool = true
 
   @@current_window : Crystal2Day::Window?
 
@@ -39,7 +40,7 @@ module Crystal2Day
 
       if !@@next_scene
         if current_scene = @@scene
-          Crystal2Day.call_scene_routine(current_scene, :exit)
+          Crystal2Day.call_scene_routine(current_scene, :exit_routine)
         else
           Crystal2Day.error "Could not exit empty scene properly"
         end
@@ -47,13 +48,13 @@ module Crystal2Day
         @@scene = nil
       elsif @@next_scene != true
         if current_scene = @@scene
-          Crystal2Day.call_scene_routine(current_scene, :exit)
+          Crystal2Day.call_scene_routine(current_scene, :exit_routine)
         else
           Crystal2Day.error "Could not exit empty scene properly"
         end
 
         @@scene = @@next_scene.as?(Crystal2Day::Scene).not_nil!
-        @@next_scene = nil
+        @@next_scene = true
         Crystal2Day.call_scene_routine(@@scene, :init)
       end
     end

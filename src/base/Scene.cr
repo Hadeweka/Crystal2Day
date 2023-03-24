@@ -36,6 +36,12 @@ module Crystal2Day
       end
     end
 
+    def exit_routine
+      C2D.windows.each do |window|
+        window.unpin_all
+      end
+    end
+
     def call_inner_draw_block
       # TODO: Draw entities here
     end
