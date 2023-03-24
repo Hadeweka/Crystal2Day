@@ -1,0 +1,20 @@
+require "sdl-crystal-bindings"
+require "sdl-crystal-bindings/sdl-mixer-bindings"
+require "sdl-crystal-bindings/sdl-image-bindings"
+require "sdl-crystal-bindings/sdl-ttf-bindings"
+
+require "./base/Coords.cr"
+require "./base/Helper.cr"
+require "./base/Limiter.cr"
+require "./base/Main.cr"
+require "./base/Scene.cr"
+
+require "./input/Event.cr"
+require "./input/Keyboard.cr"
+require "./input/Mouse.cr"
+
+require "./graphics/Drawable.cr"
+require "./graphics/Renderer.cr"
+require "./graphics/RenderQueue.cr"
+require "./graphics/View.cr"
+require "./graphics/Window.cr"

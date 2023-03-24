@@ -1,0 +1,14 @@
+name: Crystal2Day
+version: 0.0.1
+
+authors:
+  - Hadeweka
+
+dependencies:
+  sdl-crystal-bindings:
+    github: Hadeweka/SDL-Crystal-Bindings
+    branch: main
+
+license: MIT
+
+crystal: '>= 1.6.0'

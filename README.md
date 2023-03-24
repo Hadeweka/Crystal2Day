@@ -1,2 +1,14 @@
 # Crystal2Day
-Simple 2D game framework in Crystal
+
+Crystal2Day is planned to be a 2D game framework in Crystal.
+
+## Features
+
+* Based on SDL
+* Simple framework to immediately start working
+
+## Roadmap
+
+### Version 0.0.1
+
+* [ ] Working example
