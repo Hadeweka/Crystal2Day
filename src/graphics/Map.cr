@@ -2,7 +2,7 @@ module Crystal2Day
   alias TileID = UInt32
 
   class Map < Crystal2Day::Drawable
-    @tiles : Array(Array(TileID))
+    #@tiles : Array(Array(TileID))
     @width : UInt32
     @height : UInt32
 
