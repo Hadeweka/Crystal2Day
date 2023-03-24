@@ -8,12 +8,14 @@ module Crystal2Day
 
   @@current_window : Crystal2Day::Window?
 
+  @@debug : Bool = false
+
   macro call_scene_routine(scene, name)
     %scene_temp = {{scene}}
     if %scene_temp.is_a?(Crystal2Day::Scene)
       %scene_temp.{{name.id}}
     else
-      puts "WARNING: Scene variable {{scene}} is set to #{%scene_temp}"
+      puts "WARNING: Scene variable {{scene}} is set to #{%scene_temp.inspect}"
     end
   end
 
@@ -69,7 +71,7 @@ module Crystal2Day
     end
   end
 
-  def self.init
+  def self.init(debug : Bool = false)
     if LibSDL.init(LibSDL::INIT_EVERYTHING) != 0
       Crystal2Day.error "Could not initialize SDL"
     end
@@ -90,6 +92,8 @@ module Crystal2Day
     if LibSDL.mix_open_audio(44100, LibSDL::MIX_DEFAULT_FORMAT, 2, 2048) < 0
       Crystal2Day.error "Could not initialize SDL_mixer"
     end
+
+    @@debug = true if debug
   end
 
   def self.current_window
