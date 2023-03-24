@@ -1,4 +1,4 @@
-module SDC
+module Crystal2Day
   class Coords
     getter data : LibSDL::FPoint
     
@@ -26,7 +26,7 @@ module SDC
       Crystal2Day::Coords.new(self.x + other.x, self.y + other.y)
     end
 
-    def -(other : SDC::Coords)
+    def -(other : Crystal2Day::Coords)
       Crystal2Day::Coords.new(self.x - other.x, self.y - other.y)
     end
 

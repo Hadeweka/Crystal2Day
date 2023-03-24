@@ -25,5 +25,19 @@ module Crystal2Day
 
     def exit
     end
+
+    def main_draw
+      if @use_own_draw_implementation
+        call_inner_draw_block
+      elsif win = Crystal2Day.current_window
+        win.clear
+        call_inner_draw_block
+        win.render_and_display
+      end
+    end
+
+    def call_inner_draw_block
+      # TODO: Draw entities here
+    end
   end
 end
