@@ -58,10 +58,7 @@ class MyOwnScene < Crystal2Day::Scene
   end
 end
 
-Crystal2Day.init
-Crystal2Day.scene = MyOwnScene.new
-Crystal2Day.main_routine
-Crystal2Day.quit
+Crystal2Day.run(CustomScene.new)
 ```
 
 # Roadmap

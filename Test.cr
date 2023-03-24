@@ -26,7 +26,4 @@ class CustomScene < C2D::Scene
   end
 end
 
-C2D.init(debug: true)
-C2D.scene = CustomScene.new
-C2D.main_routine
-C2D.quit
+C2D.run(CustomScene.new)
