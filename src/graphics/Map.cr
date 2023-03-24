@@ -3,8 +3,8 @@ module Crystal2Day
 
   class Map < Crystal2Day::Drawable
     #@tiles : Array(Array(TileID))
-    @width : UInt32
-    @height : UInt32
+    #@width : UInt32
+    #@height : UInt32
 
     # TODO: Add shiftable vertex grid
     # TODO: Add content
