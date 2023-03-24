@@ -40,7 +40,7 @@ To get started, here is a simple example, which will simply open an empty window
 require "Crystal2Day.cr"
 
 class MyOwnScene < Crystal2Day::Scene
-  @window : Crystal2Day::Window = Crystal2Day::Window.new(title: "Hello World", w: 800, h: 600)
+  @window = Crystal2Day::Window.new(title: "Hello World", w: 800, h: 600)
 
   def handle_event(event)
     if event.type == Crystal2Day::Event::WINDOW

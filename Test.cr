@@ -3,7 +3,7 @@ require "./src/Crystal2Day.cr"
 alias C2D = Crystal2Day
 
 class CustomScene < C2D::Scene
-  @window : C2D::Window = C2D::Window.new(title: "Hello", w: 800, h: 600)
+  @window = C2D::Window.new(title: "Hello", w: 800, h: 600)
 
   def initialize
     super()
