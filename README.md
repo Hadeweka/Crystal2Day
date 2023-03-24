@@ -13,6 +13,7 @@ Mostly, it serves as a layer above lower-level game libraries like SDL, without
 having to worry about common implementation details.
 
 Currently this project is in an early state, but will be expanded over time.
+Note that its syntax may change (frequently) until version 1.0.0.
 
 # Features
 
@@ -40,7 +41,9 @@ To get started, here is a simple example, which will simply open an empty window
 require "Crystal2Day.cr"
 
 class MyOwnScene < Crystal2Day::Scene
-  @window = Crystal2Day::Window.new(title: "Hello World", w: 800, h: 600)
+  def init
+    Crystal2Day::Window.new(title: "Hello World", w: 800, h: 600)
+  end
 
   def handle_event(event)
     if event.type == Crystal2Day::Event::WINDOW
@@ -48,6 +51,10 @@ class MyOwnScene < Crystal2Day::Scene
         Crystal2Day.next_scene = nil
       end
     end
+  end
+
+  def exit
+    Crystal2Day.current_window = nil
   end
 end
 

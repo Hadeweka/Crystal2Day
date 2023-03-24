@@ -3,15 +3,14 @@ require "./src/Crystal2Day.cr"
 alias C2D = Crystal2Day
 
 class CustomScene < C2D::Scene
-  @window = C2D::Window.new(title: "Hello", w: 800, h: 600)
-
-  def initialize
-    super()
-    @box = C2D::ShapeBox.new(C2D.xy(200, 200), position: C2D.xy(150, 150))
-    @box.color = C2D::Color.green
-    @box.filled = true
-    @box.z = 10
-    @box.pin
+  def init
+    C2D::Window.new(title: "Hello", w: 800, h: 600)
+    
+    box = C2D::ShapeBox.new(C2D.xy(200, 200), position: C2D.xy(150, 150))
+    box.color = C2D::Color.green
+    box.filled = true
+    box.z = 10
+    box.pin
   end
 
   def handle_event(event)
@@ -20,6 +19,10 @@ class CustomScene < C2D::Scene
         C2D.next_scene = nil
       end
     end
+  end
+
+  def exit
+    C2D.current_window = nil
   end
 end
 
