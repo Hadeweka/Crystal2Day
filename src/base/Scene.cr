@@ -2,6 +2,21 @@ module Crystal2Day
   class Scene
     property use_own_draw_implementation : Bool = false
 
+    def handle_event(event)
+    end
+
+    def init
+    end
+
+    def exit
+    end
+
+    def update
+    end
+
+    def draw
+    end
+
     def initialize
     end
 
@@ -11,19 +26,8 @@ module Crystal2Day
       end
     end
 
-    def handle_event(event)
-    end
-
     def main_update
-    end
-
-    def main_draw
-    end
-
-    def init
-    end
-
-    def exit
+      update
     end
 
     def main_draw
@@ -43,6 +47,7 @@ module Crystal2Day
     end
 
     def call_inner_draw_block
+      draw
       # TODO: Draw entities here
     end
   end

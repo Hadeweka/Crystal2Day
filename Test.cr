@@ -2,15 +2,37 @@ require "./src/Crystal2Day.cr"
 
 alias C2D = Crystal2Day
 
+C2D::Window.new(title: "Hello", w: 800, h: 600)
+
 class CustomScene < C2D::Scene
+  @texture = C2D::Texture.new
+  @map = C2D::Map.new
+  @player_cam = C2D::Rect.new(x: 100, y: 100, width: 800, height: 600)
+
   def init
-    C2D::Window.new(title: "Hello", w: 800, h: 600)
+    @texture.load_from_file!("ExampleTileset.png")
+
+    @map.content = C2D::MapContent.new
+    @map.content.not_nil!.generate_test_map(width: 100, height: 100)
+
+    @map.link_texture(@texture)
+    @map.background_tile = 4
     
-    box = C2D::ShapeBox.new(C2D.xy(200, 200), position: C2D.xy(150, 150))
+    box = C2D::ShapeBox.new(C2D.xy(200, 200), position: C2D.xy(550, 350))
     box.color = C2D::Color.green
     box.filled = true
     box.z = 10
     box.pin
+  end
+
+  def update
+    @player_cam.x += 1
+    @player_cam.y += 2
+    @map.reload(@player_cam)
+  end
+
+  def draw
+    @map.draw
   end
 
   def handle_event(event)
@@ -22,6 +44,7 @@ class CustomScene < C2D::Scene
   end
 
   def exit
+    C2D.current_window.close
     C2D.current_window = nil
   end
 end
