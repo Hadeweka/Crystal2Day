@@ -2,8 +2,6 @@ require "./src/Crystal2Day.cr"
 
 alias C2D = Crystal2Day
 
-C2D::Window.new(title: "Hello", w: 800, h: 600)
-
 class CustomScene < C2D::Scene
   @texture = C2D::Texture.new
   @map = C2D::Map.new
@@ -50,6 +48,7 @@ class CustomScene < C2D::Scene
 end
 
 C2D.run do
+  C2D::Window.new(title: "Hello", w: 800, h: 600)
   C2D.scene = CustomScene.new
   C2D.main_routine
 end
