@@ -40,23 +40,26 @@ To get started, here is a simple example, which will simply open an empty window
 ```crystal
 require "Crystal2Day.cr"
 
+# Just create a customized Scene class
 class MyOwnScene < Crystal2Day::Scene
+  # Any events are passed to this method
   def handle_event(event)
     if event.type == Crystal2Day::Event::WINDOW
       if event.as_window_event.event == Crystal2Day::WindowEvent::CLOSE
+        # Signal the program to stop the main loop
         Crystal2Day.next_scene = nil
       end
     end
   end
-
-  def exit
-    Crystal2Day.current_window = nil
-  end
 end
 
+# All setup for the framework is done in this block
 Crystal2Day.run do
+  # If we only have one window, the framework stores a reference to it
   Crystal2Day::Window.new(title: "Hello World", w: 800, h: 600)
+  # Set the next scene
   Crystal2Day.scene = MyOwnScene.new
+  # Start the game
   Crystal2Day.main_routine
 end
 ```
@@ -69,6 +72,19 @@ end
 
 #### Features
 
-* [x] Minimal example
-* [ ] Entities
+* [X] Music and sounds
+* [X] Sprites, fonts, texts and shapes
+* [X] Z-Ordering
+* [X] Scene system
+* [X] Support for multiple windows
+* [X] Framerate limiter
 * [ ] Maps
+* [ ] 2D collision routines
+* [ ] Entities
+
+### Potential future releases
+
+#### Features
+
+* [ ] Tiled support
+* [ ] Minimal mruby scripting
