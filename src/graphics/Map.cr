@@ -45,14 +45,14 @@ module Crystal2Day
       @vertices = Array(LibSDL::Vertex).new(size: view_width * view_height * 6) {LibSDL::Vertex.new}
     end
 
-    def reload(camera : C2D::Rect)
-      view_width = (camera.width / @tile_width).ceil.to_u32 + 1
-      view_height = (camera.height / @tile_height).ceil.to_u32 + 1
+    def reload(drawing_rect : C2D::Rect)
+      view_width = (drawing_rect.width / @tile_width).ceil.to_u32 + 1
+      view_height = (drawing_rect.height / @tile_height).ceil.to_u32 + 1
 
       generate_vertices(view_width, view_height)
 
-      exact_shift_x = camera.x - (view_width - 1) * (@tile_width / 2) - 1
-      exact_shift_y = camera.y - (view_height - 1) * (@tile_height / 2) - 1
+      exact_shift_x = drawing_rect.x - (view_width - 1) * (@tile_width / 2) - 1
+      exact_shift_y = drawing_rect.y - (view_height - 1) * (@tile_height / 2) - 1
 
       n_tiles_x = @texture.width // @tile_width
       n_tiles_y = @texture.height // @tile_height
@@ -78,8 +78,8 @@ module Crystal2Day
             dx = (c == 1 || c == 2 || c == 4) ? 1 : 0
             dy = (c == 2 || c == 4 || c == 5) ? 1 : 0
 
-            vx = ((actual_x + dx) * @tile_width).to_f32 - camera.x + camera.width / 2
-            vy = ((actual_y + dy) * @tile_height).to_f32 - camera.y + camera.height / 2
+            vx = ((actual_x + dx) * @tile_width).to_f32 - drawing_rect.x + drawing_rect.width / 2
+            vy = ((actual_y + dy) * @tile_height).to_f32 - drawing_rect.y + drawing_rect.height / 2
 
             vtx = (tx + dx) / n_tiles_x
             vty = (ty + dy) / n_tiles_y

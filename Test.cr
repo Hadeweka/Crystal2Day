@@ -2,10 +2,13 @@ require "./src/Crystal2Day.cr"
 
 alias C2D = Crystal2Day
 
+WIDTH = 1600
+HEIGHT = 900
+
 class CustomScene < C2D::Scene
   @texture = C2D::Texture.new
   @map = C2D::Map.new
-  @player_cam = C2D::Rect.new(x: 100, y: 100, width: 1600, height: 900)
+  @map_drawing_rect = C2D::Rect.new(x: 100, y: 100, width: WIDTH, height: HEIGHT)
 
   def init
     @texture.load_from_file!("ExampleTileset.png")
@@ -16,7 +19,7 @@ class CustomScene < C2D::Scene
     @map.link_texture(@texture)
     @map.background_tile = 4
     
-    box = C2D::ShapeBox.new(C2D.xy(200, 200), position: C2D.xy(550, 350))
+    box = C2D::ShapeBox.new(C2D.xy(100, 100), position: C2D.xy(WIDTH / 2 - 50, HEIGHT / 2 - 50))
     box.color = C2D::Color.black
     box.filled = true
     box.z = 10
@@ -24,9 +27,12 @@ class CustomScene < C2D::Scene
   end
 
   def update
-    @player_cam.x += 1
-    @player_cam.y += 2
-    @map.reload(@player_cam)
+    @map_drawing_rect.y -= 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_W)
+    @map_drawing_rect.y += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_S)
+    @map_drawing_rect.x -= 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_A)
+    @map_drawing_rect.x += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_D)
+
+    @map.reload(@map_drawing_rect)
   end
 
   def draw
@@ -48,7 +54,7 @@ class CustomScene < C2D::Scene
 end
 
 C2D.run do
-  C2D::Window.new(title: "Hello", w: 1600, h: 900)
+  C2D::Window.new(title: "Hello", w: WIDTH, h: HEIGHT)
   C2D.scene = CustomScene.new
   C2D.main_routine
 end
