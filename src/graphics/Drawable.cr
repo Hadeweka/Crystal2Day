@@ -21,6 +21,8 @@ module Crystal2Day
           unpin
           @z = value.to_u8
           pin
+        else
+          @z = value.to_u8
         end
       end
     end

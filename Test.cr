@@ -5,19 +5,19 @@ alias C2D = Crystal2Day
 class CustomScene < C2D::Scene
   @texture = C2D::Texture.new
   @map = C2D::Map.new
-  @player_cam = C2D::Rect.new(x: 100, y: 100, width: 800, height: 600)
+  @player_cam = C2D::Rect.new(x: 100, y: 100, width: 1600, height: 900)
 
   def init
     @texture.load_from_file!("ExampleTileset.png")
 
     @map.content = C2D::MapContent.new
-    @map.content.not_nil!.generate_test_map(width: 10, height: 10)
+    @map.content.not_nil!.generate_test_map(width: 1000, height: 1000)
 
     @map.link_texture(@texture)
     @map.background_tile = 4
     
     box = C2D::ShapeBox.new(C2D.xy(200, 200), position: C2D.xy(550, 350))
-    box.color = C2D::Color.green
+    box.color = C2D::Color.black
     box.filled = true
     box.z = 10
     box.pin
@@ -48,7 +48,7 @@ class CustomScene < C2D::Scene
 end
 
 C2D.run do
-  C2D::Window.new(title: "Hello", w: 800, h: 600)
+  C2D::Window.new(title: "Hello", w: 1600, h: 900)
   C2D.scene = CustomScene.new
   C2D.main_routine
 end
