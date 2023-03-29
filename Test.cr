@@ -11,11 +11,28 @@ class CustomScene < C2D::Scene
   @map_layer_2 = C2D::Map.new
   @map_drawing_rect = C2D::Rect.new(x: 100, y: 100, width: WIDTH, height: HEIGHT)
 
+  def generate_test_map(width : UInt32, height : UInt32, with_rocks : Bool = false)
+    array = Array(Array(C2D::TileID)).new(initial_capacity: height)
+
+    0.upto(height - 1) do |y|
+      array.push Array(C2D::TileID).new(initial_capacity: width)
+      0.upto(width - 1) do |x|
+        if with_rocks
+          array[y].push(rand < 0.1 ? 6u32 : 0u32)
+        else
+          array[y].push (rand(3).to_u32 + 1)
+        end
+      end
+    end
+
+    return array
+  end
+
   def init
     @texture.load_from_file!("ExampleTileset.png")
 
-    @map.content.generate_test_map(width: 200, height: 200)
-    @map_layer_2.content.generate_test_map(width: 200, height: 200, with_rocks: true)
+    @map.content.load_from_array!(generate_test_map(width: 200, height: 200))
+    @map_layer_2.content.load_from_array!(generate_test_map(width: 200, height: 200, with_rocks: true))
 
     @map.link_texture(@texture)
     @map_layer_2.link_texture(@texture)

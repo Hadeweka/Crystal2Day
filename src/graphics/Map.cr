@@ -6,17 +6,23 @@ module Crystal2Day
     getter height : UInt32 = 0
     getter tiles = [] of Array(TileID)
 
-    def generate_test_map(width : UInt32, height : UInt32, with_rocks : Bool = false)
-      @width = width
-      @height = height
-      0.upto(@height - 1) do |y|
-        @tiles.push Array(TileID).new
-        0.upto(@width - 1) do |x|
-          if with_rocks
-            @tiles[y].push(rand < 0.1 ? 6u32 : 0u32)
-          else
-            @tiles[y].push (rand(3).to_u32 + 1)
-          end
+    def load_from_array!(array : Array(Array(TileID)))
+      @height = array.size.to_u32
+      width_obtained = false
+      @tiles = Array(Array(TileID)).new(initial_capacity: @height)
+
+      array.each do |line|
+        if width_obtained
+          C2D.error "Array has inconcistent sizes" if @width != line.size
+        else
+          @width = line.size.to_u32
+          width_obtained = true
+        end
+
+        @tiles.push Array(TileID).new(initial_capacity: @width)
+
+        line.each do |element|
+          @tiles[-1].push element
         end
       end
     end
