@@ -8,9 +8,9 @@ module Crystal2Day
     @counter : UInt32 = 0u32
     @temp_counter : UInt32 = 0u32
 
-    @render_interval : UInt32
-    @tick_interval : UInt32
-    @gc_interval : UInt32
+    @render_interval : UInt32 = 0u32
+    @tick_interval : UInt32 = 0u32
+    @gc_interval : UInt32 = 0u32
 
     @update_block : Proc(Nil) | Nil = nil
     @draw_block : Proc(Nil) | Nil = nil
@@ -18,10 +18,14 @@ module Crystal2Day
 
     @timer : Time::Span? = nil
 
-    def initialize(@max : UInt32 = 720u32, @renders_per_second : UInt32 = 60u32, @ticks_per_second : UInt32 = 60u32, @gc_per_second : UInt32 = 60u32)
-			@render_interval = (@max / @renders_per_second).to_u32
+    def reload
+      @render_interval = (@max / @renders_per_second).to_u32
 			@tick_interval = (@max / @ticks_per_second).to_u32
 			@gc_interval = (@max / @gc_per_second).to_u32
+    end
+
+    def initialize(@max : UInt32 = 720u32, @renders_per_second : UInt32 = 60u32, @ticks_per_second : UInt32 = 60u32, @gc_per_second : UInt32 = 1u32)
+			reload
     end
 
     def call_block(block : Proc(Nil) | Nil)

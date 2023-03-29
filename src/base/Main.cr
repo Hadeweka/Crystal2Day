@@ -3,7 +3,7 @@ module Crystal2Day
 
   class_property scene : Crystal2Day::Scene | Nil
   class_property next_scene : Crystal2Day::Scene | Bool | Nil
-  class_property limiter : Crystal2Day::Limiter?
+  class_property limiter : Crystal2Day::Limiter = Crystal2Day::Limiter.new
   class_getter windows : Array(Crystal2Day::Window) = [] of Crystal2Day::Window
   class_property clean_windows_on_scene_exit : Bool = true
 
@@ -27,9 +27,7 @@ module Crystal2Day
   end
 
   def self.main_routine
-    @@limiter = Crystal2Day::Limiter.new
-
-    @@limiter.not_nil!.set_update_routine do
+    @@limiter.set_update_routine do
       if current_scene = @@scene
         Crystal2Day.call_scene_routine(current_scene, :process_events)
         Crystal2Day.call_scene_routine(current_scene, :main_update)
@@ -58,7 +56,7 @@ module Crystal2Day
       end
     end
 
-    @@limiter.not_nil!.set_draw_routine do
+    @@limiter.set_draw_routine do
       if current_scene = @@scene
         Crystal2Day.call_scene_routine(current_scene, :main_draw)
       else
@@ -66,7 +64,7 @@ module Crystal2Day
       end
     end
 
-    @@limiter.not_nil!.set_gc_routine do
+    @@limiter.set_gc_routine do
       GC.collect
     end
 
@@ -74,7 +72,7 @@ module Crystal2Day
     @@next_scene = true
 
     while @@next_scene
-      break if !@@limiter.not_nil!.tick
+      break if !@@limiter.tick
     end
   end
 
