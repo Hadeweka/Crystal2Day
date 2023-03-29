@@ -6,20 +6,24 @@ module Crystal2Day
     getter height : UInt32 = 0
     getter tiles = [] of Array(TileID)
 
-    def generate_test_map(width : UInt32, height : UInt32)
+    def generate_test_map(width : UInt32, height : UInt32, with_rocks : Bool = false)
       @width = width
       @height = height
       0.upto(@height - 1) do |y|
         @tiles.push Array(TileID).new
         0.upto(@width - 1) do |x|
-          @tiles[y].push (rand(3).to_u32 + 1)
+          if with_rocks
+            @tiles[y].push(rand < 0.1 ? 6u32 : 0u32)
+          else
+            @tiles[y].push (rand(3).to_u32 + 1)
+          end
         end
       end
     end
   end
 
   class Map < Crystal2Day::Drawable
-    property content : MapContent?
+    property content : MapContent = MapContent.new
 
     getter vertices = [] of LibSDL::Vertex
 
@@ -65,9 +69,9 @@ module Crystal2Day
           actual_x = exact_actual_x.floor.to_i32
           actual_y = exact_actual_y.floor.to_i32
 
-          invalid_tile = actual_x < 0 || actual_x.to_u32 >= @content.not_nil!.width || actual_y < 0 || actual_y.to_u32 >= @content.not_nil!.height
+          invalid_tile = actual_x < 0 || actual_x.to_u32 >= @content.width || actual_y < 0 || actual_y.to_u32 >= @content.height
 
-          tile_id = invalid_tile ? @background_tile : @content.not_nil!.tiles[actual_y][actual_x]
+          tile_id = invalid_tile ? @background_tile : @content.tiles[actual_y][actual_x]
 
           actual_tile_id = tile_id  # TODO: Animations
 

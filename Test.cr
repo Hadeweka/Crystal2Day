@@ -8,16 +8,21 @@ HEIGHT = 900
 class CustomScene < C2D::Scene
   @texture = C2D::Texture.new
   @map = C2D::Map.new
+  @map_layer_2 = C2D::Map.new
   @map_drawing_rect = C2D::Rect.new(x: 100, y: 100, width: WIDTH, height: HEIGHT)
 
   def init
     @texture.load_from_file!("ExampleTileset.png")
 
-    @map.content = C2D::MapContent.new
-    @map.content.not_nil!.generate_test_map(width: 1000, height: 1000)
+    @map.content.generate_test_map(width: 200, height: 200)
+    @map_layer_2.content.generate_test_map(width: 200, height: 200, with_rocks: true)
 
     @map.link_texture(@texture)
+    @map_layer_2.link_texture(@texture)
+
     @map.background_tile = 4
+
+    @map_layer_2.z = 1
     
     box = C2D::ShapeBox.new(C2D.xy(100, 100), position: C2D.xy(WIDTH / 2 - 50, HEIGHT / 2 - 50))
     box.color = C2D::Color.black
@@ -33,10 +38,12 @@ class CustomScene < C2D::Scene
     @map_drawing_rect.x += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_D)
 
     @map.reload(@map_drawing_rect)
+    @map_layer_2.reload(@map_drawing_rect)
   end
 
   def draw
     @map.draw
+    @map_layer_2.draw
   end
 
   def handle_event(event)
