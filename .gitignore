@@ -1,3 +1,7 @@
 .shards
 lib
 shard.lock
+*.lib
+*.dll
+*.exe
+*.bat

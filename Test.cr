@@ -11,7 +11,7 @@ class CustomScene < C2D::Scene
     @texture.load_from_file!("ExampleTileset.png")
 
     @map.content = C2D::MapContent.new
-    @map.content.not_nil!.generate_test_map(width: 100, height: 100)
+    @map.content.not_nil!.generate_test_map(width: 10, height: 10)
 
     @map.link_texture(@texture)
     @map.background_tile = 4
