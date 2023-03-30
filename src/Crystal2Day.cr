@@ -3,6 +3,8 @@ require "sdl-crystal-bindings/sdl-mixer-bindings"
 require "sdl-crystal-bindings/sdl-image-bindings"
 require "sdl-crystal-bindings/sdl-ttf-bindings"
 
+require "./base/Collishi.cr"
+require "./base/CollisionShapes.cr"
 require "./base/Coords.cr"
 require "./base/Helper.cr"
 require "./base/Limiter.cr"
