@@ -41,7 +41,7 @@ module Crystal2Day
     end
 
     def exit_routine
-      C2D.windows.each do |window|
+      Crystal2Day.windows.each do |window|
         window.unpin_all
       end
     end

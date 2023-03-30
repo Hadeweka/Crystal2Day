@@ -13,7 +13,7 @@ module Crystal2Day
 
       array.each do |line|
         if width_obtained
-          C2D.error "Array has inconcistent sizes" if @width != line.size
+          Crystal2Day.error "Array has inconcistent sizes" if @width != line.size
         else
           @width = line.size.to_u32
           width_obtained = true
@@ -55,7 +55,7 @@ module Crystal2Day
       @vertices = Array(LibSDL::Vertex).new(size: view_width * view_height * 6) {LibSDL::Vertex.new}
     end
 
-    def reload(drawing_rect : C2D::Rect)
+    def reload(drawing_rect : Crystal2Day::Rect)
       view_width = (drawing_rect.width / @tile_width).ceil.to_u32 + 1
       view_height = (drawing_rect.height / @tile_height).ceil.to_u32 + 1
 
@@ -95,7 +95,7 @@ module Crystal2Day
             vty = (ty + dy) / n_tiles_y
 
             vertex_no = (x * view_height + y) * 6 + c
-            new_vertex = LibSDL::Vertex.new(position: C2D::Coords.new(vx, vy).data, tex_coord: C2D::Coords.new(vtx, vty).data, color: C2D::Color.white.data)
+            new_vertex = LibSDL::Vertex.new(position: Crystal2Day::Coords.new(vx, vy).data, tex_coord: Crystal2Day::Coords.new(vtx, vty).data, color: Crystal2Day::Color.white.data)
             @vertices[vertex_no] = new_vertex
           end
         end
