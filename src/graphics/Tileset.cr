@@ -3,6 +3,7 @@ module Crystal2Day
     @solid = false
     @animation_frame = false
   
+    # TODO: These currently don't do anything
     @index_of_first_animation_frame : Crystal2Day::TileID = 0
     @index_of_first_other_animation_frame : Crystal2Day::TileID = 0
     @number_of_animation_frames : UInt32 = 0

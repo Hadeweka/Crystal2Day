@@ -79,7 +79,7 @@ end
 * [X] Support for multiple windows
 * [X] Framerate limiter
 * [X] Maps and tilesets
-* [ ] 2D collision routines
+* [X] 2D collision routines
 * [ ] Entities
 
 ### Potential future releases
