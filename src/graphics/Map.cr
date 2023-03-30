@@ -30,13 +30,9 @@ module Crystal2Day
 
   class Map < Crystal2Day::Drawable
     property content : MapContent = MapContent.new
+    property tileset : Crystal2Day::Tileset = Crystal2Day::Tileset.new
 
     getter vertices = [] of LibSDL::Vertex
-
-    # TODO: Put these in tilesets
-    @texture : Crystal2Day::Texture
-    @tile_width : UInt32 = 50u32
-    @tile_height : UInt32 = 50u32
 
     property background_tile : TileID = 0u32
 
@@ -44,11 +40,6 @@ module Crystal2Day
 
     def initialize
       super()
-      @texture = Crystal2Day::Texture.new
-    end
-
-    def link_texture(texture : Crystal2Day::Texture)
-      @texture = texture
     end
 
     def generate_vertices(view_width : UInt32, view_height : UInt32)
@@ -56,21 +47,21 @@ module Crystal2Day
     end
 
     def reload(drawing_rect : Crystal2Day::Rect)
-      view_width = (drawing_rect.width / @tile_width).ceil.to_u32 + 1
-      view_height = (drawing_rect.height / @tile_height).ceil.to_u32 + 1
+      view_width = (drawing_rect.width / @tileset.tile_width).ceil.to_u32 + 1
+      view_height = (drawing_rect.height / @tileset.tile_height).ceil.to_u32 + 1
 
       generate_vertices(view_width, view_height)
 
-      exact_shift_x = drawing_rect.x - (view_width - 1) * (@tile_width / 2) - 1
-      exact_shift_y = drawing_rect.y - (view_height - 1) * (@tile_height / 2) - 1
+      exact_shift_x = drawing_rect.x - (view_width - 1) * (@tileset.tile_width / 2) - 1
+      exact_shift_y = drawing_rect.y - (view_height - 1) * (@tileset.tile_height / 2) - 1
 
-      n_tiles_x = @texture.width // @tile_width
-      n_tiles_y = @texture.height // @tile_height
+      n_tiles_x = @tileset.texture.width // @tileset.tile_width
+      n_tiles_y = @tileset.texture.height // @tileset.tile_height
 
       0.upto(view_width - 1) do |x|
         0.upto(view_height - 1) do |y|
-          exact_actual_x = x.to_f32 + exact_shift_x / @tile_width
-          exact_actual_y = y.to_f32 + exact_shift_y / @tile_height
+          exact_actual_x = x.to_f32 + exact_shift_x / @tileset.tile_width
+          exact_actual_y = y.to_f32 + exact_shift_y / @tileset.tile_height
 
           actual_x = exact_actual_x.floor.to_i32
           actual_y = exact_actual_y.floor.to_i32
@@ -88,8 +79,8 @@ module Crystal2Day
             dx = (c == 1 || c == 2 || c == 4) ? 1 : 0
             dy = (c == 2 || c == 4 || c == 5) ? 1 : 0
 
-            vx = ((actual_x + dx) * @tile_width).to_f32 - drawing_rect.x + drawing_rect.width / 2
-            vy = ((actual_y + dy) * @tile_height).to_f32 - drawing_rect.y + drawing_rect.height / 2
+            vx = ((actual_x + dx) * @tileset.tile_width).to_f32 - drawing_rect.x + drawing_rect.width / 2
+            vy = ((actual_y + dy) * @tileset.tile_height).to_f32 - drawing_rect.y + drawing_rect.height / 2
 
             vtx = (tx + dx) / n_tiles_x
             vty = (ty + dy) / n_tiles_y
@@ -103,7 +94,7 @@ module Crystal2Day
     end
 
     def draw_directly
-      LibSDL.render_geometry(@texture.renderer_data, @texture.data, @vertices, @vertices.size, nil, 0)
+      LibSDL.render_geometry(@tileset.texture.renderer_data, @tileset.texture.data, @vertices, @vertices.size, nil, 0)
     end
   end
 end

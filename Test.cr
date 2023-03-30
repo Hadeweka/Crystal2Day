@@ -10,6 +10,7 @@ class CustomScene < C2D::Scene
   @map = C2D::Map.new
   @map_layer_2 = C2D::Map.new
   @map_drawing_rect = C2D::Rect.new(x: 100, y: 100, width: WIDTH, height: HEIGHT)
+  @tileset = C2D::Tileset.new
 
   def generate_test_map(width : UInt32, height : UInt32, with_rocks : Bool = false)
     array = Array(Array(C2D::TileID)).new(initial_capacity: height)
@@ -34,8 +35,13 @@ class CustomScene < C2D::Scene
     @map.content.load_from_array!(generate_test_map(width: 200, height: 200))
     @map_layer_2.content.load_from_array!(generate_test_map(width: 200, height: 200, with_rocks: true))
 
-    @map.link_texture(@texture)
-    @map_layer_2.link_texture(@texture)
+    @tileset.link_texture(@texture)
+    @tileset.fill_with_default_tiles(number: 8) # NOTE: This will become relevant for tile animations and information
+    @tileset.tile_width = 50
+    @tileset.tile_height = 50
+
+    @map.tileset = @tileset
+    @map_layer_2.tileset = @tileset
 
     @map.background_tile = 4
 

@@ -78,7 +78,7 @@ end
 * [X] Scene system
 * [X] Support for multiple windows
 * [X] Framerate limiter
-* [ ] Maps
+* [X] Maps and tilesets
 * [ ] 2D collision routines
 * [ ] Entities
 
