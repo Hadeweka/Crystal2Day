@@ -38,7 +38,7 @@ module Crystal2Day
 
     def draw_directly
       final_source_rect = @texture.raw_int_boundary_rect
-      final_render_rect = (render_rect = @render_rect) ? (render_rect + @position).data : @texture.raw_boundary_rect(shifted_by: @position)
+      final_render_rect = (render_rect = @render_rect) ? (render_rect + @position + @texture.renderer.position_shift).data : @texture.raw_boundary_rect(shifted_by: @position + @texture.renderer.position_shift)
       flip_flag = LibSDL::RendererFlip::FLIP_NONE
       if center = @center
         final_center_point = center.data

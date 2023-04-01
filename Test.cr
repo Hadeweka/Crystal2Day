@@ -9,8 +9,8 @@ class CustomScene < C2D::Scene
   @texture = C2D::Texture.new
   @map = C2D::Map.new
   @map_layer_2 = C2D::Map.new
-  @map_drawing_rect = C2D::Rect.new(x: 100, y: 100, width: WIDTH, height: HEIGHT)
   @tileset = C2D::Tileset.new
+  @camera = C2D::Camera.new(position: C2D.xy(-WIDTH/2, -HEIGHT/2))
 
   def generate_test_map(width : UInt32, height : UInt32, with_rocks : Bool = false)
     array = Array(Array(C2D::TileID)).new(initial_capacity: height)
@@ -47,26 +47,26 @@ class CustomScene < C2D::Scene
 
     @map_layer_2.z = 1
     
-    box = C2D::ShapeBox.new(C2D.xy(100, 100), position: C2D.xy(WIDTH / 2 - 50, HEIGHT / 2 - 50))
+    box = C2D::ShapeBox.new(C2D.xy(100, 100), position: C2D.xy(-50, -50))
     box.color = C2D::Color.black
     box.filled = true
     box.z = 10
     box.pin
+
+    @camera.pin
+    @map.pin
+    @map_layer_2.pin
   end
 
   def update
-    @map_drawing_rect.y -= 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_W)
-    @map_drawing_rect.y += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_S)
-    @map_drawing_rect.x -= 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_A)
-    @map_drawing_rect.x += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_D)
-
-    @map.reload(@map_drawing_rect)
-    @map_layer_2.reload(@map_drawing_rect)
+    @camera.position.y -= 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_W)
+    @camera.position.y += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_S)
+    @camera.position.x -= 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_A)
+    @camera.position.x += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_D)
   end
 
   def draw
-    @map.draw
-    @map_layer_2.draw
+    
   end
 
   def handle_event(event)

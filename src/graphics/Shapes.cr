@@ -18,7 +18,7 @@ module Crystal2Day
 
     def draw_directly
       LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
-      LibSDL.render_draw_point_f(@renderer.data, @position.x, @position.y)
+      LibSDL.render_draw_point_f(@renderer.data, @position.x + @renderer.position_shift.x, @position.y + @renderer.position_shift.y)
     end
   end
 
@@ -33,7 +33,7 @@ module Crystal2Day
 
     def draw_directly
       LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
-      LibSDL.render_draw_line_f(@renderer.data, @position.x, @position.y, @position.x + @direction.x, @position.y + @direction.y)
+      LibSDL.render_draw_line_f(@renderer.data, @position.x + @renderer.position_shift.x, @position.y + @renderer.position_shift.y, @position.x + @direction.x + @renderer.position_shift.x, @position.y + @direction.y + @renderer.position_shift.y)
     end
   end
 
@@ -49,7 +49,7 @@ module Crystal2Day
 
     def draw_directly
       LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
-      rect = LibSDL::FRect.new(x: @position.x, y: @position.y, w: @size.x, h: @size.y)
+      rect = LibSDL::FRect.new(x: @position.x + @renderer.position_shift.x, y: @position.y + @renderer.position_shift.y, w: @size.x, h: @size.y)
       # NOTE: A pointer is passed, but since its contents will be copied immediately, there should be no issues
       if @filled
         LibSDL.render_fill_rect_f(@renderer.data, pointerof(rect))

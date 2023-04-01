@@ -2,7 +2,7 @@ module Crystal2Day
   class Texture < Crystal2Day::Drawable
     Crystal2DayHelper.wrap_type(Pointer(LibSDL::Texture))
 
-    @renderer : Crystal2Day::Renderer
+    getter renderer : Crystal2Day::Renderer
 
     getter width : Int32 = 0
     getter height : Int32 = 0
@@ -64,6 +64,8 @@ module Crystal2Day
 
     def draw_directly
       render_rect = raw_boundary_rect
+      render_rect.x += @renderer.position_shift.x
+      render_rect.y += @renderer.position_shift.y
       LibSDL.render_copy_ex_f(@renderer.data, data, nil, pointerof(render_rect), 0.0, nil, LibSDL::RendererFlip::FLIP_NONE)
     end
 

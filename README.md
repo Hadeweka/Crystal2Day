@@ -73,7 +73,8 @@ end
 #### Features
 
 * [X] Music and sounds
-* [X] Sprites, fonts, texts and shapes
+* [X] Sprites, fonts, texts
+* [ ] Shapes
 * [X] Z-Ordering
 * [X] Scene system
 * [X] Support for multiple windows

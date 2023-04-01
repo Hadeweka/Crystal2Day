@@ -7,10 +7,18 @@ module Crystal2Day
     getter renderer : Crystal2Day::Renderer = Crystal2Day::Renderer.new
     getter render_queue : Crystal2Day::RenderQueue = Crystal2Day::RenderQueue.new
 
+    getter width : UInt32
+    getter height : UInt32
+
+    # TODO: Accessors for size and title
+
     def initialize(title : String, w : Int, h : Int, x : Int = LibSDL::WINDOWPOS_UNDEFINED, y : Int = LibSDL::WINDOWPOS_UNDEFINED, fullscreen : Bool = false, set_as_current : Bool = true)
       window_flags = fullscreen ? LibSDL::WindowFlags::WINDOW_SHOWN | LibSDL::WindowFlags::WINDOW_FULLSCREEN : LibSDL::WindowFlags::WINDOW_SHOWN
       @data = LibSDL.create_window(title, x, y, w, h, window_flags)
       Crystal2Day.error "Could not create window with title \"#{title}\"" unless @data
+
+      @width = w.to_u32
+      @height = h.to_u32
 
       renderer_flags = LibSDL::RendererFlags::RENDERER_ACCELERATED
       @renderer.create!(self, renderer_flags)
@@ -55,7 +63,7 @@ module Crystal2Day
     end
 
     def render_and_display
-      @renderer.reset_view
+      @renderer.reset
       @render_queue.draw
       LibSDL.render_present(@renderer.data)
     end

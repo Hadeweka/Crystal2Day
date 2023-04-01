@@ -52,7 +52,7 @@ module Crystal2Day
     end
   
     def get_tile(identification : Crystal2Day::TileID)
-      @tiles[identification]? ? @tiles[identification] : C2D.error "Undefined tile with tile ID: #{identification}"
+      @tiles[identification]? ? @tiles[identification] : Crystal2Day.error "Undefined tile with tile ID: #{identification}"
     end
   
     def size

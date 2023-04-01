@@ -19,8 +19,10 @@ require "./input/Event.cr"
 require "./input/Keyboard.cr"
 require "./input/Mouse.cr"
 
-require "./graphics/Color.cr"
 require "./graphics/Drawable.cr"
+
+require "./graphics/Camera.cr"
+require "./graphics/Color.cr"
 require "./graphics/Font.cr"
 require "./graphics/Map.cr"
 require "./graphics/Renderer.cr"

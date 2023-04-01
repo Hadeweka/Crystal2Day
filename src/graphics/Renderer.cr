@@ -4,6 +4,7 @@ module Crystal2Day
 
     @current_view : Crystal2Day::View = Crystal2Day::View.new
     getter original_view : Crystal2Day::View = Crystal2Day::View.new
+    property position_shift : Crystal2Day::Coords = Crystal2Day.xy
 
     def initialize
     end
@@ -32,6 +33,15 @@ module Crystal2Day
 
     def reset_view
       self.view = self.original_view
+    end
+
+    def reset_shift
+      @position_shift = Crystal2Day.xy
+    end
+
+    def reset
+      reset_view
+      reset_shift
     end
 
     def free
