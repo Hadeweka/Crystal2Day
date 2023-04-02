@@ -74,7 +74,7 @@ end
 
 * [X] Music and sounds
 * [X] Sprites, fonts, texts
-* [ ] Shapes
+* [X] Basic shapes (points, lines, boxes, circles, triangles)
 * [X] Z-Ordering
 * [X] Scene system
 * [X] Support for multiple windows
@@ -82,6 +82,7 @@ end
 * [X] Maps and tilesets
 * [X] 2D collision routines
 * [ ] Entities
+* [ ] Advanced shapes (ellipses and quadrangles)
 
 ### Potential future releases
 

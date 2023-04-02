@@ -39,6 +39,7 @@ module Crystal2Day
 
   class ShapeBox < Shape
     property size : Crystal2Day::Coords
+
     property filled : Bool = false
 
     def initialize(size : Crystal2Day::Coords, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.not_nil!.renderer)
@@ -62,6 +63,11 @@ module Crystal2Day
   class ShapeCircle < Shape
     property radius : Float32
 
+    property number_of_render_iterations : UInt32 = 32
+    property filled : Bool = false
+
+    SECTOR_BORDERS = [Crystal2Day.xy(1.0, 0.0), Crystal2Day.xy(0.0, 1.0), Crystal2Day.xy(-1.0, 0.0), Crystal2Day.xy(0.0, -1.0)]
+
     def initialize(radius : Float32, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.not_nil!.renderer)
       super(renderer)
       @radius = radius
@@ -69,13 +75,50 @@ module Crystal2Day
     end
 
     def draw_directly
-      # TODO
+      # TODO: Unfilled
+      # TODO: Optimize this if necessary
+
+      segment_angle = 2.0 * Math::PI / (number_of_render_iterations + 1)
+      base_circle = Array(Crystal2Day::Coords).new(size: number_of_render_iterations + 1) do |i|
+        cos_angle = Math.cos(segment_angle * i)
+        sin_angle = Math.sin(segment_angle * i)
+        Crystal2Day.xy(@radius * cos_angle, @radius * sin_angle)
+      end
+
+      center_position = @position + @renderer.position_shift
+
+      if @filled
+        vertices = Array(LibSDL::Vertex).new(initial_capacity: (number_of_render_iterations + 1) * 4 * 3)
+
+        0.upto(3) do |segment_id|
+          0.upto(number_of_render_iterations) do |i|
+            index = 3 * segment_id * i
+            vertices.push LibSDL::Vertex.new(position: (center_position + base_circle[i]).data, color: @color.data)
+            vertices.push LibSDL::Vertex.new(position: (center_position + base_circle[(i + 1) % base_circle.size]).data, color: @color.data)
+            vertices.push LibSDL::Vertex.new(position: center_position.data, color: @color.data)
+          end
+        end
+
+        LibSDL.render_geometry(@renderer.data, nil, vertices, vertices.size, nil, 0)
+      else
+        LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
+
+        0.upto(number_of_render_iterations) do |i|
+          vx1 = (center_position + base_circle[i]).x
+          vy1 = (center_position + base_circle[i]).y
+          vx2 = (center_position + base_circle[(i + 1) % (number_of_render_iterations + 1)]).x
+          vy2 = (center_position + base_circle[(i + 1) % (number_of_render_iterations + 1)]).y
+          LibSDL.render_draw_line_f(@renderer.data, vx1, vy1, vx2, vy2)
+        end
+      end
     end
   end
 
   class ShapeTriangle < Shape
     property side_1 : Crystal2Day::Coords
     property side_2 : Crystal2Day::Coords
+
+    property filled : Bool = false
 
     def self.from_vertices(vertex_0 : Crystal2Day::Coords, vertex_1 : Crystal2Day::Coords, vertex_2 : Crystal2Day::Coords, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.not_nil!.renderer)
       self.new(vertex_1 - vertex_0, vertex_2 - vertex_0, position: vertex_0, renderer: renderer)
@@ -139,7 +182,18 @@ module Crystal2Day
     end
 
     def draw_directly
-      # TODO
+      if @filled
+        sdl_vertex_0 = LibSDL::Vertex.new(position: (vertex_0 + @renderer.position_shift).data, color: @color.data)
+        sdl_vertex_1 = LibSDL::Vertex.new(position: (vertex_1 + @renderer.position_shift).data, color: @color.data)
+        sdl_vertex_2 = LibSDL::Vertex.new(position: (vertex_2 + @renderer.position_shift).data, color: @color.data)
+        vertices = [sdl_vertex_0, sdl_vertex_1, sdl_vertex_2]
+        LibSDL.render_geometry(@renderer.data, nil, vertices, 3, nil, 0)
+      else
+        LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
+        LibSDL.render_draw_line_f(@renderer.data, vertex_0.x + @renderer.position_shift.x, vertex_0.y + @renderer.position_shift.y, vertex_1.x + @renderer.position_shift.x, vertex_1.y + @renderer.position_shift.y)
+        LibSDL.render_draw_line_f(@renderer.data, vertex_1.x + @renderer.position_shift.x, vertex_1.y + @renderer.position_shift.y, vertex_2.x + @renderer.position_shift.x, vertex_2.y + @renderer.position_shift.y)
+        LibSDL.render_draw_line_f(@renderer.data, vertex_2.x + @renderer.position_shift.x, vertex_2.y + @renderer.position_shift.y, vertex_0.x + @renderer.position_shift.x, vertex_0.y + @renderer.position_shift.y)
+      end
     end
   end
 

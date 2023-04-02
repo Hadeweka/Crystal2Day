@@ -53,6 +53,18 @@ class CustomScene < C2D::Scene
     box.z = 10
     box.pin
 
+    triangle = C2D::ShapeTriangle.new(position: C2D.xy(-50, 0), side_1: C2D.xy(100, 0), side_2: C2D.xy(50, 50))
+    triangle.color = C2D::Color.red
+    triangle.filled = true
+    triangle.z = 11
+    triangle.pin
+
+    circle = C2D::ShapeCircle.new(position: C2D.xy(0.0, 0.0), radius: 50.0)
+    circle.color = C2D::Color.green
+    circle.z = 12
+    circle.filled = false
+    circle.pin
+
     @camera.pin
     @map.pin
     @map_layer_2.pin
