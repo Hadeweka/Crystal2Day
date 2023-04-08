@@ -74,7 +74,7 @@ end
 
 * [X] Music and sounds
 * [X] Sprites, fonts, texts
-* [X] Basic shapes (points, lines, boxes, circles, triangles)
+* [X] Basic shapes (points, lines, boxes, circles, triangles, ellipses)
 * [X] Z-Ordering
 * [X] Scene system
 * [X] Support for multiple windows
@@ -82,7 +82,6 @@ end
 * [X] Maps and tilesets
 * [X] 2D collision routines
 * [ ] Entities
-* [ ] Advanced shapes (ellipses and quadrangles)
 
 ### Potential future releases
 
@@ -90,3 +89,5 @@ end
 
 * [ ] Tiled support
 * [ ] Minimal mruby scripting
+* [ ] Quadriliteral shapes
+

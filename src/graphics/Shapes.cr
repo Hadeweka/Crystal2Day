@@ -66,8 +66,6 @@ module Crystal2Day
     property number_of_render_iterations : UInt32 = 32
     property filled : Bool = false
 
-    SECTOR_BORDERS = [Crystal2Day.xy(1.0, 0.0), Crystal2Day.xy(0.0, 1.0), Crystal2Day.xy(-1.0, 0.0), Crystal2Day.xy(0.0, -1.0)]
-
     def initialize(radius : Float32, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.not_nil!.renderer)
       super(renderer)
       @radius = radius
@@ -75,7 +73,6 @@ module Crystal2Day
     end
 
     def draw_directly
-      # TODO: Unfilled
       # TODO: Optimize this if necessary
 
       segment_angle = 2.0 * Math::PI / (number_of_render_iterations + 1)
@@ -200,6 +197,9 @@ module Crystal2Day
   class ShapeEllipse < Shape
     property semiaxes : Crystal2Day::Coords
 
+    property number_of_render_iterations : UInt32 = 32
+    property filled : Bool = false
+
     def initialize(semiaxes : Crystal2Day::Coords, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.not_nil!.renderer)
       super(renderer)
       @semiaxes = semiaxes
@@ -207,7 +207,42 @@ module Crystal2Day
     end
 
     def draw_directly
-      # TODO
+      # TODO: Optimize this if necessary
+      # TODO: Put together circle and ellipse routines
+
+      segment_angle = 2.0 * Math::PI / (number_of_render_iterations + 1)
+      base_ellipse = Array(Crystal2Day::Coords).new(size: number_of_render_iterations + 1) do |i|
+        cos_angle = Math.cos(segment_angle * i)
+        sin_angle = Math.sin(segment_angle * i)
+        Crystal2Day.xy(@semiaxes.x * cos_angle, @semiaxes.y * sin_angle)
+      end
+
+      center_position = @position + @renderer.position_shift
+
+      if @filled
+        vertices = Array(LibSDL::Vertex).new(initial_capacity: (number_of_render_iterations + 1) * 4 * 3)
+
+        0.upto(3) do |segment_id|
+          0.upto(number_of_render_iterations) do |i|
+            index = 3 * segment_id * i
+            vertices.push LibSDL::Vertex.new(position: (center_position + base_ellipse[i]).data, color: @color.data)
+            vertices.push LibSDL::Vertex.new(position: (center_position + base_ellipse[(i + 1) % base_ellipse.size]).data, color: @color.data)
+            vertices.push LibSDL::Vertex.new(position: center_position.data, color: @color.data)
+          end
+        end
+
+        LibSDL.render_geometry(@renderer.data, nil, vertices, vertices.size, nil, 0)
+      else
+        LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
+
+        0.upto(number_of_render_iterations) do |i|
+          vx1 = (center_position + base_ellipse[i]).x
+          vy1 = (center_position + base_ellipse[i]).y
+          vx2 = (center_position + base_ellipse[(i + 1) % (number_of_render_iterations + 1)]).x
+          vy2 = (center_position + base_ellipse[(i + 1) % (number_of_render_iterations + 1)]).y
+          LibSDL.render_draw_line_f(@renderer.data, vx1, vy1, vx2, vy2)
+        end
+      end
     end
   end
 end

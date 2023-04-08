@@ -65,6 +65,13 @@ class CustomScene < C2D::Scene
     circle.filled = false
     circle.pin
 
+    ellipse = C2D::ShapeEllipse.new(position: C2D.xy(0.0, 0.0), semiaxes: C2D.xy(100.0, 50.0))
+    ellipse.color = C2D::Color.yellow
+    ellipse.z = 13
+    ellipse.number_of_render_iterations = 8
+    ellipse.filled = false
+    ellipse.pin
+
     @camera.pin
     @map.pin
     @map_layer_2.pin
