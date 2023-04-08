@@ -81,6 +81,13 @@ end
 * [X] Framerate limiter
 * [X] Maps and tilesets
 * [X] 2D collision routines
+
+#### Todo list
+
+* [ ] Controller support
+* [ ] Key mapping helpers
+* [ ] Window modificators
+* [ ] Custom shape designs (colors, textures)
 * [ ] Entities
 * [ ] Tile information and animation
 * [ ] Sprite animations
