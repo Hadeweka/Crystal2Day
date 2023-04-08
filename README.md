@@ -82,6 +82,12 @@ end
 * [X] Maps and tilesets
 * [X] 2D collision routines
 * [ ] Entities
+* [ ] Tile information and animation
+* [ ] Sprite animations
+* [ ] Entity collision system
+* [ ] Entity data system
+* [ ] Game data storage
+* [ ] Data marshalling
 
 ### Potential future releases
 
