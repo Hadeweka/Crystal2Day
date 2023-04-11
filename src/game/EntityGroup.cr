@@ -30,12 +30,23 @@ module Crystal2Day
 
     def delete_entity_at(index : Number)
       @members.delete_at(index).delete
+      @refs.delete_at(index)
     end
 
     def update
       @members.each do |entity|
         entity.update
       end
+    end
+
+    def clear
+      0.upto(@members.size - 1) do |index|
+        delete_entity_at(-1)
+      end
+    end
+
+    def finalize
+      clear
     end
   end
 end

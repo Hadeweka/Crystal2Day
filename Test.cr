@@ -109,6 +109,7 @@ class CustomScene < C2D::Scene
   def exit
     C2D.current_window.close
     C2D.current_window = nil
+    @entities.clear
   end
 end
 
