@@ -86,7 +86,7 @@ end
 
 * [ ] Controller support
 * [ ] Key mapping helpers
-* [ ] Window modificators
+* [ ] Method of getting windows by ID
 * [ ] Custom shape designs (colors, textures)
 * [ ] Entities
 * [ ] Tile information and animation

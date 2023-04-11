@@ -10,6 +10,7 @@ module Crystal2Day
     getter width : UInt32
     getter height : UInt32
     getter title : String
+    getter fullscreen : Bool
 
     # TODO: Accessors for size and title
 
@@ -21,6 +22,8 @@ module Crystal2Day
       @width = w.to_u32
       @height = h.to_u32
       @title = title
+
+      @fullscreen = fullscreen
 
       renderer_flags = LibSDL::RendererFlags::RENDERER_ACCELERATED
       @renderer.create!(self, renderer_flags)
@@ -44,6 +47,12 @@ module Crystal2Day
       @title = value
       LibSDL.set_window_title(data, value)
     end
+
+    def fullscreen=(value : Bool)
+      @fullscreen = value
+      window_flags = @fullscreen ? LibSDL::WindowFlags::WINDOW_SHOWN | LibSDL::WindowFlags::WINDOW_FULLSCREEN : LibSDL::WindowFlags::WINDOW_SHOWN
+      LibSDL.set_window_fullscreen(data, window_flags)
+    end 
 
     def open?
       data?

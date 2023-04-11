@@ -75,6 +75,8 @@ class CustomScene < C2D::Scene
     @camera.pin
     @map.pin
     @map_layer_2.pin
+
+    C2D.current_window.fullscreen = true
   end
 
   def update
