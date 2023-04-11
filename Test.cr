@@ -33,10 +33,12 @@ class CustomScene < C2D::Scene
   def init
     @texture.load_from_file!("ExampleTileset.png")
 
+    # NOTE: This is a Ruby coroutine!
     update_hook = C2D::CoroutineTemplate.from_block do |entity|
       entity.set_state("test", 12345)
       100.times {Fiber.yield}
       puts "ID: #{entity.get_state("id")}, Test: #{entity.get_state("test")}"
+      entity.call_proc("test_proc")
     end
 
     10.times {@entities.add_entity}
@@ -44,7 +46,20 @@ class CustomScene < C2D::Scene
       entity = @entities.get_entity(i).not_nil!
       entity.set_state("id", i.to_s)
       entity.add_hook_from_template("update", update_hook)
+
+      # NOTE: This is a Crystal callback!
+      entity.add_proc("test_proc") do |entity|
+        puts "Hello world from a #{C2D.scene.class}!"
+      end
     end
+
+    # NOTE: Above we used Ruby coroutines and Crystal callbacks.
+    # They seem quite similar, but they have drastical differences.
+    # The Ruby coroutines can only access the entity state and the Crystal callbacks.
+    # This way, you can limit scripting to certain elements.
+    # But the coroutines also allow for suspension, while keeping their context.
+    # This is not possible with the Crystal callbacks.
+    # They however can do nearly anything and access most other functions.
 
     @map.content.load_from_array!(generate_test_map(width: 200, height: 200))
     @map_layer_2.content.load_from_array!(generate_test_map(width: 200, height: 200, with_rocks: true))

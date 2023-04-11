@@ -2,6 +2,7 @@ module Crystal2Day
   class Entity
     @state = {} of String => Anyolite::RbRef
     @hooks = {} of String => Crystal2Day::Coroutine
+    @procs = {} of String => Proc(Entity, Nil)
 
     def initialize
     end
@@ -12,6 +13,14 @@ module Crystal2Day
         Crystal2Day.warning "Hook #{name} was already registered and will be overwritten."
       end
       @hooks[name] = template.generate_hook
+    end
+
+    @[Anyolite::Exclude]
+    def add_proc(name : String, &proc : Crystal2Day::Entity -> Nil)
+      if @procs[name]?
+        Crystal2Day.warning "Proc #{name} was already registered and will be overwritten."
+      end
+      @procs[name] = proc
     end
 
     @[Anyolite::Exclude]
@@ -30,6 +39,10 @@ module Crystal2Day
     @[Anyolite::Specialize]
     def set_state(index : String, value : Anyolite::RbRef)
       @state[index] = value
+    end
+
+    def call_proc(name : String)
+      @procs[name].call(self)
     end
 
     @[Anyolite::Exclude]

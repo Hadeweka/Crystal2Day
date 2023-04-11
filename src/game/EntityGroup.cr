@@ -15,7 +15,7 @@ module Crystal2Day
     def add_entity
       new_entity = Crystal2Day::Entity.new
       new_ref = Crystal2Day::Interpreter.generate_ref(new_entity)
-
+      
       @members.push new_entity
       @refs.push new_ref
 
