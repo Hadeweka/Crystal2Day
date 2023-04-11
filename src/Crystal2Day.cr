@@ -10,6 +10,8 @@ require "./base/Rect.cr"
 
 require "./scripting/Interpreter.cr"
 
+require "./scripting/Coroutine.cr"
+
 require "./audio/Music.cr"
 require "./audio/Sound.cr"
 

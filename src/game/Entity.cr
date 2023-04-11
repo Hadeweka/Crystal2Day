@@ -1,12 +1,20 @@
 module Crystal2Day
   class Entity
     @state = {} of String => Anyolite::RbRef
+    @hooks = {} of String => Crystal2Day::Coroutine
 
     def initialize
     end
 
-    def init
-      # TODO: Call init hook
+    def add_hook_from_template(name : String, template : Crystal2Day::CoroutineTemplate)
+      if @hooks[name]?
+        Crystal2Day.warning "Hook #{name} was already registered and will be overwritten."
+      end
+      @hooks[name] = template.generate_hook
+    end
+
+    def init(own_ref : Anyolite::RbRef)
+      call_hook("init", own_ref)
     end
 
     def get_state(index : String)
@@ -22,12 +30,19 @@ module Crystal2Day
       @state[index] = value
     end
 
-    def update
-      # TODO: Call update hook
+    def update(own_ref : Anyolite::RbRef)
+      call_hook("update", own_ref)
     end
 
-    def delete
-      # TODO: Call deletion hook
+    @[Anyolite::Exclude]
+    def call_hook(name : String, own_ref : Anyolite::RbRef)
+      if @hooks[name]?
+        @hooks[name].call(own_ref)
+      end
+    end
+
+    def delete(own_ref : Anyolite::RbRef)
+      call_hook("delete", own_ref)
     end
   end
 end

@@ -33,9 +33,17 @@ class CustomScene < C2D::Scene
   def init
     @texture.load_from_file!("ExampleTileset.png")
 
-    100.times {@entities.add_entity}
+    update_hook = C2D::CoroutineTemplate.from_block do |entity|
+      entity.set_state("test", 12345)
+      100.times {Fiber.yield}
+      puts entity.get_state("id")
+    end
+
+    10.times {@entities.add_entity}
     0.upto(@entities.number - 1) do |i|
-      @entities.get_entity(i).not_nil!.set_state("id", i.to_s)
+      entity = @entities.get_entity(i).not_nil!
+      entity.set_state("id", i.to_s)
+      entity.add_hook_from_template("update", update_hook)
     end
 
     @map.content.load_from_array!(generate_test_map(width: 200, height: 200))
@@ -91,8 +99,6 @@ class CustomScene < C2D::Scene
     C2D.current_window.title = "FPS: #{C2D.get_fps.round.to_i}"
 
     @entities.update
-
-    Anyolite.eval("a = Entity.new; a.set_state('test', [123]); puts a.get_state('test').inspect")
   end
 
   def draw

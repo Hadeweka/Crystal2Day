@@ -19,7 +19,7 @@ module Crystal2Day
       @members.push new_entity
       @refs.push new_ref
 
-      new_entity.init
+      new_entity.init(new_ref)
 
       return @members.size
     end
@@ -29,13 +29,12 @@ module Crystal2Day
     end
 
     def delete_entity_at(index : Number)
-      @members.delete_at(index).delete
-      @refs.delete_at(index)
+      @members.delete_at(index).delete(@refs.delete_at(index))
     end
 
     def update
-      @members.each do |entity|
-        entity.update
+      0.upto(@members.size - 1) do |index|
+        @members[index].update(@refs[index])
       end
     end
 

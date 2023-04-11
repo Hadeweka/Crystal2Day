@@ -86,11 +86,10 @@ end
 * [X] Maps and tilesets
 * [X] 2D collision routines
 * [X] Minimal mruby scripting using Anyolite
-* [X] Entities with flexible states
+* [X] Entities with flexible states and scripts
 
 #### Todo list
 
-* [ ] Entity hooks
 * [ ] Controller support
 * [ ] Key mapping helpers
 * [ ] Method of getting windows by ID

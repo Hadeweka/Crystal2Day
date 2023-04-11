@@ -16,6 +16,7 @@ module Crystal2Day
       else
         @@rb_interpreter = Anyolite::RbInterpreter.new
         Anyolite::HelperClasses.load_all(Crystal2Day::Interpreter.get)
+        Anyolite.disable_program_execution
       end
     end
   
@@ -44,6 +45,24 @@ module Crystal2Day
     def self.inspect_ref(value : Anyolite::RbRef)
       ruby_str = Anyolite::RbCore.rb_inspect(Crystal2Day::Interpreter.get.to_unsafe, value.value)
       Anyolite::RbCast.cast_to_string(Crystal2Day::Interpreter.get.to_unsafe, ruby_str)
+    end
+
+    def self.fiber_from_proc(template_proc : Anyolite::RbRef)
+      fiber_class = Anyolite.eval("Fiber")
+      return Anyolite.call_rb_method_of_object(fiber_class, :new, block: template_proc)
+    end
+
+    def self.check_if_fiber_is_alive(fiber : Anyolite::RbRef)
+      Anyolite.call_rb_method_of_object(fiber.to_unsafe, :"alive?", cast_to: Bool)
+    end
+
+    def self.resume_fiber(fiber : Anyolite::RbRef, arg : Anyolite::RbRef)
+      idx = Anyolite::RbCore.rb_gc_arena_save(Crystal2Day::Interpreter.get.to_unsafe)
+      Anyolite::RbCore.rb_fiber_resume(Crystal2Day::Interpreter.get.to_unsafe, fiber.to_unsafe, 1, [arg.to_unsafe])
+      err = Anyolite::RbCore.get_last_rb_error(Crystal2Day::Interpreter.get.to_unsafe)
+      converted_err = Anyolite.call_rb_method_of_object(err, "to_s", cast_to: String)
+      raise "Error at Fiber execution: #{converted_err}" if converted_err != ""
+      Anyolite::RbCore.rb_gc_arena_restore(Crystal2Day::Interpreter.get.to_unsafe, idx)
     end
 
     macro cast_ref_to(value, crystal_class)
