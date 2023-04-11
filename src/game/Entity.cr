@@ -6,6 +6,7 @@ module Crystal2Day
     def initialize
     end
 
+    @[Anyolite::Exclude]
     def add_hook_from_template(name : String, template : Crystal2Day::CoroutineTemplate)
       if @hooks[name]?
         Crystal2Day.warning "Hook #{name} was already registered and will be overwritten."
@@ -13,6 +14,7 @@ module Crystal2Day
       @hooks[name] = template.generate_hook
     end
 
+    @[Anyolite::Exclude]
     def init(own_ref : Anyolite::RbRef)
       call_hook("init", own_ref)
     end
@@ -30,6 +32,7 @@ module Crystal2Day
       @state[index] = value
     end
 
+    @[Anyolite::Exclude]
     def update(own_ref : Anyolite::RbRef)
       call_hook("update", own_ref)
     end
@@ -41,6 +44,7 @@ module Crystal2Day
       end
     end
 
+    @[Anyolite::Exclude]
     def delete(own_ref : Anyolite::RbRef)
       call_hook("delete", own_ref)
     end

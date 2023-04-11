@@ -36,7 +36,7 @@ class CustomScene < C2D::Scene
     update_hook = C2D::CoroutineTemplate.from_block do |entity|
       entity.set_state("test", 12345)
       100.times {Fiber.yield}
-      puts entity.get_state("id")
+      puts "ID: #{entity.get_state("id")}, Test: #{entity.get_state("test")}"
     end
 
     10.times {@entities.add_entity}
