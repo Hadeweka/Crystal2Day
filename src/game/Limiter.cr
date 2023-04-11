@@ -4,6 +4,7 @@ module Crystal2Day
     property renders_per_second : UInt32
     property ticks_per_second : UInt32
     property gc_per_second : UInt32
+    property track_fps : Bool = false
 
     @counter : UInt32 = 0u32
     @temp_counter : UInt32 = 0u32
@@ -15,6 +16,8 @@ module Crystal2Day
     @update_block : Proc(Nil) | Nil = nil
     @draw_block : Proc(Nil) | Nil = nil
     @gc_block : Proc(Nil) | Nil = nil
+
+    @current_draw_fps : Float64 = 0.0
 
     @timer : Time::Span? = nil
 
@@ -51,6 +54,11 @@ module Crystal2Day
 			@render_interval = (@max / @renders_per_second).to_u32
 		end
 
+    def current_draw_fps
+      @track_fps = true
+      @current_draw_fps
+    end
+
     def tick
       @timer = Time.monotonic unless @timer
 
@@ -83,6 +91,7 @@ module Crystal2Day
 			if scheduled_frame
 				while (Time.monotonic - @timer.not_nil!).total_seconds < (@temp_counter + 1) / @max.to_f
 				end
+        @current_draw_fps = 1.0 / (Time.monotonic - @timer.not_nil!).total_seconds if @track_fps
 				@temp_counter = 0
 				@timer = Time.monotonic
 			else

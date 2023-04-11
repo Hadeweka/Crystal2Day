@@ -101,6 +101,11 @@ module Crystal2Day
     @@debug = true if debug
   end
 
+  # NOTE: FPS tracking is disabled by default. Calling this function will enable it.
+  def self.get_fps
+    @@limiter.current_draw_fps
+  end
+
   def self.current_window
     if window = @@current_window
       window

@@ -75,8 +75,6 @@ class CustomScene < C2D::Scene
     @camera.pin
     @map.pin
     @map_layer_2.pin
-
-    C2D.current_window.fullscreen = true
   end
 
   def update
@@ -84,10 +82,10 @@ class CustomScene < C2D::Scene
     @camera.position.y += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_S)
     @camera.position.x -= 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_A)
     @camera.position.x += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_D)
+    C2D.current_window.title = "FPS: #{C2D.get_fps.round.to_i}"
   end
 
   def draw
-    
   end
 
   def handle_event(event)
