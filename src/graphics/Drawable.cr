@@ -4,7 +4,7 @@ module Crystal2Day
     getter pinned : Bool = false
 
     def draw
-      if window = Crystal2Day.current_window
+      if window = Crystal2Day.current_window_if_any
         window.draw(self)
       else
         Crystal2Day.error "Could not draw to closed or invalid window"
@@ -29,7 +29,7 @@ module Crystal2Day
 
     def pin
       @pinned = true
-      if window = Crystal2Day.current_window
+      if window = Crystal2Day.current_window_if_any
         window.pin(self)
       else
         Crystal2Day.error "Could not pin to closed or invalid window"
@@ -38,7 +38,7 @@ module Crystal2Day
 
     def unpin
       @pinned = false
-      if window = Crystal2Day.current_window
+      if window = Crystal2Day.current_window_if_any
         window.unpin(self)
       else
         Crystal2Day.error "Could not unpin from closed or invalid window"

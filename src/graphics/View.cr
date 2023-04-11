@@ -3,7 +3,7 @@ module Crystal2Day
     @data : LibSDL::Rect
     @renderer : Crystal2Day::Renderer?
 
-    def initialize(rect : Crystal2Day::Rect, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.not_nil!.renderer)
+    def initialize(rect : Crystal2Day::Rect, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       super()
       @data = LibSDL::Rect.new(x: rect.x, y: rect.y, w: rect.width, h: rect.height)
     end

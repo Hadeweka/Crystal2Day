@@ -32,7 +32,7 @@ module Crystal2Day
     property content : MapContent = MapContent.new
     property tileset : Crystal2Day::Tileset = Crystal2Day::Tileset.new
 
-    property drawing_rect : Crystal2Day::Rect = Crystal2Day::Rect.new(width: Crystal2Day.current_window.not_nil!.width, height: Crystal2Day.current_window.not_nil!.height)
+    property drawing_rect : Crystal2Day::Rect = Crystal2Day::Rect.new(width: Crystal2Day.current_window.width, height: Crystal2Day.current_window.height)
 
     getter vertices = [] of LibSDL::Vertex
 
@@ -40,7 +40,7 @@ module Crystal2Day
 
     VERTEX_SIGNATURE = [0, 1, 2, 0, 2, 3]
 
-    def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.not_nil!.renderer)
+    def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       super()
     end
 

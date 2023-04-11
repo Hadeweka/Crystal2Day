@@ -9,6 +9,7 @@ module Crystal2Day
 
     getter width : UInt32
     getter height : UInt32
+    getter title : String
 
     # TODO: Accessors for size and title
 
@@ -19,6 +20,7 @@ module Crystal2Day
 
       @width = w.to_u32
       @height = h.to_u32
+      @title = title
 
       renderer_flags = LibSDL::RendererFlags::RENDERER_ACCELERATED
       @renderer.create!(self, renderer_flags)
@@ -26,6 +28,21 @@ module Crystal2Day
 
       Crystal2Day.current_window = self if set_as_current
       Crystal2Day.register_window(self)
+    end
+
+    def width=(value : Int)
+      @width = value
+      LibSDL.set_window_size(data, @width, @height)
+    end
+
+    def height=(value : Int)
+      @height = value
+      LibSDL.set_window_size(data, @width, @height)
+    end
+
+    def title=(value : String)
+      @title = value
+      LibSDL.set_window_title(data, value)
     end
 
     def open?
@@ -69,7 +86,7 @@ module Crystal2Day
     end
 
     def close
-      Crystal2Day.current_window = nil if Crystal2Day.current_window == self
+      Crystal2Day.current_window = nil if Crystal2Day.current_window_if_any == self
       Crystal2Day.unregister_window(self)
       @renderer.free
       LibSDL.destroy_window(data)

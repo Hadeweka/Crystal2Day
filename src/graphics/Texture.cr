@@ -9,11 +9,11 @@ module Crystal2Day
 
     property offset : Crystal2Day::Coords = Crystal2Day.xy
 
-    def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.not_nil!.renderer)
+    def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       super()
     end
 
-    def self.load_from_file(filename : String, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.not_nil!.renderer)
+    def self.load_from_file(filename : String, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       texture = Crystal2Day::Texture.new(renderer)
       texture.load_from_file!(filename)
 

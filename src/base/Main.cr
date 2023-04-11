@@ -105,8 +105,12 @@ module Crystal2Day
     if window = @@current_window
       window
     else
-      nil
+      Crystal2Day.error "No window available"
     end
+  end
+
+  def self.current_window_if_any
+    @@current_window
   end
 
   def self.current_window=(window : Crystal2Day::Window?)

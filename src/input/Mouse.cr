@@ -22,7 +22,7 @@ module Crystal2Day
     end
 
     def self.position=(pos : Crystal2Day::Coords)
-      if window = Crystal2Day.current_window.not_nil!
+      if window = Crystal2Day.current_window_if_any
         LibSDL.warp_mouse_in_window(window.data, pos.x, pos.y)
       else
         Crystal2Day.error "Could not set position in closed or invalid window"

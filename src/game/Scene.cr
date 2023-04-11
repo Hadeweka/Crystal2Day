@@ -33,7 +33,7 @@ module Crystal2Day
     def main_draw
       if @use_own_draw_implementation
         call_inner_draw_block
-      elsif win = Crystal2Day.current_window
+      elsif win = Crystal2Day.current_window_if_any
         win.clear
         call_inner_draw_block
         win.render_and_display
