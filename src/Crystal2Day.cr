@@ -3,11 +3,12 @@ require "sdl-crystal-bindings/sdl-mixer-bindings"
 require "sdl-crystal-bindings/sdl-image-bindings"
 require "sdl-crystal-bindings/sdl-ttf-bindings"
 
-
 require "./base/Coords.cr"
 require "./base/Helper.cr"
 require "./base/Main.cr"
 require "./base/Rect.cr"
+
+require "./scripting/Interpreter.cr"
 
 require "./audio/Music.cr"
 require "./audio/Sound.cr"
@@ -15,6 +16,7 @@ require "./audio/Sound.cr"
 require "./game/Collishi.cr"
 require "./game/CollisionShapes.cr"
 require "./game/Entity.cr"
+require "./game/EntityGroup.cr"
 require "./game/Limiter.cr"
 require "./game/Scene.cr"
 

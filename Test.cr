@@ -11,6 +11,7 @@ class CustomScene < C2D::Scene
   @map_layer_2 = C2D::Map.new
   @tileset = C2D::Tileset.new
   @camera = C2D::Camera.new(position: C2D.xy(-WIDTH/2, -HEIGHT/2))
+  @entities = C2D::EntityGroup.new
 
   def generate_test_map(width : UInt32, height : UInt32, with_rocks : Bool = false)
     array = Array(Array(C2D::TileID)).new(initial_capacity: height)
@@ -31,6 +32,11 @@ class CustomScene < C2D::Scene
 
   def init
     @texture.load_from_file!("ExampleTileset.png")
+
+    100.times {@entities.add_entity}
+    0.upto(@entities.number - 1) do |i|
+      @entities.get_entity(i).not_nil!.set_state("id", i.to_s)
+    end
 
     @map.content.load_from_array!(generate_test_map(width: 200, height: 200))
     @map_layer_2.content.load_from_array!(generate_test_map(width: 200, height: 200, with_rocks: true))
@@ -83,6 +89,10 @@ class CustomScene < C2D::Scene
     @camera.position.x -= 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_A)
     @camera.position.x += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_D)
     C2D.current_window.title = "FPS: #{C2D.get_fps.round.to_i}"
+
+    @entities.update
+
+    Anyolite.eval("a = Entity.new; a.set_state('test', [123]); puts a.get_state('test').inspect")
   end
 
   def draw

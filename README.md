@@ -25,13 +25,17 @@ Note that its syntax may change (frequently) until version 1.0.0.
 # Prerequisites
 
 * Crystal
-* SDL 2
+* SDL 2 (SDL 3 is not yet supported)
+* Git (For installing Anyolite)
+* GCC or Microsoft Visual Studio (for installing Anyolite)
+* Ruby (for installing Anyolite)
+* Rake (for installing Anyolite)
 
 # Installing
 
 Currently, this shard can simply be used by adding it into your `shard.yml`.
 
-Make sure to have SDL installed, or linking will fail.
+Make sure to have SDL 2 and its libraries installed, or linking will fail.
 
 # A simple example
 
@@ -81,18 +85,19 @@ end
 * [X] Framerate limiter
 * [X] Maps and tilesets
 * [X] 2D collision routines
+* [X] Minimal mruby scripting using Anyolite
+* [X] Entities with flexible states
 
 #### Todo list
 
+* [ ] Entity hooks
 * [ ] Controller support
 * [ ] Key mapping helpers
 * [ ] Method of getting windows by ID
 * [ ] Custom shape designs (colors, textures)
-* [ ] Entities
 * [ ] Tile information and animation
 * [ ] Sprite animations
 * [ ] Entity collision system
-* [ ] Entity data system
 * [ ] Game data storage
 * [ ] Data marshalling
 
@@ -101,6 +106,5 @@ end
 #### Features
 
 * [ ] Tiled support
-* [ ] Minimal mruby scripting
 * [ ] Quadriliteral shapes
 
