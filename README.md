@@ -1,16 +1,27 @@
-# Crystal2Day
-
-Crystal2Day is a 2D game framework in Crystal.
-
-# Description
+# What is Crystal2Day?
 
 Crystal2Day (or short C2D) is designed as a tool to develop games with Crystal fast.
 
+Less work for you, therefore more time for actual game design.
+
+# Why should I use Crystal2Day?
+
+Did you ever want to start a game, but then got frustrated while programming something
+mundane like a scrolling map, finally implemented it and then gave up when you saw the
+terrifying news of "20 FPS"?
+
+Then Crystal2Day might just be the solution for you.
+
+Crystal2Day is more than just a Crystal wrapper around a media library. 
+
 It provides basic game functions, but also some typical game design structures like
-scenes and entities.
+maps, scenes and entities.
 
 Mostly, it serves as a layer above lower-level game libraries like SDL, without
 having to worry about common implementation details.
+
+For example, a map class is already implemented, as well as typical collision routines,
+a framerate limiter, z-ordering, cameras and many other things.
 
 Currently this project is in an early state, but will be expanded over time.
 Note that its syntax may change (frequently) until version 1.0.0.
@@ -21,19 +32,21 @@ Note that its syntax may change (frequently) until version 1.0.0.
 * Simple framework to immediately start working
 * Scene system to organize and streamline game design
 * Drawing system with z-ordering
+* Entity behavior scripting using mruby
 
 # Prerequisites
 
-* Crystal
-* SDL 2 (SDL 3 is not yet supported)
-* Git (For installing Anyolite)
+* Crystal (obviously)
+* SDL 2 (media library; SDL 3 is not yet supported)
+* Git (for installing Anyolite)
 * GCC or Microsoft Visual Studio (for installing Anyolite)
 * Ruby (for installing Anyolite)
 * Rake (for installing Anyolite)
 
 # Installing
 
-Currently, this shard can simply be used by adding it into your `shard.yml`.
+Currently, this shard can simply be used by adding it into your `shard.yml`,
+as long as all dependencies are installed correctly.
 
 Make sure to have SDL 2 and its libraries installed, or linking will fail.
 
@@ -100,6 +113,7 @@ end
 * [ ] Entity collision system
 * [ ] Game data storage
 * [ ] Data marshalling
+* [ ] Documentation
 
 ### Potential future releases
 
