@@ -1,3 +1,5 @@
+# A simple example program to showcase some of the features of Crystal2Day.
+
 require "./src/Crystal2Day.cr"
 
 alias C2D = Crystal2Day

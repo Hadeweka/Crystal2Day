@@ -1,3 +1,6 @@
+# A drawable object, which specifies a viewport for all objects above it.
+# This allows for minimaps or split screens.
+
 module Crystal2Day
   class View < Crystal2Day::Drawable
     @data : LibSDL::Rect

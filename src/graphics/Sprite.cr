@@ -1,3 +1,6 @@
+# A sprite class for more flexibility with textures.
+# It allows for geometric operations and serves as a thin layer.
+
 module Crystal2Day
   class Sprite < Crystal2Day::Drawable
     @texture : Crystal2Day::Texture

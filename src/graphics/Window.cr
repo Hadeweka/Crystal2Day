@@ -1,3 +1,6 @@
+# The window class.
+# You can even create multiples of these (Crystal2Day keeps track of them for you).
+
 module Crystal2Day
   class Window
     Crystal2DayHelper.wrap_type(Pointer(LibSDL::Window))
@@ -11,8 +14,6 @@ module Crystal2Day
     getter height : UInt32
     getter title : String
     getter fullscreen : Bool
-
-    # TODO: Accessors for size and title
 
     def initialize(title : String, w : Int, h : Int, x : Int = LibSDL::WINDOWPOS_UNDEFINED, y : Int = LibSDL::WINDOWPOS_UNDEFINED, fullscreen : Bool = false, set_as_current : Bool = true)
       window_flags = fullscreen ? LibSDL::WindowFlags::WINDOW_SHOWN | LibSDL::WindowFlags::WINDOW_FULLSCREEN : LibSDL::WindowFlags::WINDOW_SHOWN

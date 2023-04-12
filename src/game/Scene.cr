@@ -1,3 +1,6 @@
+# An abstract scene class.
+# Just derive your own scene class from it and overload the empty methods.
+
 module Crystal2Day
   class Scene
     property use_own_draw_implementation : Bool = false

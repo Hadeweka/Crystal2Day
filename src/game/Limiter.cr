@@ -1,3 +1,8 @@
+# A singleton class, which schedules drawing and update calls.
+# Usually, if your game is designed to run with 60 FPS, you can just ignore this.
+# This class is mostly relevant for you if you want to change the FPS.
+# You can even schedule the garbage collector with this.
+
 module Crystal2Day
 	class Limiter
     property max : UInt32

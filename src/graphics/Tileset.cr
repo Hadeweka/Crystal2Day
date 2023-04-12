@@ -1,3 +1,7 @@
+# Tile information for maps.
+# These specify what exactly to draw when rendering a tile.
+# Also, you can extend the `Tile` class for custom tile information.
+
 module Crystal2Day
   class Tile
     @solid = false

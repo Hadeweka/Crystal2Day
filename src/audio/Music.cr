@@ -1,3 +1,7 @@
+# A simple music class.
+# Use it for single background tracks.
+# Looping is possible with certain file formats like OGG.
+
 module Crystal2Day
   class Music
     Crystal2DayHelper.wrap_type(Pointer(LibSDL::MixMusic))

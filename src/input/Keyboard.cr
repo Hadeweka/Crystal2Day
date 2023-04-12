@@ -1,3 +1,5 @@
+# A module to handle keyboard state and inputs.
+
 module Crystal2Day
   module Keyboard
     {% for key in LibSDL::KeyCode.constants %}

@@ -1,3 +1,6 @@
+# A camera class, which affects all layers above it when drawn.
+# It simply shifts all content above it by its position.
+
 module Crystal2Day
   class Camera < Crystal2Day::Drawable
     property position : Crystal2Day::Coords = Crystal2Day.xy

@@ -1,3 +1,5 @@
+# A font class for text rendering.
+
 module Crystal2Day
   class Font
     Crystal2DayHelper.wrap_type(Pointer(LibSDL::TTFFont))

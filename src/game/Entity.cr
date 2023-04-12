@@ -1,3 +1,8 @@
+# A class for entities with their own state and behavior.
+# Generally, you want to use them from an `EntityGroup` with a specific `EntityType`.
+# This class is also exposed to the internal mruby interpreter.
+# Most properties can also be modified at runtime, so this class is very flexible.
+
 module Crystal2Day
   class Entity
     @state = {} of String => Anyolite::RbRef

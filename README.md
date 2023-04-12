@@ -90,6 +90,7 @@ end
 
 #### Todo list
 
+* [ ] Entity drawing
 * [ ] Controller support
 * [ ] Key mapping helpers
 * [ ] Method of getting windows by ID

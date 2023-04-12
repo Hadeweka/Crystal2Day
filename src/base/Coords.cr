@@ -1,3 +1,5 @@
+# A coordinate class, which essentially represents a 2D vector or point.
+
 module Crystal2Day
   class Coords
     getter data : LibSDL::FPoint

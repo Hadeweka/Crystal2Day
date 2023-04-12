@@ -1,3 +1,6 @@
+# The abstract base class for any drawable objects.
+# If you want to implement your own `Drawable`, you need to provide some way to draw it directly.
+
 module Crystal2Day
   abstract class Drawable
     getter z : UInt8 = 0

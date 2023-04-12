@@ -1,3 +1,7 @@
+# The base texture.
+# You can technically draw this directly, but using wrappers like sprites is recommended.
+# Keep in mind that these objects are quite large, so you want to avoid creating too many of these.
+
 module Crystal2Day
   class Texture < Crystal2Day::Drawable
     Crystal2DayHelper.wrap_type(Pointer(LibSDL::Texture))

@@ -1,3 +1,6 @@
+# A collection of collision shapes.
+# The second half of the file contains collision checking routines.
+
 module Crystal2Day
   class CollisionShape
     property position : Crystal2Day::Coords = Crystal2Day.xy
@@ -119,8 +122,7 @@ module Crystal2Day
     end
   end
   
-  # TODO: Quadrangle
-  # TODO: Support for ellipse drawing
+  # TODO: Quadriliteral
   
   class CollisionShapeEllipse < CollisionShape
     property semiaxes : Crystal2Day::Coords = Crystal2Day.xy

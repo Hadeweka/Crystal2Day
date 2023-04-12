@@ -1,3 +1,8 @@
+# A sound class, which can be used for short-time sound effects.
+# Multiple sounds can be played at the same time when using different channels.
+# You can also pitch-shift the sounds. However, you should avoid shifting up.
+# Shifting the pitch up might sound artificial due to information loss.
+
 module Crystal2Day
   class Sound
     Crystal2DayHelper.wrap_type(Pointer(LibSDL::MixChunk))

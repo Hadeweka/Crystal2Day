@@ -1,3 +1,5 @@
+# A module to handle mouse state and input.
+
 module Crystal2Day
   module Mouse
     BUTTON_LEFT = LibSDL::BUTTON_LEFT

@@ -1,3 +1,6 @@
+# The collection of all files for Crystal2Day.
+# Any deviation from alphabetic order is intended.
+
 require "sdl-crystal-bindings"
 require "sdl-crystal-bindings/sdl-mixer-bindings"
 require "sdl-crystal-bindings/sdl-image-bindings"

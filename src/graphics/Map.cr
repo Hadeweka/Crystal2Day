@@ -1,3 +1,5 @@
+# Two map classes, one for the actual map data and one for the rendering.
+
 module Crystal2Day
   alias TileID = UInt32
 

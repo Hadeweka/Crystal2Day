@@ -1,3 +1,7 @@
+# The main module.
+# This is globally accessible to allow for a cleaner syntax.
+# You will most likely need this for running your game.
+
 module Crystal2Day
   MAX_VOLUME = LibSDL::MIX_MAX_VOLUME
 

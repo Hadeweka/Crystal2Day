@@ -1,3 +1,6 @@
+# An overlay to the renderer, which allows for z-ordering and pinned objects.
+# Unless you explicitly want to build your own rendering system, you can leave this alone.
+
 module Crystal2Day
   class RenderQueue
     NUMBER_OF_LAYERS = 256

@@ -1,3 +1,7 @@
+# A template for entities.
+# Each instance is essentially a different entity type.
+# You can add default state values, coroutines and procs.
+
 module Crystal2Day
   class EntityType
     DEFAULT_NAME = "<nameless>"

@@ -1,3 +1,7 @@
+# This class serves as a container for multiple entities.
+# Use these to group similar entities together, for easier management.
+# Using this class also takes care of any mruby memory management.
+
 module Crystal2Day
   class EntityGroup
     @members : Array(Crystal2Day::Entity)

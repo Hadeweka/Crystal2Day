@@ -1,3 +1,6 @@
+# A class for passing rectangle data.
+# This is not to be confused with drawable rectangles and collision boxes.
+
 module Crystal2Day
   class Rect
     getter data : LibSDL::FRect

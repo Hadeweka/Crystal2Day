@@ -1,3 +1,5 @@
+# Helper classes
+
 module Crystal2DayHelper
   macro wrap_type(x)
     @data : {{x}}?

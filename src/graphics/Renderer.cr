@@ -1,3 +1,6 @@
+# The renderer class, responsible for actual drawing.
+# This is mostly an internal class.
+
 module Crystal2Day
   class Renderer
     Crystal2DayHelper.wrap_type(Pointer(LibSDL::Renderer))

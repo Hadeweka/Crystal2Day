@@ -1,3 +1,5 @@
+# A thin layer around the SDL event classes, to allow for easier handling.
+
 module Crystal2Day
   {% for potential_event_class in LibSDL.constants %}
     {% parsed_name = parse_type(potential_event_class.stringify).stringify %}

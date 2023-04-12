@@ -1,4 +1,4 @@
-# Collishi collision algorithm library, by Hadeweka
+# The Collishi collision algorithm library, also by Hadeweka
 
 module Collishi
   def self.fraction_less_than_zero(nominator : Float, denominator : Float)

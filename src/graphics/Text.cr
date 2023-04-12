@@ -1,3 +1,6 @@
+# A wrapper around a font texture.
+# Use it to draw texts.
+
 module Crystal2Day
   class Text < Crystal2Day::Drawable
     @texture : Crystal2Day::Texture

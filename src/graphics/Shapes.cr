@@ -1,3 +1,6 @@
+# A collection of drawable shapes.
+# You can also implement your own shapes, as long as you specifiy how to draw them.
+
 module Crystal2Day
   abstract class Shape < Crystal2Day::Drawable
     property position : Crystal2Day::Coords = Crystal2Day.xy

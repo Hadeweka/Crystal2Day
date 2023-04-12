@@ -1,3 +1,5 @@
+# A color class with some predefined values.
+
 module Crystal2Day
   class Color
     getter data : LibSDL::Color

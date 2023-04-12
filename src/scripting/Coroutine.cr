@@ -1,3 +1,7 @@
+# Coroutines and their templates.
+# These are mruby fibers, so they keep their own context and can be suspended at any time.
+# Use these for entity behavior scripting.
+
 module Crystal2Day
   class Coroutine
     @fiber : Anyolite::RbRef
