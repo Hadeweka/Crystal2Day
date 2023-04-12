@@ -4,7 +4,21 @@ module Crystal2Day
     @hooks = {} of String => Crystal2Day::Coroutine
     @procs = {} of String => Proc(Entity, Nil)
 
+    @type_name : String = Crystal2Day::EntityType::DEFAULT_NAME
+
+    @[Anyolite::Specialize]
     def initialize
+    end
+
+    def initialize(entity_type : Crystal2Day::EntityType)
+      @state.merge! entity_type.transfer_default_state
+      @procs.merge! entity_type.transfer_default_procs
+
+      entity_type.transfer_coroutine_templates.each do |name, template|
+        add_hook_from_template(name, template)
+      end
+      
+      @type_name = entity_type.name
     end
 
     @[Anyolite::Exclude]

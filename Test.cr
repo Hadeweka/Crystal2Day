@@ -41,16 +41,18 @@ class CustomScene < C2D::Scene
       entity.call_proc("test_proc")
     end
 
-    10.times {@entities.add_entity}
-    0.upto(@entities.number - 1) do |i|
-      entity = @entities.get_entity(i).not_nil!
-      entity.set_state("id", i.to_s)
-      entity.add_hook_from_template("update", update_hook)
+    entity_type = C2D::EntityType.new(name: "TestEntity")
+    entity_type.add_default_state("test", 12345)
+    entity_type.add_coroutine_template("update", update_hook)
 
-      # NOTE: This is a Crystal callback!
-      entity.add_proc("test_proc") do |entity|
-        puts "Hello world from a #{C2D.scene.class}!"
-      end
+    # NOTE: This is a Crystal callback!
+    entity_type.add_default_proc("test_proc") do |entity|
+      puts "Hello world from a #{C2D.scene.class}!"
+    end
+    
+    10.times {@entities.add_entity(entity_type)}
+    0.upto(@entities.number - 1) do |i|
+      @entities.get_entity(i).set_state("id", i.to_s)
     end
 
     # NOTE: Above we used Ruby coroutines and Crystal callbacks.

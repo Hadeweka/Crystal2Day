@@ -12,14 +12,23 @@ module Crystal2Day
       @members.size
     end
 
+    def add_entity(entity_type : Crystal2Day::EntityType)
+      new_entity = Crystal2Day::Entity.new(entity_type)
+      register_new_entity(new_entity)
+    end
+
     def add_entity
       new_entity = Crystal2Day::Entity.new
-      new_ref = Crystal2Day::Interpreter.generate_ref(new_entity)
+      register_new_entity(new_entity)
+    end
+
+    def register_new_entity(entity : Crystal2Day::Entity)
+      new_ref = Crystal2Day::Interpreter.generate_ref(entity)
       
-      @members.push new_entity
+      @members.push entity
       @refs.push new_ref
 
-      new_entity.init(new_ref)
+      entity.init(new_ref)
 
       return @members.size
     end

@@ -22,10 +22,10 @@ module Crystal2Day
 
   def self.run(debug : Bool = false)
     Crystal2Day.init(debug: debug)
-    C2D::Interpreter.start
-    C2D::Interpreter.expose_class(C2D::Entity)
+    Crystal2Day::Interpreter.start
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::Entity)
     yield
-    C2D::Interpreter.close
+    Crystal2Day::Interpreter.close
     Crystal2Day.quit
   end
 

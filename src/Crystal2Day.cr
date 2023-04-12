@@ -19,6 +19,7 @@ require "./game/Collishi.cr"
 require "./game/CollisionShapes.cr"
 require "./game/Entity.cr"
 require "./game/EntityGroup.cr"
+require "./game/EntityType.cr"
 require "./game/Limiter.cr"
 require "./game/Scene.cr"
 
