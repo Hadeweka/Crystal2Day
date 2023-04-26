@@ -5,11 +5,24 @@
 
 module Crystal2Day
   class Entity
-    @state = {} of String => Anyolite::RbRef
-    @hooks = {} of String => Crystal2Day::Coroutine
-    @procs = {} of String => Proc(Entity, Nil)
+    STATE_INITIAL_CAPACITY = 8
+    HOOKS_INITIAL_CAPACITY = 8
+    PROCS_INITIAL_CAPACITY = 8
+    CHILDREN_INITIAL_CAPACITY = 8
+
+    @state = Hash(String, Anyolite::RbRef).new(initial_capacity: STATE_INITIAL_CAPACITY)
+    @hooks = Hash(String, Crystal2Day::Coroutine).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
+    @procs = Hash(String, Proc(Entity, Nil)).new(initial_capacity: PROCS_INITIAL_CAPACITY)
+
+    @children = Array(Entity).new(initial_capacity: CHILDREN_INITIAL_CAPACITY)
 
     @type_name : String = Crystal2Day::EntityType::DEFAULT_NAME
+
+    getter magic_number : UInt64 = 0u64
+
+    property position : Crystal2Day::Coords = Crystal2Day.xy
+    property velocity : Crystal2Day::Coords = Crystal2Day.xy
+    property acceleration : Crystal2Day::Coords = Crystal2Day.xy
 
     @[Anyolite::Specialize]
     def initialize
@@ -44,6 +57,7 @@ module Crystal2Day
 
     @[Anyolite::Exclude]
     def init(own_ref : Anyolite::RbRef)
+      @magic_number = self.object_id
       call_hook("init", own_ref)
     end
 

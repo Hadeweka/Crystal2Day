@@ -46,10 +46,12 @@ module Crystal2Day
   end
 
   class Tileset
+    INITIAL_CAPACITY = 256
+
     getter texture : Crystal2Day::Texture = Crystal2Day::Texture.new
     property tile_width : UInt32 = 50u32
     property tile_height : UInt32 = 50u32
-    @tiles : Array(Tile) = Array(Tile).new(initial_capacity: 1000)
+    @tiles : Array(Tile) = Array(Tile).new(initial_capacity: INITIAL_CAPACITY)
 
     def link_texture(texture : Crystal2Day::Texture)
       @texture = texture

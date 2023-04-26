@@ -4,10 +4,12 @@
 
 module Crystal2Day
   class EntityGroup
+    BASE_INITIAL_CAPACITY = 128u32
+
     @members : Array(Crystal2Day::Entity)
     @refs : Array(Anyolite::RbRef)
 
-    def initialize(capacity : UInt32 = 100)
+    def initialize(capacity : UInt32 = BASE_INITIAL_CAPACITY)
       @members = Array(Crystal2Day::Entity).new(initial_capacity: capacity)
       @refs = Array(Anyolite::RbRef).new(initial_capacity: capacity)
     end

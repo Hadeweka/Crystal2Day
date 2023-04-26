@@ -9,6 +9,12 @@ module Crystal2Day
     @default_state = {} of String => Anyolite::RbRef
     @coroutine_templates = {} of String => Crystal2Day::CoroutineTemplate
     @default_procs = {} of String => Proc(Entity, Nil)
+
+    @sprites = Array(Crystal2Day::Sprite).new
+    @boxes = Array(Crystal2Day::CollisionShapeBox).new
+    @shapes = Array(Crystal2Day::CollisionShape).new
+    @hitshapes = Array(Crystal2Day::CollisionShape).new
+    @hurtshapes = Array(Crystal2Day::CollisionShape).new
     
     property name : String = DEFAULT_NAME
 
