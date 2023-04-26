@@ -14,6 +14,12 @@ module Crystal2Day
     @hooks = Hash(String, Crystal2Day::Coroutine).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
     @procs = Hash(String, Proc(Entity, Nil)).new(initial_capacity: PROCS_INITIAL_CAPACITY)
 
+    @sprites = Array(Crystal2Day::Sprite).new
+    @boxes = Array(Crystal2Day::CollisionShapeBox).new
+    @shapes = Array(Crystal2Day::CollisionShape).new
+    @hitshapes = Array(Crystal2Day::CollisionShape).new
+    @hurtshapes = Array(Crystal2Day::CollisionShape).new
+
     @children = Array(Entity).new(initial_capacity: CHILDREN_INITIAL_CAPACITY)
 
     @type_name : String = Crystal2Day::EntityType::DEFAULT_NAME
@@ -35,7 +41,27 @@ module Crystal2Day
       entity_type.transfer_coroutine_templates.each do |name, template|
         add_hook_from_template(name, template)
       end
-      
+
+      entity_type.transfer_sprites.each do |sprite|
+        @sprites.push sprite.dup
+      end
+
+      entity_type.transfer_boxes.each do |box|
+        @boxes.push box.dup
+      end
+
+      entity_type.transfer_shapes.each do |shape|
+        @shapes.push shape.dup
+      end
+
+      entity_type.transfer_hitshapes.each do |hitshape|
+        @hitshapes.push hitshape.dup
+      end
+
+      entity_type.transfer_hurtshapes.each do |hurtshape|
+        @hurtshapes.push hurtshape.dup
+      end
+
       @type_name = entity_type.name
     end
 
@@ -93,6 +119,10 @@ module Crystal2Day
     @[Anyolite::Exclude]
     def delete(own_ref : Anyolite::RbRef)
       call_hook("delete", own_ref)
+    end
+
+    def draw
+      # TODO
     end
   end
 end

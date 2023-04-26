@@ -8,6 +8,10 @@ module Crystal2Day
       @data = LibSDL::FPoint.new(x: x, y: y)
     end
 
+    def dup
+      Coords.new(x, y)
+    end
+
     def x
       @data.x
     end

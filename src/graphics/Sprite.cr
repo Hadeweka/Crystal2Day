@@ -17,6 +17,15 @@ module Crystal2Day
       @texture = from_texture
     end
 
+    def dup
+      new_sprite = Sprite.new(from_texture: @texture, source_rect: @source_rect.dup)
+      new_sprite.position = @position.dup
+      new_sprite.render_rect = @render_rect.dup
+      new_sprite.angle = @angle
+      new_sprite.center = @center.dup
+      new_sprite
+    end
+
     def link_texture(texture : Crystal2Day::Texture)
       @texture = texture
     end

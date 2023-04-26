@@ -48,5 +48,25 @@ module Crystal2Day
     def transfer_default_procs
       @default_procs
     end
+
+    def transfer_sprites
+      @sprites
+    end
+
+    def transfer_boxes
+      @boxes
+    end
+
+    def transfer_shapes
+      @shapes
+    end
+
+    def transfer_hitshapes
+      @hitshapes
+    end
+
+    def transfer_hurtshapes
+      @hurtshapes
+    end
   end
 end

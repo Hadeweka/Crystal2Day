@@ -9,6 +9,10 @@ module Crystal2Day
       @data = LibSDL::FRect.new(x: x, y: y, w: width, h: height)
     end
 
+    def dup
+      Rect.new(x, y, width, height)
+    end
+
     def +(vector : Crystal2Day::Coords)
       Crystal2Day::Rect.new(x: self.x + vector.x, y: self.y + vector.y, width: self.width, height: self.height)
     end

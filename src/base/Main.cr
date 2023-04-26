@@ -27,6 +27,8 @@ module Crystal2Day
   def self.run(debug : Bool = false)
     Crystal2Day.init(debug: debug)
     Crystal2Day::Interpreter.start
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::Coords)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::Color)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Entity)
     yield
     Crystal2Day::Interpreter.close

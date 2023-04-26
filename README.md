@@ -108,6 +108,7 @@ end
 * [ ] Key mapping helpers
 * [ ] Method of getting windows by ID
 * [ ] Custom shape designs (colors, textures)
+* [ ] Particle generator
 * [ ] Tile information and animation
 * [ ] Sprite animations
 * [ ] Entity collision system
