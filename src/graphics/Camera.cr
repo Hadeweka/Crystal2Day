@@ -9,8 +9,8 @@ module Crystal2Day
       super()
     end
 
-    def draw_directly
-      @renderer.position_shift = @position * (-1)
+    def draw_directly(offset : Coords)
+      @renderer.position_shift = (@position + offset) * (-1)
     end
   end
 end

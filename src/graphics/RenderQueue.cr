@@ -6,17 +6,19 @@ module Crystal2Day
     NUMBER_OF_LAYERS = 256
     INITIAL_CAPACITY = 100
 
-    @static_content : StaticArray(Deque(Drawable), NUMBER_OF_LAYERS) = 
-      StaticArray(Deque(Drawable), NUMBER_OF_LAYERS).new do |i|
-        capacity = Crystal2Day::RenderQueue::INITIAL_CAPACITY
-        (Deque(Crystal2Day::Drawable).new(initial_capacity: capacity))
-      end
+    alias ContentTuple = Tuple(Drawable, Coords)
+    alias ContentDeque = Deque(ContentTuple)
+    alias ContentArray = StaticArray(ContentDeque, NUMBER_OF_LAYERS)
 
-    @content : StaticArray(Deque(Drawable), NUMBER_OF_LAYERS) = 
-      StaticArray(Deque(Drawable), NUMBER_OF_LAYERS).new do |i|
-        capacity = Crystal2Day::RenderQueue::INITIAL_CAPACITY
-        (Deque(Crystal2Day::Drawable).new(initial_capacity: capacity))
-      end
+    @static_content : ContentArray = ContentArray.new do |i|
+      capacity = Crystal2Day::RenderQueue::INITIAL_CAPACITY
+      Crystal2Day::RenderQueue::ContentDeque.new(initial_capacity: capacity)
+    end
+
+    @content : ContentArray = ContentArray.new do |i|
+      capacity = Crystal2Day::RenderQueue::INITIAL_CAPACITY
+      Crystal2Day::RenderQueue::ContentDeque.new(initial_capacity: capacity)
+    end
     
     @highest_z : UInt8 = 0
     @highest_static_z : UInt8 = 0
@@ -24,18 +26,18 @@ module Crystal2Day
     def initialize
     end
 
-    def add(obj : Drawable, z : UInt8 = 0u8)
-      @content[z].push(obj)
+    def add(obj : Drawable, z : UInt8, offset : Coords)
+      @content[z].push({obj, offset})
       @highest_z = z if z > @highest_z
     end
 
-    def add_static(obj : Drawable, z : UInt8 = 0u8)
-      @static_content[z].push(obj)
+    def add_static(obj : Drawable, z : UInt8, offset : Coords)
+      @static_content[z].push({obj, offset})
       @highest_static_z = z if z > @highest_static_z
     end
 
-    def delete_static(obj : Drawable, z : UInt8 = 0u8)
-      @static_content[z].delete(obj)
+    def delete_static(obj : Drawable, z : UInt8, offset : Coords)
+      @static_content[z].delete({obj, offset})
       # TODO: Maybe update @highest_static_z
     end
 
@@ -53,12 +55,12 @@ module Crystal2Day
       0.upto(max_z) do |z|
         if z <= @highest_static_z
           @static_content[z].each do |element|
-            element.draw_directly
+            element[0].draw_directly(element[1])
           end
         end
         if z <= @highest_z
           @content[z].reject! do |element|
-            element.draw_directly
+            element[0].draw_directly(element[1])
             true
           end
         end

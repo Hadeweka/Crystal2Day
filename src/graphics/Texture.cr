@@ -66,10 +66,10 @@ module Crystal2Day
       @renderer.data
     end
 
-    def draw_directly
+    def draw_directly(offset : Coords)
       render_rect = raw_boundary_rect
-      render_rect.x += @renderer.position_shift.x
-      render_rect.y += @renderer.position_shift.y
+      render_rect.x += @renderer.position_shift.x + offset.x
+      render_rect.y += @renderer.position_shift.y + offset.y
       LibSDL.render_copy_ex_f(@renderer.data, data, nil, pointerof(render_rect), 0.0, nil, LibSDL::RendererFlip::FLIP_NONE)
     end
 

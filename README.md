@@ -103,7 +103,6 @@ end
 
 #### Todo list
 
-* [ ] Entity drawing
 * [ ] Controller support
 * [ ] Key mapping helpers
 * [ ] Method of getting windows by ID
@@ -112,6 +111,7 @@ end
 * [ ] Tile information and animation
 * [ ] Sprite animations
 * [ ] Entity collision system
+* [ ] Entity parent-children system with memory management
 * [ ] Game data storage
 * [ ] Data marshalling
 * [ ] Documentation

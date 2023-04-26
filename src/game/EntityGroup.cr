@@ -3,13 +3,14 @@
 # Using this class also takes care of any mruby memory management.
 
 module Crystal2Day
-  class EntityGroup
+  class EntityGroup < Crystal2Day::Drawable
     BASE_INITIAL_CAPACITY = 128u32
 
     @members : Array(Crystal2Day::Entity)
     @refs : Array(Anyolite::RbRef)
+    @renderer : Crystal2Day::Renderer
 
-    def initialize(capacity : UInt32 = BASE_INITIAL_CAPACITY)
+    def initialize(capacity : UInt32 = BASE_INITIAL_CAPACITY, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       @members = Array(Crystal2Day::Entity).new(initial_capacity: capacity)
       @refs = Array(Anyolite::RbRef).new(initial_capacity: capacity)
     end
@@ -19,12 +20,12 @@ module Crystal2Day
     end
 
     def add_entity(entity_type : Crystal2Day::EntityType)
-      new_entity = Crystal2Day::Entity.new(entity_type)
+      new_entity = Crystal2Day::Entity.new(entity_type, renderer: @renderer)
       register_new_entity(new_entity)
     end
 
     def add_entity
-      new_entity = Crystal2Day::Entity.new
+      new_entity = Crystal2Day::Entity.new(renderer: @renderer)
       register_new_entity(new_entity)
     end
 
@@ -56,6 +57,12 @@ module Crystal2Day
     def clear
       0.upto(@members.size - 1) do |index|
         delete_entity_at(-1)
+      end
+    end
+
+    def draw_directly(offset : Coords)
+      @members.each do |entity|
+        entity.draw_directly(offset)
       end
     end
 

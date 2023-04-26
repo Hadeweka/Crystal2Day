@@ -4,7 +4,7 @@
 # Most properties can also be modified at runtime, so this class is very flexible.
 
 module Crystal2Day
-  class Entity
+  class Entity < Crystal2Day::Drawable
     STATE_INITIAL_CAPACITY = 8
     HOOKS_INITIAL_CAPACITY = 8
     PROCS_INITIAL_CAPACITY = 8
@@ -24,17 +24,19 @@ module Crystal2Day
 
     @type_name : String = Crystal2Day::EntityType::DEFAULT_NAME
 
+    @renderer : Crystal2Day::Renderer
+
     getter magic_number : UInt64 = 0u64
 
     property position : Crystal2Day::Coords = Crystal2Day.xy
     property velocity : Crystal2Day::Coords = Crystal2Day.xy
     property acceleration : Crystal2Day::Coords = Crystal2Day.xy
 
-    @[Anyolite::Specialize]
-    def initialize
+    @[Anyolite::Specialize(nil)]
+    def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
     end
 
-    def initialize(entity_type : Crystal2Day::EntityType)
+    def initialize(entity_type : Crystal2Day::EntityType, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       @state.merge! entity_type.transfer_default_state
       @procs.merge! entity_type.transfer_default_procs
 
@@ -121,8 +123,10 @@ module Crystal2Day
       call_hook("delete", own_ref)
     end
 
-    def draw
-      # TODO
+    def draw_directly(offset : Coords = Crystal2Day.xy)
+      @sprites.each do |sprite|
+        sprite.draw_directly(@position + offset)
+      end
     end
   end
 end

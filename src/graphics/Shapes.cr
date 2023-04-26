@@ -19,9 +19,9 @@ module Crystal2Day
       @position = position
     end
 
-    def draw_directly
+    def draw_directly(offset : Coords)
       LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
-      LibSDL.render_draw_point_f(@renderer.data, @position.x + @renderer.position_shift.x, @position.y + @renderer.position_shift.y)
+      LibSDL.render_draw_point_f(@renderer.data, @position.x + @renderer.position_shift.x + offset.x, @position.y + @renderer.position_shift.y + offset.y)
     end
   end
 
@@ -34,9 +34,13 @@ module Crystal2Day
       @position = position
     end
 
-    def draw_directly
+    def draw_directly(offset : Coords)
       LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
-      LibSDL.render_draw_line_f(@renderer.data, @position.x + @renderer.position_shift.x, @position.y + @renderer.position_shift.y, @position.x + @direction.x + @renderer.position_shift.x, @position.y + @direction.y + @renderer.position_shift.y)
+      draw_x = @position.x + @renderer.position_shift.x + offset.x
+      draw_y =  @position.y + @renderer.position_shift.y + offset.y
+      draw_end_x = @position.x + @direction.x + @renderer.position_shift.x + offset.x
+      draw_end_y = @position.y + @direction.y + @renderer.position_shift.y + offset.y
+      LibSDL.render_draw_line_f(@renderer.data, draw_x, draw_y, draw_end_x, draw_end_y)
     end
   end
 
@@ -51,9 +55,9 @@ module Crystal2Day
       @position = position
     end
 
-    def draw_directly
+    def draw_directly(offset : Coords)
       LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
-      rect = LibSDL::FRect.new(x: @position.x + @renderer.position_shift.x, y: @position.y + @renderer.position_shift.y, w: @size.x, h: @size.y)
+      rect = LibSDL::FRect.new(x: @position.x + @renderer.position_shift.x + offset.x, y: @position.y + @renderer.position_shift.y + offset.y, w: @size.x, h: @size.y)
       # NOTE: A pointer is passed, but since its contents will be copied immediately, there should be no issues
       if @filled
         LibSDL.render_fill_rect_f(@renderer.data, pointerof(rect))
@@ -75,7 +79,7 @@ module Crystal2Day
       @position = position
     end
 
-    def draw_directly
+    def draw_directly(offset : Coords)
       # TODO: Optimize this if necessary
 
       segment_angle = 2.0 * Math::PI / (number_of_render_iterations + 1)
@@ -85,7 +89,7 @@ module Crystal2Day
         Crystal2Day.xy(@radius * cos_angle, @radius * sin_angle)
       end
 
-      center_position = @position + @renderer.position_shift
+      center_position = @position + @renderer.position_shift + offset
 
       if @filled
         vertices = Array(LibSDL::Vertex).new(initial_capacity: (number_of_render_iterations + 1) * 4 * 3)
@@ -181,7 +185,7 @@ module Crystal2Day
       @position = position
     end
 
-    def draw_directly
+    def draw_directly(offset : Coords)
       if @filled
         sdl_vertex_0 = LibSDL::Vertex.new(position: (vertex_0 + @renderer.position_shift).data, color: @color.data)
         sdl_vertex_1 = LibSDL::Vertex.new(position: (vertex_1 + @renderer.position_shift).data, color: @color.data)
@@ -190,9 +194,11 @@ module Crystal2Day
         LibSDL.render_geometry(@renderer.data, nil, vertices, 3, nil, 0)
       else
         LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
-        LibSDL.render_draw_line_f(@renderer.data, vertex_0.x + @renderer.position_shift.x, vertex_0.y + @renderer.position_shift.y, vertex_1.x + @renderer.position_shift.x, vertex_1.y + @renderer.position_shift.y)
-        LibSDL.render_draw_line_f(@renderer.data, vertex_1.x + @renderer.position_shift.x, vertex_1.y + @renderer.position_shift.y, vertex_2.x + @renderer.position_shift.x, vertex_2.y + @renderer.position_shift.y)
-        LibSDL.render_draw_line_f(@renderer.data, vertex_2.x + @renderer.position_shift.x, vertex_2.y + @renderer.position_shift.y, vertex_0.x + @renderer.position_shift.x, vertex_0.y + @renderer.position_shift.y)
+        shift_x = @renderer.position_shift.x + offset.x
+        shift_y = @renderer.position_shift.y + offset.y
+        LibSDL.render_draw_line_f(@renderer.data, vertex_0.x + shift_x, vertex_0.y + shift_y, vertex_1.x + shift_x, vertex_1.y + shift_y)
+        LibSDL.render_draw_line_f(@renderer.data, vertex_1.x + shift_x, vertex_1.y + shift_y, vertex_2.x + shift_x, vertex_2.y + shift_y)
+        LibSDL.render_draw_line_f(@renderer.data, vertex_2.x + shift_x, vertex_2.y + shift_y, vertex_0.x + shift_x, vertex_0.y + shift_y)
       end
     end
   end
@@ -209,7 +215,7 @@ module Crystal2Day
       @position = position
     end
 
-    def draw_directly
+    def draw_directly(offset : Coords)
       # TODO: Optimize this if necessary
       # TODO: Put together circle and ellipse routines
 
@@ -220,7 +226,7 @@ module Crystal2Day
         Crystal2Day.xy(@semiaxes.x * cos_angle, @semiaxes.y * sin_angle)
       end
 
-      center_position = @position + @renderer.position_shift
+      center_position = @position + @renderer.position_shift + offset
 
       if @filled
         vertices = Array(LibSDL::Vertex).new(initial_capacity: (number_of_render_iterations + 1) * 4 * 3)

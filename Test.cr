@@ -108,6 +108,7 @@ class CustomScene < C2D::Scene
     @camera.pin
     @map.pin
     @map_layer_2.pin
+    @entities.pin
   end
 
   def update

@@ -52,7 +52,7 @@ module Crystal2Day
       @data = raw_rect
     end
 
-    def draw_directly
+    def draw_directly(offset : Coords)
       @renderer.not_nil!.view = self
     end
 

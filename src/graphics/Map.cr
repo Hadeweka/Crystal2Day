@@ -50,14 +50,14 @@ module Crystal2Day
       @vertices = Array(LibSDL::Vertex).new(size: view_width * view_height * 6) {LibSDL::Vertex.new}
     end
 
-    def reload_vertex_grid
+    def reload_vertex_grid(offset : Coords)
       view_width = (drawing_rect.width / @tileset.tile_width).ceil.to_u32 + 1
       view_height = (drawing_rect.height / @tileset.tile_height).ceil.to_u32 + 1
 
       generate_vertices(view_width, view_height)
 
-      pos_shift_x = @renderer.position_shift.x
-      pos_shift_y = @renderer.position_shift.y
+      pos_shift_x = @renderer.position_shift.x + offset.x
+      pos_shift_y = @renderer.position_shift.y + offset.y
 
       exact_shift_x = @drawing_rect.x + @drawing_rect.width / 2 - pos_shift_x - (view_width - 1) * (@tileset.tile_width / 2) - 1
       exact_shift_y = @drawing_rect.y + @drawing_rect.height / 2 - pos_shift_y - (view_height - 1) * (@tileset.tile_height / 2) - 1
@@ -100,8 +100,8 @@ module Crystal2Day
       end
     end
 
-    def draw_directly
-      reload_vertex_grid
+    def draw_directly(offset : Coords)
+      reload_vertex_grid(offset)
       LibSDL.render_geometry(@tileset.texture.renderer_data, @tileset.texture.data, @vertices, @vertices.size, nil, 0)
     end
   end

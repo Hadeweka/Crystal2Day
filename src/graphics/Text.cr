@@ -39,9 +39,9 @@ module Crystal2Day
       @texture.load_text_from_font!(@text, @font, color: @color)
     end
 
-    def draw_directly
+    def draw_directly(offset : Coords)
       final_source_rect = @texture.raw_int_boundary_rect
-      final_render_rect = (render_rect = @render_rect) ? (render_rect + @position + @texture.renderer.position_shift).data : @texture.raw_boundary_rect(shifted_by: @position + @texture.renderer.position_shift)
+      final_render_rect = (render_rect = @render_rect) ? (render_rect + @position + @texture.renderer.position_shift + offset).data : @texture.raw_boundary_rect(shifted_by: @position + @texture.renderer.position_shift + offset)
       flip_flag = LibSDL::RendererFlip::FLIP_NONE
       if center = @center
         final_center_point = center.data

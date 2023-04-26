@@ -6,9 +6,9 @@ module Crystal2Day
     getter z : UInt8 = 0
     getter pinned : Bool = false
 
-    def draw
+    def draw(offset : Coords = Crystal2Day.xy)
       if window = Crystal2Day.current_window_if_any
-        window.draw(self)
+        window.draw(self, offset)
       else
         Crystal2Day.error "Could not draw to closed or invalid window"
       end
@@ -30,24 +30,24 @@ module Crystal2Day
       end
     end
 
-    def pin
+    def pin(offset : Coords = Crystal2Day.xy)
       @pinned = true
       if window = Crystal2Day.current_window_if_any
-        window.pin(self)
+        window.pin(self, offset)
       else
         Crystal2Day.error "Could not pin to closed or invalid window"
       end
     end
 
-    def unpin
+    def unpin(offset : Coords = Crystal2Day.xy)
       @pinned = false
       if window = Crystal2Day.current_window_if_any
-        window.unpin(self)
+        window.unpin(self, offset)
       else
         Crystal2Day.error "Could not unpin from closed or invalid window"
       end
     end
 
-    abstract def draw_directly
+    abstract def draw_directly(offset : Coords)
   end
 end
