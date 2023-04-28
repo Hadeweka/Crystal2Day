@@ -9,6 +9,7 @@ HEIGHT = 900
 
 class CustomScene < C2D::Scene
   @texture = C2D::Texture.new
+  @texture2 = C2D::Texture.new
   @map = C2D::Map.new
   @map_layer_2 = C2D::Map.new
   @tileset = C2D::Tileset.new
@@ -34,18 +35,26 @@ class CustomScene < C2D::Scene
 
   def init
     @texture.load_from_file!("ExampleTileset.png")
+    @texture2.load_from_file!("ExampleSprite.png")
+
+    sprite = C2D::Sprite.new
+    sprite.link_texture(@texture2)
+    sprite.source_rect = C2D::Rect.new(x: 0, y: 0, width: 50, height: 50)
+    sprite.z = 20
 
     # NOTE: This is a Ruby coroutine!
     update_hook = C2D::CoroutineTemplate.from_block do |entity|
       entity.set_state("test", 12345)
-      100.times {Fiber.yield}
+      100.times {entity.position.x += rand(11) - 5; entity.position.y += rand(11) - 5; Fiber.yield}
       puts "ID: #{entity.get_state("id")}, Test: #{entity.get_state("test")}, Magic number: #{entity.magic_number}, Position: #{entity.position}"
       entity.call_proc("test_proc")
+      loop {entity.position.y += 1; Fiber.yield}
     end
 
     entity_type = C2D::EntityType.new(name: "TestEntity")
     entity_type.add_default_state("test", 12345)
     entity_type.add_coroutine_template("update", update_hook)
+    entity_type.add_sprite sprite
 
     # NOTE: This is a Crystal callback!
     entity_type.add_default_proc("test_proc") do |entity|

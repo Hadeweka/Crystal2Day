@@ -10,6 +10,8 @@ module Crystal2Day
     PROCS_INITIAL_CAPACITY = 8
     CHILDREN_INITIAL_CAPACITY = 8
 
+    property z : UInt8 = 0
+
     @state = Hash(String, Anyolite::RbRef).new(initial_capacity: STATE_INITIAL_CAPACITY)
     @hooks = Hash(String, Crystal2Day::Coroutine).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
     @procs = Hash(String, Proc(Entity, Nil)).new(initial_capacity: PROCS_INITIAL_CAPACITY)
@@ -121,6 +123,10 @@ module Crystal2Day
     @[Anyolite::Exclude]
     def delete(own_ref : Anyolite::RbRef)
       call_hook("delete", own_ref)
+    end
+
+    def get_sprite(index : UInt32)
+      @sprites[index]
     end
 
     # TODO: Integrate parent-child offset

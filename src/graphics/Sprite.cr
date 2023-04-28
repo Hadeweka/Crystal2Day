@@ -23,6 +23,7 @@ module Crystal2Day
       new_sprite.render_rect = @render_rect.dup
       new_sprite.angle = @angle
       new_sprite.center = @center.dup
+      new_sprite.z = @z
       new_sprite
     end
 
@@ -32,7 +33,8 @@ module Crystal2Day
 
     def draw_directly(offset : Coords)
       final_source_rect = (source_rect = @source_rect) ? source_rect.int_data : @texture.raw_int_boundary_rect
-      final_render_rect = (render_rect = @render_rect) ? (render_rect + @position + @texture.renderer.position_shift + offset).data : @texture.raw_boundary_rect(shifted_by: @position + @texture.renderer.position_shift + offset)
+      final_offset = @position + @texture.renderer.position_shift + offset
+      final_render_rect = (render_rect = @render_rect) ? (render_rect + final_offset).data : (source_rect ? (source_rect + final_offset).data : @texture.raw_boundary_rect(shifted_by: final_offset))
       flip_flag = LibSDL::RendererFlip::FLIP_NONE
       if center = @center
         final_center_point = center.data

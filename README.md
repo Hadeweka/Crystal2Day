@@ -100,9 +100,11 @@ end
 * [X] 2D collision routines
 * [X] Minimal mruby scripting using Anyolite
 * [X] Entities with flexible states and scripts
+* [ ] Background textures with parallax scrolling
 
 #### Todo list
 
+* [ ] Add better sprite management for entities
 * [ ] Controller support
 * [ ] Key mapping helpers
 * [ ] Method of getting windows by ID

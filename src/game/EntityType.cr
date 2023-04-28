@@ -37,6 +37,12 @@ module Crystal2Day
       @default_procs[name] = proc
     end
 
+    def add_sprite(sprite : Crystal2Day::Sprite)
+      @sprites.push sprite
+    end
+
+    # TODO: Other routines
+
     def transfer_default_state
       @default_state
     end
