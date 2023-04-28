@@ -108,7 +108,6 @@ class CustomScene < C2D::Scene
     @camera.pin
     @map.pin
     @map_layer_2.pin
-    @entities.pin
   end
 
   def update
@@ -122,6 +121,7 @@ class CustomScene < C2D::Scene
   end
 
   def draw
+    @entities.draw
   end
 
   def handle_event(event)

@@ -4,7 +4,7 @@
 # Most properties can also be modified at runtime, so this class is very flexible.
 
 module Crystal2Day
-  class Entity < Crystal2Day::Drawable
+  class Entity
     STATE_INITIAL_CAPACITY = 8
     HOOKS_INITIAL_CAPACITY = 8
     PROCS_INITIAL_CAPACITY = 8
@@ -123,9 +123,11 @@ module Crystal2Day
       call_hook("delete", own_ref)
     end
 
-    def draw_directly(offset : Coords = Crystal2Day.xy)
+    # TODO: Integrate parent-child offset
+    # TODO: Is there any way to enable pinning this?
+    def draw(offset : Coords = Crystal2Day.xy)
       @sprites.each do |sprite|
-        sprite.draw_directly(@position + offset)
+        sprite.draw(@position + offset)
       end
     end
   end
