@@ -20,6 +20,7 @@ require "./audio/Sound.cr"
 
 require "./graphics/Drawable.cr"
 
+require "./graphics/Animation.cr"
 require "./graphics/Camera.cr"
 require "./graphics/Color.cr"
 require "./graphics/Font.cr"

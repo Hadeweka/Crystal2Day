@@ -10,6 +10,7 @@ module Crystal2Day
     property render_rect : Crystal2Day::Rect?
     property angle : Float32 = 0.0f32
     property center : Crystal2Day::Coords?
+    property animation : Crystal2Day::Animation = Crystal2Day::Animation.new
 
     def initialize(from_texture : Crystal2Day::Texture = Crystal2Day::Texture.new, source_rect : Crystal2Day::Rect? = nil)
       super()
@@ -24,7 +25,24 @@ module Crystal2Day
       new_sprite.angle = @angle
       new_sprite.center = @center.dup
       new_sprite.z = @z
+      new_sprite.animation = Animation.new(@animation.template)
       new_sprite
+    end
+
+    def update_source_rect_by_frame(frame : UInt16)
+      # TODO: This currently only works for texture stripes, but not squares
+      if source_rect = @source_rect
+        source_rect.x = source_rect.width * frame
+      else
+        Crystal2Day.error "No source rect defined"
+      end
+    end
+
+    def update
+      @animation.update
+      if @animation.has_changed
+        update_source_rect_by_frame(@animation.current_frame)
+      end
     end
 
     def link_texture(texture : Crystal2Day::Texture)
@@ -34,7 +52,7 @@ module Crystal2Day
     def draw_directly(offset : Coords)
       final_source_rect = (source_rect = @source_rect) ? source_rect.int_data : @texture.raw_int_boundary_rect
       final_offset = @position + @texture.renderer.position_shift + offset
-      final_render_rect = (render_rect = @render_rect) ? (render_rect + final_offset).data : (source_rect ? (source_rect + final_offset).data : @texture.raw_boundary_rect(shifted_by: final_offset))
+      final_render_rect = (render_rect = @render_rect) ? (render_rect + final_offset).data : (source_rect ? (source_rect.unshifted + final_offset).data : @texture.raw_boundary_rect(shifted_by: final_offset))
       flip_flag = LibSDL::RendererFlip::FLIP_NONE
       if center = @center
         final_center_point = center.data

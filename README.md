@@ -108,10 +108,8 @@ end
 * [ ] Controller support
 * [ ] Key mapping helpers
 * [ ] Method of getting windows by ID
-* [ ] Custom shape designs (colors, textures)
 * [ ] Particle generator
 * [ ] Tile information and animation
-* [ ] Sprite animations
 * [ ] Entity collision system
 * [ ] Entity parent-children system with memory management
 * [ ] Game data storage
@@ -124,4 +122,5 @@ end
 
 * [ ] Tiled support
 * [ ] Quadriliteral shapes
+* [ ] Custom shape designs (colors, textures)
 

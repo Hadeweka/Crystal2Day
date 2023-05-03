@@ -53,6 +53,10 @@ module Crystal2Day
       @data.h = value
     end
 
+    def unshifted
+      Rect.new(0.0, 0.0, width, height)
+    end
+
     def int_data
       LibSDL::Rect.new(x: self.x, y: self.y, w: self.width, h: self.height)
     end

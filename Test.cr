@@ -41,6 +41,8 @@ class CustomScene < C2D::Scene
     sprite.link_texture(@texture2)
     sprite.source_rect = C2D::Rect.new(x: 0, y: 0, width: 50, height: 50)
     sprite.z = 20
+    animation_template = C2D::AnimationTemplate.new(start_frame: 1, loop_end_frame: 2, frame_delay: 20)
+    sprite.animation = C2D::Animation.new(animation_template)
 
     # NOTE: This is a Ruby coroutine!
     update_hook = C2D::CoroutineTemplate.from_block do |entity|
