@@ -11,6 +11,7 @@ module Crystal2Day
     property angle : Float32 = 0.0f32
     property center : Crystal2Day::Coords?
     property animation : Crystal2Day::Animation = Crystal2Day::Animation.new
+    property parallax : Crystal2Day::Coords = Crystal2Day.xy(1.0, 1.0)
 
     def initialize(from_texture : Crystal2Day::Texture = Crystal2Day::Texture.new, source_rect : Crystal2Day::Rect? = nil)
       super()
@@ -26,6 +27,7 @@ module Crystal2Day
       new_sprite.center = @center.dup
       new_sprite.z = @z
       new_sprite.animation = Animation.new(@animation.template)
+      new_sprite.parallax = @parallax
       new_sprite
     end
 
@@ -51,7 +53,7 @@ module Crystal2Day
 
     def draw_directly(offset : Coords)
       final_source_rect = (source_rect = @source_rect) ? source_rect.int_data : @texture.raw_int_boundary_rect
-      final_offset = @position + @texture.renderer.position_shift + offset
+      final_offset = @position + @texture.renderer.position_shift.scale(@parallax) + offset
       final_render_rect = (render_rect = @render_rect) ? (render_rect + final_offset).data : (source_rect ? (source_rect.unshifted + final_offset).data : @texture.raw_boundary_rect(shifted_by: final_offset))
       flip_flag = LibSDL::RendererFlip::FLIP_NONE
       if center = @center

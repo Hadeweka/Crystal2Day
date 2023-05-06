@@ -40,6 +40,10 @@ module Crystal2Day
       Crystal2Day::Coords.new(self.x * scalar, self.y * scalar)
     end
 
+    def scale(other : Crystal2Day::Coords)
+      Crystal2Day::Coords.new(self.x * other.x, self.y * other.y)
+    end
+
     def /(scalar : Number)
       Crystal2Day::Coords.new(self.x / scalar, self.y / scalar)
     end

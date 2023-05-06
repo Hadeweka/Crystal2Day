@@ -10,6 +10,7 @@ HEIGHT = 900
 class CustomScene < C2D::Scene
   @texture = C2D::Texture.new
   @texture2 = C2D::Texture.new
+  @texture3 = C2D::Texture.new
   @map = C2D::Map.new
   @map_layer_2 = C2D::Map.new
   @tileset = C2D::Tileset.new
@@ -36,6 +37,7 @@ class CustomScene < C2D::Scene
   def init
     @texture.load_from_file!("ExampleTileset.png")
     @texture2.load_from_file!("ExampleSprite.png")
+    @texture3.load_from_file!("ExampleSky.png")
 
     sprite = C2D::Sprite.new
     sprite.link_texture(@texture2)
@@ -44,16 +46,21 @@ class CustomScene < C2D::Scene
     animation_template = C2D::AnimationTemplate.new(start_frame: 1, loop_end_frame: 2, frame_delay: 20)
     sprite.animation = C2D::Animation.new(animation_template)
 
+    bg = C2D::Sprite.new
+    bg.link_texture(@texture3)
+    bg.position = C2D.xy(0, 0)
+    bg.parallax = C2D.xy(0.1, 1.0)
+    bg.z = 25
+
     C2D.game_data.set_state("gravity", C2D.xy(0, 9.81))
 
     # NOTE: This is a Ruby coroutine!
     update_hook = C2D::CoroutineTemplate.from_block do |entity|
       entity.set_state("test", 12345)
       100.times {entity.position.x += rand(11) - 5; entity.position.y += rand(11) - 5; Fiber.yield}
-      puts "ID: #{entity.get_state("id")}, Test: #{entity.get_state("test")}, Magic number: #{entity.magic_number}, Position: #{entity.position}"
+      gravity = Crystal2Day.game_data.get_state("gravity")
+      puts "ID: #{entity.get_state("id")}, Test: #{entity.get_state("test")}, Magic number: #{entity.magic_number}, Position: #{entity.position}, Gravity: #{gravity}"
       entity.call_proc("test_proc")
-      Crystal2Day.game_data = Crystal2Day.game_data
-      puts Crystal2Day.game_data.get_state("gravity")
       loop {entity.position.y += 1; Fiber.yield}
     end
 
@@ -119,6 +126,8 @@ class CustomScene < C2D::Scene
     ellipse.number_of_render_iterations = 8
     ellipse.filled = false
     ellipse.pin
+
+    bg.pin
 
     @camera.pin
     @map.pin

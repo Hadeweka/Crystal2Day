@@ -101,7 +101,6 @@ end
 * [X] Minimal mruby scripting using Anyolite
 * [X] Entities with flexible states and scripts
 * [X] Simple game state
-* [ ] Background textures with parallax scrolling
 
 #### Todo list
 
