@@ -100,6 +100,7 @@ end
 * [X] 2D collision routines
 * [X] Minimal mruby scripting using Anyolite
 * [X] Entities with flexible states and scripts
+* [X] Simple game state
 * [ ] Background textures with parallax scrolling
 
 #### Todo list
@@ -107,12 +108,10 @@ end
 * [ ] Add better sprite management for entities
 * [ ] Controller support
 * [ ] Key mapping helpers
-* [ ] Method of getting windows by ID
 * [ ] Particle generator
 * [ ] Tile information and animation
 * [ ] Entity collision system
 * [ ] Entity parent-children system with memory management
-* [ ] Game data storage
 * [ ] Data marshalling
 * [ ] Documentation
 

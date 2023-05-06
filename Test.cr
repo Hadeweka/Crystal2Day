@@ -44,12 +44,16 @@ class CustomScene < C2D::Scene
     animation_template = C2D::AnimationTemplate.new(start_frame: 1, loop_end_frame: 2, frame_delay: 20)
     sprite.animation = C2D::Animation.new(animation_template)
 
+    C2D.game_data.set_state("gravity", C2D.xy(0, 9.81))
+
     # NOTE: This is a Ruby coroutine!
     update_hook = C2D::CoroutineTemplate.from_block do |entity|
       entity.set_state("test", 12345)
       100.times {entity.position.x += rand(11) - 5; entity.position.y += rand(11) - 5; Fiber.yield}
       puts "ID: #{entity.get_state("id")}, Test: #{entity.get_state("test")}, Magic number: #{entity.magic_number}, Position: #{entity.position}"
       entity.call_proc("test_proc")
+      Crystal2Day.game_data = Crystal2Day.game_data
+      puts Crystal2Day.game_data.get_state("gravity")
       loop {entity.position.y += 1; Fiber.yield}
     end
 

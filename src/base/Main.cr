@@ -10,6 +10,7 @@ module Crystal2Day
   class_property limiter : Crystal2Day::Limiter = Crystal2Day::Limiter.new
   class_getter windows : Array(Crystal2Day::Window) = [] of Crystal2Day::Window
   class_property clean_windows_on_scene_exit : Bool = true
+  class_property game_data : Crystal2Day::GameData = Crystal2Day::GameData.new
 
   @@current_window : Crystal2Day::Window?
 
@@ -27,9 +28,13 @@ module Crystal2Day
   def self.run(debug : Bool = false)
     Crystal2Day.init(debug: debug)
     Crystal2Day::Interpreter.start
-    Crystal2Day::Interpreter.expose_class(Crystal2Day::Coords)
-    Crystal2Day::Interpreter.expose_class(Crystal2Day::Color)
-    Crystal2Day::Interpreter.expose_class(Crystal2Day::Entity)
+    Crystal2Day::Interpreter.expose_module_only(Crystal2Day)
+    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, game_data, Crystal2Day::GameData)
+    # TODO: Add bindings for Crystal2Day.xy
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::Coords, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::Color, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::Entity, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::GameData, under: Crystal2Day)
     yield
     Crystal2Day::Interpreter.close
     Crystal2Day.quit

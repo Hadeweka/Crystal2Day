@@ -10,6 +10,16 @@ module Crystal2Day
   module Interpreter
     @@rb_interpreter : Anyolite::RbInterpreter? = nil
 
+    macro expose_module_only(class_or_module)
+      Anyolite.wrap_module(Crystal2Day::Interpreter.get, {{class_or_module}}, {{class_or_module.stringify}})
+    end
+
+    macro expose_class_property(class_or_module, method, method_arg)
+      Anyolite.wrap_class_method(Crystal2Day::Interpreter.get, {{class_or_module}}, {{method.stringify}}, {{class_or_module}}.{{method}})
+      Anyolite.wrap_class_method(Crystal2Day::Interpreter.get, {{class_or_module}}, {{method.stringify + "="}}, {{class_or_module}}.{{method}}, {{method_arg}}, operator: "=")
+      # TODO: Replace this with Anyolite class property wrappers if available
+    end
+
     macro expose_class(class_or_module, under = nil)
       Anyolite.wrap(Crystal2Day::Interpreter.get, {{class_or_module}}, under: {{under}})
     end
