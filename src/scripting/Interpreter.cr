@@ -20,6 +20,10 @@ module Crystal2Day
       # TODO: Replace this with Anyolite class property wrappers if available
     end
 
+    macro expose_class_function(class_or_module, method, method_args)
+      Anyolite.wrap_class_method(Crystal2Day::Interpreter.get, {{class_or_module}}, {{method.stringify}}, {{class_or_module}}.{{method}}, {{method_args}})
+    end
+
     macro expose_class(class_or_module, under = nil)
       Anyolite.wrap(Crystal2Day::Interpreter.get, {{class_or_module}}, under: {{under}})
     end

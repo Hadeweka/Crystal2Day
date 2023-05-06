@@ -58,7 +58,7 @@ class CustomScene < C2D::Scene
     # NOTE: This is a Ruby coroutine!
     update_hook = C2D::CoroutineTemplate.from_block do |entity|
       entity.set_state("test", 12345)
-      100.times {entity.position.x += rand(11) - 5; entity.position.y += rand(11) - 5; Fiber.yield}
+      100.times {entity.accelerate(Crystal2Day.xy(rand - 0.5, rand - 0.5)*100.0); Fiber.yield}
       gravity = Crystal2Day.game_data.get_state("gravity")
       puts "ID: #{entity.get_state("id")}, Test: #{entity.get_state("test")}, Magic number: #{entity.magic_number}, Position: #{entity.position}, Gravity: #{gravity}"
       entity.call_proc("test_proc")

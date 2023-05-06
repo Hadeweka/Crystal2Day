@@ -32,7 +32,8 @@ module Crystal2Day
     Crystal2Day::Interpreter.expose_module_only(Crystal2Day)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, game_data, Crystal2Day::GameData)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, physics_time_step, Float32)
-    # TODO: Add bindings for things like Crystal2Day.xy
+    Crystal2Day::Interpreter.expose_class_function(Crystal2Day, xy, [x : Float32 = 0.0f32, y : Float32 = 0.0f32])
+    # TODO: Maybe just use Anyolite for the whole module
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Coords, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Color, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Entity, under: Crystal2Day)
