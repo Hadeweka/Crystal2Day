@@ -111,9 +111,22 @@ module Crystal2Day
     @[Anyolite::Exclude]
     def update(own_ref : Anyolite::RbRef)
       call_hook("update", own_ref)
+      update_physics
       @sprites.each do |sprite|
         sprite.update
       end
+    end
+
+    @[Anyolite::Exclude]
+    def update_physics
+      # TODO: Add units
+      @velocity += @acceleration * Crystal2Day.physics_time_step
+      @position += @velocity * Crystal2Day.physics_time_step
+      @acceleration = Crystal2Day.xy
+    end
+
+    def accelerate(value : Crystal2Day::Coords)
+      @acceleration += value
     end
 
     @[Anyolite::Exclude]

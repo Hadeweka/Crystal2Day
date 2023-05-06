@@ -11,6 +11,7 @@ module Crystal2Day
   class_getter windows : Array(Crystal2Day::Window) = [] of Crystal2Day::Window
   class_property clean_windows_on_scene_exit : Bool = true
   class_property game_data : Crystal2Day::GameData = Crystal2Day::GameData.new
+  class_property physics_time_step : Float32 = 1.0
 
   @@current_window : Crystal2Day::Window?
 
@@ -30,7 +31,8 @@ module Crystal2Day
     Crystal2Day::Interpreter.start
     Crystal2Day::Interpreter.expose_module_only(Crystal2Day)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, game_data, Crystal2Day::GameData)
-    # TODO: Add bindings for Crystal2Day.xy
+    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, physics_time_step, Float32)
+    # TODO: Add bindings for things like Crystal2Day.xy
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Coords, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Color, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Entity, under: Crystal2Day)

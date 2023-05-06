@@ -53,6 +53,7 @@ class CustomScene < C2D::Scene
     bg.z = 25
 
     C2D.game_data.set_state("gravity", C2D.xy(0, 9.81))
+    C2D.physics_time_step = 0.1
 
     # NOTE: This is a Ruby coroutine!
     update_hook = C2D::CoroutineTemplate.from_block do |entity|
@@ -61,7 +62,7 @@ class CustomScene < C2D::Scene
       gravity = Crystal2Day.game_data.get_state("gravity")
       puts "ID: #{entity.get_state("id")}, Test: #{entity.get_state("test")}, Magic number: #{entity.magic_number}, Position: #{entity.position}, Gravity: #{gravity}"
       entity.call_proc("test_proc")
-      loop {entity.position.y += 1; Fiber.yield}
+      loop {entity.accelerate(gravity); Fiber.yield}
     end
 
     entity_type = C2D::EntityType.new(name: "TestEntity")
