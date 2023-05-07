@@ -1,0 +1,29 @@
+{
+  "EntityType":
+  [
+    {
+      "name": "TestEntity",
+
+      "default_state": {
+        "test": 12345
+      },
+
+      "coroutines": {
+        "update": "ExampleUpdate.rb"
+      },
+
+      "sprites": [
+        {
+          "texture": "ExampleSprite.png",
+          "source_rect": {"width": 50, "height": 50},
+          "z": 20,
+          "animation_template": {
+            "start_frame": 1,
+            "loop_end_frame": 2,
+            "frame_delay": 20
+          }
+        }
+      ]
+    }
+  ]
+}

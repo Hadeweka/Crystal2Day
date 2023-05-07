@@ -104,15 +104,40 @@ end
 
 #### Todo list
 
-* [ ] Add better sprite management for entities
+##### Features
+
+* [ ] Particle generator
+* [ ] Documentation
+
+##### Controls
+
 * [ ] Controller support
 * [ ] Key mapping helpers
-* [ ] Particle generator
-* [ ] Tile information and animation
+
+##### Data management
+
+* [ ] Resource management system
+* [ ] Data serializing
+* [ ] Database system for templates etc.
+* [ ] Data obfuscation
+
+##### Entities
+
+* [ ] Better sprite management
 * [ ] Entity collision system
 * [ ] Entity parent-children system with memory management
-* [ ] Data marshalling
-* [ ] Documentation
+* [ ] Multiple entity script pages/states
+
+##### Maps
+
+* [ ] Loading routines
+* [ ] Collision checks
+* [ ] Tile information
+
+##### Graphics
+
+* [ ] Tile animation
+* [ ] Text alignment options
 
 ### Potential future releases
 
@@ -121,4 +146,6 @@ end
 * [ ] Tiled support
 * [ ] Quadriliteral shapes
 * [ ] Custom shape designs (colors, textures)
+* [ ] Entity type inheritance
+* [ ] ImGUI support
 
