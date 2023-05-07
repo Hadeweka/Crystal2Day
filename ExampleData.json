@@ -2,7 +2,7 @@
   "EntityType":
   [
     {
-      "name": "TestEntity",
+      "name": "Player",
 
       "default_state": {
         "test": 12345
@@ -16,11 +16,11 @@
         {
           "texture": "ExampleSprite.png",
           "source_rect": {"width": 50, "height": 50},
-          "z": 20,
+          "z": 3,
           "animation_template": {
             "start_frame": 1,
             "loop_end_frame": 2,
-            "frame_delay": 20
+            "frame_delay": 10
           }
         }
       ]

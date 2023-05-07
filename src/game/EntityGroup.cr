@@ -19,13 +19,15 @@ module Crystal2Day
       @members.size
     end
 
-    def add_entity(entity_type : Crystal2Day::EntityType)
+    def add_entity(entity_type : Crystal2Day::EntityType, position : Crystal2Day::Coords = Crystal2Day.xy)
       new_entity = Crystal2Day::Entity.new(entity_type, renderer: @renderer)
+      new_entity.position = position
       register_new_entity(new_entity)
     end
 
-    def add_entity
+    def add_entity(position : Crystal2Day::Coords = Crystal2Day.xy)
       new_entity = Crystal2Day::Entity.new(renderer: @renderer)
+      new_entity.position = position
       register_new_entity(new_entity)
     end
 

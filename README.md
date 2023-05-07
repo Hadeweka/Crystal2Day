@@ -1,6 +1,6 @@
 # What is Crystal2Day?
 
-Crystal2Day (or short C2D) is designed as a tool to develop games with Crystal fast.
+Crystal2Day is designed as a tool to develop games with Crystal fast.
 
 Less work for you, therefore more time for actual game design.
 
@@ -123,6 +123,7 @@ end
 
 ##### Entities
 
+* [ ] Hook for event handling
 * [ ] Better sprite management
 * [ ] Entity collision system
 * [ ] Entity parent-children system with memory management
@@ -138,6 +139,7 @@ end
 
 * [ ] Tile animation
 * [ ] Text alignment options
+* [ ] Sprite flipping and simple scaling
 
 ### Potential future releases
 

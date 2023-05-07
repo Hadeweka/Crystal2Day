@@ -2,26 +2,106 @@
 
 require "./src/Crystal2Day.cr"
 
-alias C2D = Crystal2Day
+alias CD = Crystal2Day
 
 WIDTH = 1600
 HEIGHT = 900
 
-class CustomScene < C2D::Scene
-  @texture = C2D::Texture.new
-  @texture2 = C2D::Texture.new
-  @texture3 = C2D::Texture.new
-  @map = C2D::Map.new
-  @map_layer_2 = C2D::Map.new
-  @tileset = C2D::Tileset.new
-  @camera = C2D::Camera.new(position: C2D.xy(-WIDTH/2, -HEIGHT/2))
-  @entities = C2D::EntityGroup.new
+class CustomScene < CD::Scene
+  # Map components
+  @texture_tileset = CD::Texture.new
+  @map = CD::Map.new
+  @tileset = CD::Tileset.new
+
+  # Background
+  @texture_bg = CD::Texture.new
+  @bg = CD::Sprite.new
+
+  # Gameplay
+  @texture_player = CD::Texture.new
+  @player = CD::EntityGroup.new
+  @camera = CD::Camera.new
+
+  def init
+    @texture_tileset.load_from_file!("ExampleTileset.png")
+    @tileset.link_texture(@texture_tileset)
+    @tileset.fill_with_default_tiles(number: 8) # NOTE: This will become relevant for tile animations and information
+    @tileset.tile_width = 50
+    @tileset.tile_height = 50
+    @map.tileset = @tileset
+    @map.content.load_from_array!(generate_test_map(width: 200, height: 200))
+    @map.background_tile = 0
+    @map.z = 2
+    @map.pin
+
+    @texture_bg.load_from_file!("ExampleSky.png")
+    @bg.link_texture(@texture_bg)
+    @bg.position = CD.xy(-100, -100)
+    @bg.parallax = CD.xy(0.1, 0.1)
+    @bg.render_rect = CD::Rect.new(width: 2000, height: 2000)
+    @bg.z = 1
+    @bg.pin
+    
+    @texture_player.load_from_file!("ExampleSprite.png")
+    # TODO: Load this from a file
+    sprite_player = CD::Sprite.new
+    sprite_player.link_texture(@texture_player)
+    sprite_player.source_rect = CD::Rect.new(width: 50, height: 50)
+    sprite_player.position = CD.xy(-25, -50)
+    sprite_player.z = 3
+    animation_template = CD::AnimationTemplate.new(start_frame: 1, loop_end_frame: 2, frame_delay: 10)
+    sprite_player.animation = CD::Animation.new(animation_template)
+    entity_type = CD::EntityType.new(name: "Player")
+    entity_type.add_default_state("test", 12345)
+    entity_type.add_sprite(sprite_player)
+    @player.add_entity(entity_type, position: CD.xy(25, 0))
+
+    @camera.follow_entity(@player.get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
+    @camera.z = 0
+    @camera.pin
+
+    CD.game_data.set_state("gravity", CD.xy(0, 100.0))
+    CD.physics_time_step = 0.1
+  end
+
+  def update
+    player_entity = @player.get_entity(0)
+    player_entity.velocity.y = -200 if CD::Keyboard.key_down?(CD::Keyboard::K_W) && player_entity.position.y == 0
+    player_entity.position.x -= 10 if CD::Keyboard.key_down?(CD::Keyboard::K_A)
+    player_entity.position.x += 10 if CD::Keyboard.key_down?(CD::Keyboard::K_D)
+    player_entity.accelerate(CD::Interpreter.cast_ref_to(CD.game_data.get_state("gravity"), CD::Coords))
+    CD.current_window.title = "FPS: #{CD.get_fps.round.to_i}"
+
+    @player.update
+
+    if player_entity.position.y >= 0 && player_entity.position.x > -25
+      player_entity.position.y = 0
+      player_entity.velocity.y = 0
+    end
+  end
+
+  def draw
+    @player.draw
+  end
+
+  def handle_event(event)
+    if event.type == CD::Event::WINDOW
+      if event.as_window_event.event == CD::WindowEvent::CLOSE
+        CD.next_scene = nil
+      end
+    end
+  end
+
+  def exit
+    CD.current_window.close
+    CD.current_window = nil
+  end
 
   def generate_test_map(width : UInt32, height : UInt32, with_rocks : Bool = false)
-    array = Array(Array(C2D::TileID)).new(initial_capacity: height)
+    array = Array(Array(CD::TileID)).new(initial_capacity: height)
 
     0.upto(height - 1) do |y|
-      array.push Array(C2D::TileID).new(initial_capacity: width)
+      array.push Array(CD::TileID).new(initial_capacity: width)
       0.upto(width - 1) do |x|
         if with_rocks
           array[y].push(rand < 0.1 ? 6u32 : 0u32)
@@ -33,139 +113,10 @@ class CustomScene < C2D::Scene
 
     return array
   end
-
-  def init
-    @texture.load_from_file!("ExampleTileset.png")
-    @texture2.load_from_file!("ExampleSprite.png")
-    @texture3.load_from_file!("ExampleSky.png")
-
-    sprite = C2D::Sprite.new
-    sprite.link_texture(@texture2)
-    sprite.source_rect = C2D::Rect.new(x: 0, y: 0, width: 50, height: 50)
-    sprite.z = 20
-    animation_template = C2D::AnimationTemplate.new(start_frame: 1, loop_end_frame: 2, frame_delay: 20)
-    sprite.animation = C2D::Animation.new(animation_template)
-
-    bg = C2D::Sprite.new
-    bg.link_texture(@texture3)
-    bg.position = C2D.xy(0, 0)
-    bg.parallax = C2D.xy(0.1, 1.0)
-    bg.z = 25
-
-    C2D.game_data.set_state("gravity", C2D.xy(0, 9.81))
-    C2D.physics_time_step = 0.1
-
-    # NOTE: This is a Ruby coroutine!
-    update_hook = C2D::CoroutineTemplate.from_block do |entity|
-      entity.set_state("test", 12345)
-      100.times {entity.accelerate(Crystal2Day.xy(rand - 0.5, rand - 0.5)*100.0); Fiber.yield}
-      gravity = Crystal2Day.game_data.get_state("gravity")
-      puts "ID: #{entity.get_state("id")}, Test: #{entity.get_state("test")}, Magic number: #{entity.magic_number}, Position: #{entity.position}, Gravity: #{gravity}"
-      entity.call_proc("test_proc")
-      loop {entity.accelerate(gravity); Fiber.yield}
-    end
-
-    entity_type = C2D::EntityType.new(name: "TestEntity")
-    entity_type.add_default_state("test", 12345)
-    entity_type.add_coroutine_template("update", update_hook)
-    entity_type.add_sprite sprite
-
-    # NOTE: This is a Crystal callback!
-    entity_type.add_default_proc("test_proc") do |entity|
-      puts "Hello world from a #{C2D.scene.class}!"
-    end
-    
-    10.times {@entities.add_entity(entity_type)}
-    0.upto(@entities.number - 1) do |i|
-      @entities.get_entity(i).set_state("id", i.to_s)
-    end
-
-    # NOTE: Above we used Ruby coroutines and Crystal callbacks.
-    # They seem quite similar, but they have drastical differences.
-    # The Ruby coroutines can only access the entity state and the Crystal callbacks.
-    # This way, you can limit scripting to certain elements.
-    # But the coroutines also allow for suspension, while keeping their context.
-    # This is not possible with the Crystal callbacks.
-    # They however can do nearly anything and access most other functions.
-
-    @map.content.load_from_array!(generate_test_map(width: 200, height: 200))
-    @map_layer_2.content.load_from_array!(generate_test_map(width: 200, height: 200, with_rocks: true))
-
-    @tileset.link_texture(@texture)
-    @tileset.fill_with_default_tiles(number: 8) # NOTE: This will become relevant for tile animations and information
-    @tileset.tile_width = 50
-    @tileset.tile_height = 50
-
-    @map.tileset = @tileset
-    @map_layer_2.tileset = @tileset
-
-    @map.background_tile = 4
-
-    @map_layer_2.z = 1
-    
-    box = C2D::ShapeBox.new(C2D.xy(100, 100), position: C2D.xy(-50, -50))
-    box.color = C2D::Color.black
-    box.filled = true
-    box.z = 10
-    box.pin
-
-    triangle = C2D::ShapeTriangle.new(position: C2D.xy(-50, 0), side_1: C2D.xy(100, 0), side_2: C2D.xy(50, 50))
-    triangle.color = C2D::Color.red
-    triangle.filled = true
-    triangle.z = 11
-    triangle.pin
-
-    circle = C2D::ShapeCircle.new(position: C2D.xy(0.0, 0.0), radius: 50.0)
-    circle.color = C2D::Color.green
-    circle.z = 12
-    circle.filled = false
-    circle.pin
-
-    ellipse = C2D::ShapeEllipse.new(position: C2D.xy(0.0, 0.0), semiaxes: C2D.xy(100.0, 50.0))
-    ellipse.color = C2D::Color.yellow
-    ellipse.z = 13
-    ellipse.number_of_render_iterations = 8
-    ellipse.filled = false
-    ellipse.pin
-
-    bg.pin
-
-    @camera.pin
-    @map.pin
-    @map_layer_2.pin
-  end
-
-  def update
-    @camera.position.y -= 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_W)
-    @camera.position.y += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_S)
-    @camera.position.x -= 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_A)
-    @camera.position.x += 10 if C2D::Keyboard.key_down?(C2D::Keyboard::K_D)
-    C2D.current_window.title = "FPS: #{C2D.get_fps.round.to_i}"
-
-    @entities.update
-  end
-
-  def draw
-    @entities.draw
-  end
-
-  def handle_event(event)
-    if event.type == C2D::Event::WINDOW
-      if event.as_window_event.event == C2D::WindowEvent::CLOSE
-        C2D.next_scene = nil
-      end
-    end
-  end
-
-  def exit
-    C2D.current_window.close
-    C2D.current_window = nil
-    @entities.clear
-  end
 end
 
-C2D.run do
-  C2D::Window.new(title: "Hello", w: WIDTH, h: HEIGHT)
-  C2D.scene = CustomScene.new
-  C2D.main_routine
+CD.run do
+  CD::Window.new(title: "Hello", w: WIDTH, h: HEIGHT)
+  CD.scene = CustomScene.new
+  CD.main_routine
 end

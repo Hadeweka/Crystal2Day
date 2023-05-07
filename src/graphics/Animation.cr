@@ -31,6 +31,7 @@ module Crystal2Day
     end
 
     def update
+      first_frame = (@repeat_counter == 0 && @delay_counter == @template.frame_delay) # TODO: Maybe this can be optimized
       if @delay_counter == 0
         @delay_counter = @template.frame_delay
         if @current_frame < @template.loop_end_frame
@@ -47,7 +48,7 @@ module Crystal2Day
         end
       else
         @delay_counter -= 1
-        @has_changed = false
+        @has_changed = first_frame
       end
     end
 

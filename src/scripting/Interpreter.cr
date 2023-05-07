@@ -84,7 +84,7 @@ module Crystal2Day
     end
 
     macro cast_ref_to(value, crystal_class)
-      Anyolite::Macro.convert_from_ruby_to_crystal(Crystal2Day::Interpreter.get.to_unsafe, {{value}}, {{crystal_class}})
+      Anyolite::Macro.convert_from_ruby_to_crystal(Crystal2Day::Interpreter.get.to_unsafe, {{value}}.to_unsafe, {{crystal_class}})
     end
   end
 end
