@@ -101,6 +101,7 @@ end
 * [X] Minimal mruby scripting using Anyolite
 * [X] Entities with flexible states and scripts
 * [X] Simple game state
+* [X] Resource management system
 
 #### Todo list
 
@@ -116,7 +117,6 @@ end
 
 ##### Data management
 
-* [ ] Resource management system
 * [ ] Data serializing
 * [ ] Database system for templates etc.
 * [ ] Data obfuscation

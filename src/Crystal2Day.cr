@@ -10,6 +10,7 @@ require "./base/Coords.cr"
 require "./base/Helper.cr"
 require "./base/Main.cr"
 require "./base/Rect.cr"
+require "./base/ResourceManager.cr"
 
 require "./scripting/Interpreter.cr"
 

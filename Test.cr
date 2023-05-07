@@ -9,22 +9,19 @@ HEIGHT = 900
 
 class CustomScene < CD::Scene
   # Map components
-  @texture_tileset = CD::Texture.new
   @map = CD::Map.new
   @tileset = CD::Tileset.new
 
   # Background
-  @texture_bg = CD::Texture.new
   @bg = CD::Sprite.new
 
   # Gameplay
-  @texture_player = CD::Texture.new
   @player = CD::EntityGroup.new
   @camera = CD::Camera.new
 
   def init
-    @texture_tileset.load_from_file!("ExampleTileset.png")
-    @tileset.link_texture(@texture_tileset)
+    texture_tileset = CD.rm.load_texture("ExampleTileset.png")
+    @tileset.link_texture(texture_tileset)
     @tileset.fill_with_default_tiles(number: 8) # NOTE: This will become relevant for tile animations and information
     @tileset.tile_width = 50
     @tileset.tile_height = 50
@@ -34,18 +31,18 @@ class CustomScene < CD::Scene
     @map.z = 2
     @map.pin
 
-    @texture_bg.load_from_file!("ExampleSky.png")
-    @bg.link_texture(@texture_bg)
+    texture_bg = CD.rm.load_texture("ExampleSky.png")
+    @bg.link_texture(texture_bg)
     @bg.position = CD.xy(-100, -100)
     @bg.parallax = CD.xy(0.1, 0.1)
     @bg.render_rect = CD::Rect.new(width: 2000, height: 2000)
     @bg.z = 1
     @bg.pin
     
-    @texture_player.load_from_file!("ExampleSprite.png")
+    texture_player = CD.rm.load_texture("ExampleSprite.png")
     # TODO: Load this from a file
     sprite_player = CD::Sprite.new
-    sprite_player.link_texture(@texture_player)
+    sprite_player.link_texture(texture_player)
     sprite_player.source_rect = CD::Rect.new(width: 50, height: 50)
     sprite_player.position = CD.xy(-25, -50)
     sprite_player.z = 3
