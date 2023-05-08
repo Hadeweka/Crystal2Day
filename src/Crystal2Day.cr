@@ -9,9 +9,11 @@ require "sdl-crystal-bindings/sdl-image-bindings"
 require "sdl-crystal-bindings/sdl-ttf-bindings"
 
 require "anyolite"
+
 ANYOLITE_DEFAULT_OPTIONAL_ARGS_TO_KEYWORD_ARGS = true
 
 require "./base/Coords.cr"
+require "./base/Database.cr"
 require "./base/Helper.cr"
 require "./base/Main.cr"
 require "./base/Rect.cr"

@@ -21,8 +21,24 @@ module Crystal2Day
     def initialize(name : String = DEFAULT_NAME)
     end
 
+    def initialize(pull : JSON::PullParser)
+      pull.read_object do |key|
+        case key
+        when "name" then @name = pull.read_string
+        when "default_state"
+          pull.read_object do |state_key|
+            add_default_state_from_raw_json(name: state_key, raw_json: pull.read_raw)
+          end
+        end
+      end
+    end
+
     def add_default_state(name : String, value)
       @default_state[name] = Crystal2Day::Interpreter.generate_ref(value)
+    end
+
+    def add_default_state_from_raw_json(name : String, raw_json : String)
+      @default_state[name] = Crystal2Day::Interpreter.convert_json_to_ref(raw_json)
     end
 
     def add_coroutine_template(name : String, template : Crystal2Day::CoroutineTemplate)

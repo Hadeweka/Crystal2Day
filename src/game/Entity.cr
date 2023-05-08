@@ -39,7 +39,7 @@ module Crystal2Day
     end
 
     def initialize(entity_type : Crystal2Day::EntityType, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
-      @state.merge! entity_type.transfer_default_state
+      @state.merge! entity_type.transfer_default_state # TODO: Generate these values using JSON templates instead!
       @procs.merge! entity_type.transfer_default_procs
 
       entity_type.transfer_coroutine_templates.each do |name, template|

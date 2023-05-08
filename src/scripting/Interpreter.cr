@@ -82,5 +82,42 @@ module Crystal2Day
     macro cast_ref_to(value, crystal_class)
       Anyolite::Macro.convert_from_ruby_to_crystal(Crystal2Day::Interpreter.get.to_unsafe, {{value}}.to_unsafe, {{crystal_class}})
     end
+
+    def self.convert_json_to_ref(json_string : String)
+      generate_ref(convert_json_to_value(json_string))
+    end
+
+    # TODO: Add other types like Colors as well
+    alias JSONParserType = Nil | Bool | Int64 | Float64 | String | Crystal2Day::Coords | Crystal2Day::Rect | Array(JSONParserType)
+
+    def self.convert_json_to_value(json_string : String)
+      pull = JSON::PullParser.new(json_string)
+      case pull.kind
+      when JSON::PullParser::Kind::Null then return nil
+      when JSON::PullParser::Kind::Bool then return pull.read_bool
+      when JSON::PullParser::Kind::Int then return pull.read_int
+      when JSON::PullParser::Kind::Float then return pull.read_float
+      when JSON::PullParser::Kind::String then return pull.read_string
+      when JSON::PullParser::Kind::BeginArray
+        array = [] of JSONParserType
+        pull.read_array do
+          array.push convert_json_to_value(pull.read_raw)
+        end
+        return array
+      when JSON::PullParser::Kind::BeginObject
+        pull.read_next
+        obj_key = pull.read_object_key
+        case obj_key
+        when "Coords" then
+          return Crystal2Day::Coords.from_json(pull.read_raw)
+        when "Rect" then
+          return Crystal2Day::Rect.from_json(pull.read_raw)
+        else
+          Crystal2Day.error "Unknown object type from JSON: #{obj_key}"
+        end
+      else
+        Crystal2Day.error "Something went wrong while parsing JSON string: #{json_string}"
+      end
+    end
   end
 end
