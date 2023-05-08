@@ -53,7 +53,7 @@ class CustomScene < CD::Scene
         "frame_delay": 10
       }
     }>))
-    entity_type.add_default_state("test", 12345)
+    entity_type.add_default_state_from_raw_json("test", "12345")
     @player.add_entity(entity_type, position: CD.xy(25, 0))
 
     @camera.follow_entity(@player.get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))

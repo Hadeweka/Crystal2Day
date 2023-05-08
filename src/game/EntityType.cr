@@ -21,6 +21,8 @@ module Crystal2Day
     def initialize(name : String = DEFAULT_NAME)
     end
 
+    # TODO: Add sprites, shapes etc. to the following routine
+
     def initialize(pull : JSON::PullParser)
       pull.read_object do |key|
         case key
