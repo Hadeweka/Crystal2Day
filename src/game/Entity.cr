@@ -46,8 +46,8 @@ module Crystal2Day
         add_hook_from_template(name, template)
       end
 
-      entity_type.transfer_sprites.each do |sprite|
-        @sprites.push sprite.dup
+      entity_type.transfer_sprite_templates.each do |sprite_template|
+        @sprites.push Crystal2Day::Sprite.new(sprite_template)
       end
 
       entity_type.transfer_boxes.each do |box|

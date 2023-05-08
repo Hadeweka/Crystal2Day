@@ -12,18 +12,17 @@ module Crystal2Day
   class_property clean_windows_on_scene_exit : Bool = true
   class_property game_data : Crystal2Day::GameData = Crystal2Day::GameData.new
   class_property physics_time_step : Float32 = 1.0
-  class_property resource_manager : Crystal2Day::ResourceManager = Crystal2Day::ResourceManager.new
 
   @@current_window : Crystal2Day::Window?
 
   @@debug : Bool = false
 
   def self.rm
-    resource_manager
+    self.current_window.resource_manager
   end
 
   def self.rm=(value)
-    resource_manager = value
+    self.current_window.resource_manager = value
   end
 
   macro call_scene_routine(scene, name)

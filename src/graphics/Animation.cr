@@ -2,18 +2,23 @@
 
 module Crystal2Day
   struct AnimationTemplate
+    include JSON::Serializable
+
     property start_frame : UInt16 = 0u16
     property loop_end_frame : UInt16 = 0u16
-    property loop_start_frame : UInt16 = 0u16
+    property loop_start_frame : UInt16? = nil
     property repeat_times : Int32 = -1
     property frame_delay : UInt32 = 0
 
+    @[JSON::Field(ignore: true)]
+    property actual_loop_start_frame : UInt16 = 0u16
+
     def initialize(@start_frame : UInt16 = 0u16, @loop_end_frame : UInt16 = 0u16, loop_start_frame : UInt16? = nil, @repeat_times : Int32 = -1, @frame_delay : UInt32 = 0)
-      if loop_start_frame
-        @loop_start_frame = loop_start_frame
-      else
-        @loop_start_frame = @start_frame
-      end
+      @actual_loop_start_frame = @loop_start_frame ? @loop_start_frame.not_nil! : @start_frame
+    end
+
+    def after_initialize
+      @actual_loop_start_frame = @loop_start_frame ? @loop_start_frame.not_nil! : @start_frame
     end
   end
 
@@ -42,7 +47,7 @@ module Crystal2Day
           if @template.repeat_times > 0 && @repeat_counter > @template.repeat_times
             @finished = true
           else
-            @current_frame = @template.loop_start_frame
+            @current_frame = @template.actual_loop_start_frame
             @has_changed = true
           end
         end

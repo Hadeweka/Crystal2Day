@@ -2,6 +2,22 @@
 # It allows for geometric operations and serves as a thin layer.
 
 module Crystal2Day
+  struct SpriteTemplate
+    include JSON::Serializable
+
+    @[JSON::Field(key: "texture")]
+    property texture_filename : String = ""
+
+    property position : Crystal2Day::Coords = Crystal2Day.xy
+    property source_rect : Crystal2Day::Rect?
+    property render_rect : Crystal2Day::Rect?
+    property angle : Float32 = 0.0f32
+    property center : Crystal2Day::Coords?
+    property animation_template : Crystal2Day::AnimationTemplate = Crystal2Day::AnimationTemplate.new
+    property parallax : Crystal2Day::Coords = Crystal2Day.xy(1.0, 1.0)
+    property z : UInt8 = 0
+  end
+
   class Sprite < Crystal2Day::Drawable
     @texture : Crystal2Day::Texture
     
@@ -19,16 +35,17 @@ module Crystal2Day
       @texture = from_texture
     end
 
-    def dup
-      new_sprite = Sprite.new(from_texture: @texture, source_rect: @source_rect.dup)
-      new_sprite.position = @position.dup
-      new_sprite.render_rect = @render_rect.dup
-      new_sprite.angle = @angle
-      new_sprite.center = @center.dup
-      new_sprite.z = @z
-      new_sprite.animation = Animation.new(@animation.template)
-      new_sprite.parallax = @parallax
-      new_sprite
+    def initialize(sprite_template : Crystal2Day::SpriteTemplate)
+      super()
+      @texture = Crystal2Day.rm.load_texture(sprite_template.texture_filename)
+      @position = sprite_template.position
+      @source_rect = sprite_template.source_rect
+      @render_rect = sprite_template.render_rect
+      @angle = sprite_template.angle
+      @center = sprite_template.center
+      @animation = Animation.new(sprite_template.animation_template)
+      @parallax = sprite_template.parallax
+      @z = sprite_template.z
     end
 
     def update_source_rect_by_frame(frame : UInt16)

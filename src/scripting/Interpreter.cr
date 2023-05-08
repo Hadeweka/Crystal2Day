@@ -2,10 +2,6 @@
 # If you want to modify or use this, do it at your own risk.
 # Make sure you know what you are doing, if you really want to.
 
-require "anyolite"
-
-ANYOLITE_DEFAULT_OPTIONAL_ARGS_TO_KEYWORD_ARGS = true
-
 module Crystal2Day
   module Interpreter
     @@rb_interpreter : Anyolite::RbInterpreter? = nil

@@ -5,8 +5,22 @@ module Crystal2Day
   class Rect
     getter data : LibSDL::FRect
 
+    @[Anyolite::Specialize]
     def initialize(x : Number = 0.0, y : Number = 0.0, width : Number = 0.0, height : Number = 0.0)
       @data = LibSDL::FRect.new(x: x, y: y, w: width, h: height)
+    end
+
+    def initialize(pull : JSON::PullParser)
+      @data = LibSDL::FRect.new(x: 0.0, y: 0.0, w: 0.0, h: 0.0)
+
+      pull.read_object do |key|
+        case key
+        when "x" then self.x = pull.read_float
+        when "y" then self.y = pull.read_float
+        when "width" then self.width = pull.read_float
+        when "height" then self.height = pull.read_float
+        end
+      end
     end
 
     def dup

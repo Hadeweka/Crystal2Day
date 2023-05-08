@@ -15,6 +15,8 @@ module Crystal2Day
     getter title : String
     getter fullscreen : Bool
 
+    property resource_manager : Crystal2Day::ResourceManager = Crystal2Day::ResourceManager.new
+
     def initialize(title : String, w : Int, h : Int, x : Int = LibSDL::WINDOWPOS_UNDEFINED, y : Int = LibSDL::WINDOWPOS_UNDEFINED, fullscreen : Bool = false, set_as_current : Bool = true)
       window_flags = fullscreen ? LibSDL::WindowFlags::WINDOW_SHOWN | LibSDL::WindowFlags::WINDOW_FULLSCREEN : LibSDL::WindowFlags::WINDOW_SHOWN
       @data = LibSDL.create_window(title, x, y, w, h, window_flags)
@@ -29,6 +31,8 @@ module Crystal2Day
       renderer_flags = LibSDL::RendererFlags::RENDERER_ACCELERATED
       @renderer.create!(self, renderer_flags)
       Crystal2Day.error "Could not create renderer" unless @renderer.data?
+
+      @resource_manager.renderer = @renderer
 
       Crystal2Day.current_window = self if set_as_current
       Crystal2Day.register_window(self)

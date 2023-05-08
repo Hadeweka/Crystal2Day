@@ -10,7 +10,7 @@ module Crystal2Day
     @coroutine_templates = {} of String => Crystal2Day::CoroutineTemplate
     @default_procs = {} of String => Proc(Entity, Nil)
 
-    @sprites = Array(Crystal2Day::Sprite).new
+    @sprite_templates = Array(Crystal2Day::SpriteTemplate).new
     @boxes = Array(Crystal2Day::CollisionShapeBox).new
     @shapes = Array(Crystal2Day::CollisionShape).new
     @hitshapes = Array(Crystal2Day::CollisionShape).new
@@ -37,8 +37,8 @@ module Crystal2Day
       @default_procs[name] = proc
     end
 
-    def add_sprite(sprite : Crystal2Day::Sprite)
-      @sprites.push sprite
+    def add_sprite_template(sprite_template : Crystal2Day::SpriteTemplate)
+      @sprite_templates.push sprite_template
     end
 
     # TODO: Other routines
@@ -55,8 +55,8 @@ module Crystal2Day
       @default_procs
     end
 
-    def transfer_sprites
-      @sprites
+    def transfer_sprite_templates
+      @sprite_templates
     end
 
     def transfer_boxes

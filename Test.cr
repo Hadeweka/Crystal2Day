@@ -38,19 +38,21 @@ class CustomScene < CD::Scene
     @bg.render_rect = CD::Rect.new(width: 2000, height: 2000)
     @bg.z = 1
     @bg.pin
-    
-    texture_player = CD.rm.load_texture("ExampleSprite.png")
-    # TODO: Load this from a file
-    sprite_player = CD::Sprite.new
-    sprite_player.link_texture(texture_player)
-    sprite_player.source_rect = CD::Rect.new(width: 50, height: 50)
-    sprite_player.position = CD.xy(-25, -50)
-    sprite_player.z = 3
-    animation_template = CD::AnimationTemplate.new(start_frame: 1, loop_end_frame: 2, frame_delay: 10)
-    sprite_player.animation = CD::Animation.new(animation_template)
+
+    player_sprite_template = CD::SpriteTemplate.from_json(%<{
+      "texture": "ExampleSprite.png",
+      "source_rect": {"width": 50, "height": 50},
+      "position": {"x": -25, "y": -50},
+      "z": 3,
+      "animation_template": {
+        "start_frame": 1,
+        "loop_end_frame": 2,
+        "frame_delay": 10
+      }
+    }>)
     entity_type = CD::EntityType.new(name: "Player")
     entity_type.add_default_state("test", 12345)
-    entity_type.add_sprite(sprite_player)
+    entity_type.add_sprite_template(player_sprite_template)
     @player.add_entity(entity_type, position: CD.xy(25, 0))
 
     @camera.follow_entity(@player.get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
@@ -64,8 +66,8 @@ class CustomScene < CD::Scene
   def update
     player_entity = @player.get_entity(0)
     player_entity.velocity.y = -200 if CD::Keyboard.key_down?(CD::Keyboard::K_W) && player_entity.position.y == 0
-    player_entity.position.x -= 10 if CD::Keyboard.key_down?(CD::Keyboard::K_A)
-    player_entity.position.x += 10 if CD::Keyboard.key_down?(CD::Keyboard::K_D)
+    player_entity.position.x -= 5 if CD::Keyboard.key_down?(CD::Keyboard::K_A)
+    player_entity.position.x += 5 if CD::Keyboard.key_down?(CD::Keyboard::K_D) && (player_entity.position.y <= 0 || player_entity.position.x < -25)
     player_entity.accelerate(CD::Interpreter.cast_ref_to(CD.game_data.get_state("gravity"), CD::Coords))
     CD.current_window.title = "FPS: #{CD.get_fps.round.to_i}"
 

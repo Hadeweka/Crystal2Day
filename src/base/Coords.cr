@@ -4,8 +4,20 @@ module Crystal2Day
   class Coords
     getter data : LibSDL::FPoint
     
+    @[Anyolite::Specialize]
     def initialize(x : Number = 0.0, y : Number = 0.0)
       @data = LibSDL::FPoint.new(x: x, y: y)
+    end
+
+    def initialize(pull : JSON::PullParser)
+      @data = LibSDL::FPoint.new(x: 0.0, y: 0.0)
+
+      pull.read_object do |key|
+        case key
+        when "x" then self.x = pull.read_float
+        when "y" then self.y = pull.read_float
+        end
+      end
     end
 
     def dup

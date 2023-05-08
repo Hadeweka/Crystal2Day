@@ -1,23 +1,27 @@
+# A window-specific resource manager.
+
 module Crystal2Day
   class ResourceManager
     TEXTURES_INITIAL_CAPACITY = 256
 
     @textures = Hash(String, Crystal2Day::Texture).new(initial_capacity: TEXTURES_INITIAL_CAPACITY)
+    property renderer : Crystal2Day::Renderer? = nil
 
-    def load_texture(filename, name : String? = nil, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
-      index_name = name ? name.not_nil! : "UNNAMED_#{filename.hash}"
-
-      unless @textures[index_name]?
-        texture = Crystal2Day::Texture.new(renderer)
-        texture.load_from_file!(filename)
-        @textures[index_name] = texture
-      end
-
-      @textures[index_name]
+    def initialize
     end
 
-    def unload_texture(name)
-      @textures[name].delete if @textures[name]?
+    def load_texture(filename)
+      unless @textures[filename]?
+        texture = Crystal2Day::Texture.new(@renderer.not_nil!)
+        texture.load_from_file!(filename)
+        @textures[filename] = texture
+      end
+
+      @textures[filename]
+    end
+
+    def unload_texture(filename)
+      @textures[filename].delete if @textures[filename]?
     end
 
     def unload_all_textures
