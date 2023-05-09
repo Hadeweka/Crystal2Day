@@ -69,7 +69,7 @@ class CustomScene < CD::Scene
     player_entity.velocity.y = -200 if CD::Keyboard.key_down?(CD::Keyboard::K_W) && player_entity.position.y == 0
     player_entity.position.x -= 5 if CD::Keyboard.key_down?(CD::Keyboard::K_A)
     player_entity.position.x += 5 if CD::Keyboard.key_down?(CD::Keyboard::K_D) && (player_entity.position.y <= 0 || player_entity.position.x < -25)
-    player_entity.accelerate(CD::Interpreter.cast_ref_to(CD.game_data.get_state("gravity"), CD::Coords))
+    player_entity.accelerate(CD.game_data.get_state("gravity").to_xy)
     CD.current_window.title = "FPS: #{CD.get_fps.round.to_i}"
 
     @player.update

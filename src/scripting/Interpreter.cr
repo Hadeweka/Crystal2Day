@@ -121,3 +121,31 @@ module Crystal2Day
     end
   end
 end
+
+module Anyolite
+  class RbRef
+    def to_b
+      Crystal2Day::Interpreter.cast_ref_to(self, Bool)
+    end
+
+    def to_i
+      Crystal2Day::Interpreter.cast_ref_to(self, Int)
+    end
+
+    def to_f
+      Crystal2Day::Interpreter.cast_ref_to(self, Float)
+    end
+
+    def to_s
+      Crystal2Day::Interpreter.cast_ref_to(self, String)
+    end
+
+    def to_xy
+      Crystal2Day::Interpreter.cast_ref_to(self, Crystal2Day::Coords)
+    end
+
+    def to_rect
+      Crystal2Day::Interpreter.cast_ref_to(self, Crystal2Day::Rect)
+    end
+  end
+end
