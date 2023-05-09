@@ -17,3 +17,13 @@ module Crystal2DayHelper
     end
   end
 end
+
+class Object
+  def Object.from_json_file(filename : String)
+    result = uninitialized self
+    File.open(filename, "r") do |f|
+      result = self.from_json(f)
+    end
+    return result
+  end
+end

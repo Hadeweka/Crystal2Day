@@ -87,8 +87,8 @@ module Crystal2Day
       generate_ref(convert_json_to_value(json_string))
     end
 
-    # TODO: Add other types like Colors as well
-    alias JSONParserType = Nil | Bool | Int64 | Float64 | String | Crystal2Day::Coords | Crystal2Day::Rect | Array(JSONParserType)
+    # TODO: Add shapes
+    alias JSONParserType = Nil | Bool | Int64 | Float64 | String | Crystal2Day::Coords | Crystal2Day::Rect | Crystal2Day::Color | Array(JSONParserType)
 
     def self.convert_json_to_value(json_string : String)
       pull = JSON::PullParser.new(json_string)
@@ -112,6 +112,8 @@ module Crystal2Day
           return Crystal2Day::Coords.from_json(pull.read_raw)
         when "Rect" then
           return Crystal2Day::Rect.from_json(pull.read_raw)
+        when "Color" then
+          return Crystal2Day::Color.from_json(pull.read_raw)
         else
           Crystal2Day.error "Unknown object type from JSON: #{obj_key}"
         end
@@ -140,12 +142,20 @@ module Anyolite
       Crystal2Day::Interpreter.cast_ref_to(self, String)
     end
 
-    def to_xy
+    def to_coords
       Crystal2Day::Interpreter.cast_ref_to(self, Crystal2Day::Coords)
+    end
+
+    def to_xy
+      to_coords
     end
 
     def to_rect
       Crystal2Day::Interpreter.cast_ref_to(self, Crystal2Day::Rect)
+    end
+
+    def to_color
+      Crystal2Day::Interpreter.cast_ref_to(self, Crystal2Day::Color)
     end
   end
 end

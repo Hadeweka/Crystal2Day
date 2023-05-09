@@ -4,8 +4,24 @@ module Crystal2Day
   class Color
     getter data : LibSDL::Color
 
+    # TODO: Add constructor to load color from hex string
+
+    @[Anyolite::Specialize]
     def initialize(r : Number = 0, g : Number = 0, b : Number = 0, a : Number = 255)
       @data = LibSDL::Color.new(r: r, g: g, b: b, a: a)
+    end
+
+    def initialize(pull : JSON::PullParser)
+      @data = LibSDL::Color.new(r: 0, g: 0, b: 0, a: 255)
+
+      pull.read_object do |key|
+        case key
+        when "r" then self.r = pull.read_int
+        when "g" then self.g = pull.read_int
+        when "b" then self.b = pull.read_int
+        when "a" then self.a = pull.read_int     
+        end
+      end
     end
 
     def r

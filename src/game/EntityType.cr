@@ -21,7 +21,7 @@ module Crystal2Day
     def initialize(name : String = DEFAULT_NAME)
     end
 
-    # TODO: Add sprites, shapes etc. to the following routine
+    # TODO: Add shapes, coroutines etc. to the following routine
 
     def initialize(pull : JSON::PullParser)
       pull.read_object do |key|
@@ -30,6 +30,11 @@ module Crystal2Day
         when "default_state"
           pull.read_object do |state_key|
             add_default_state_from_raw_json(name: state_key, raw_json: pull.read_raw)
+          end
+        when "sprite_templates"
+          # TODO: If necessary, replace this with read_object here
+          pull.read_array do
+            add_sprite_template_from_raw_json(raw_json: pull.read_raw)
           end
         end
       end
@@ -55,8 +60,14 @@ module Crystal2Day
       @default_procs[name] = proc
     end
 
+    # TODO: Decide whether to access sprites by a key or not
+
     def add_sprite_template(sprite_template : Crystal2Day::SpriteTemplate)
       @sprite_templates.push sprite_template
+    end
+
+    def add_sprite_template_from_raw_json(raw_json : String)
+      @sprite_templates.push Crystal2Day::SpriteTemplate.from_json(raw_json)
     end
 
     # TODO: Other routines

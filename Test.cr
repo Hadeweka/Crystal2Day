@@ -41,19 +41,7 @@ class CustomScene < CD::Scene
 
     # TODO: Load entity type entirely from a JSON file
 
-    entity_type = CD::EntityType.new(name: "Player")
-    entity_type.add_sprite_template(CD::SpriteTemplate.from_json(%<{
-      "texture": "ExampleSprite.png",
-      "source_rect": {"width": 50, "height": 50},
-      "position": {"x": -25, "y": -50},
-      "z": 3,
-      "animation_template": {
-        "start_frame": 1,
-        "loop_end_frame": 2,
-        "frame_delay": 10
-      }
-    }>))
-    entity_type.add_default_state_from_raw_json("test", "12345")
+    entity_type = CD::EntityType.from_json_file("ExampleEntityStatePlayer.json")
     @player.add_entity(entity_type, position: CD.xy(25, 0))
 
     @camera.follow_entity(@player.get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
