@@ -39,8 +39,6 @@ class CustomScene < CD::Scene
     @bg.z = 1
     @bg.pin
 
-    # TODO: Load entity type entirely from a JSON file
-
     entity_type = CD::EntityType.from_json_file("ExampleEntityStatePlayer.json")
     @player.add_entity(entity_type, position: CD.xy(25, 0))
 
@@ -53,19 +51,9 @@ class CustomScene < CD::Scene
   end
 
   def update
-    player_entity = @player.get_entity(0)
-    player_entity.velocity.y = -200 if CD::Keyboard.key_down?(CD::Keyboard::K_W) && player_entity.position.y == 0
-    player_entity.position.x -= 5 if CD::Keyboard.key_down?(CD::Keyboard::K_A)
-    player_entity.position.x += 5 if CD::Keyboard.key_down?(CD::Keyboard::K_D) && (player_entity.position.y <= 0 || player_entity.position.x < -25)
-    player_entity.accelerate(CD.game_data.get_state("gravity").to_xy)
     CD.current_window.title = "FPS: #{CD.get_fps.round.to_i}"
 
     @player.update
-
-    if player_entity.position.y >= 0 && player_entity.position.x > -25
-      player_entity.position.y = 0
-      player_entity.velocity.y = 0
-    end
   end
 
   def draw
@@ -78,6 +66,8 @@ class CustomScene < CD::Scene
         CD.next_scene = nil
       end
     end
+
+    @player.handle_event(event)
   end
 
   def exit

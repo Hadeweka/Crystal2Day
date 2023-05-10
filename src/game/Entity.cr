@@ -115,6 +115,12 @@ module Crystal2Day
       @sprites.each do |sprite|
         sprite.update
       end
+      call_hook("post_update", own_ref)
+    end
+
+    @[Anyolite::Exclude]
+    def handle_event(own_ref : Anyolite::RbRef)
+      call_hook("handle_event", own_ref)
     end
 
     @[Anyolite::Exclude]

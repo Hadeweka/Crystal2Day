@@ -56,6 +56,14 @@ module Crystal2Day
       end
     end
 
+    def handle_event(event : Crystal2Day::Event)
+      Crystal2Day.last_event = event
+      0.upto(@members.size - 1) do |index|
+        @members[index].handle_event(@refs[index])
+      end
+      Crystal2Day.last_event = nil
+    end
+
     def clear
       0.upto(@members.size - 1) do |index|
         delete_entity_at(-1)

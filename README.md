@@ -123,11 +123,11 @@ end
 
 ##### Entities
 
-* [ ] Hook for event handling
 * [ ] Better sprite management
 * [ ] Entity collision system
 * [ ] Entity parent-children system with memory management
 * [ ] Multiple entity script pages/states
+* [ ] Initial parameters
 
 ##### Maps
 

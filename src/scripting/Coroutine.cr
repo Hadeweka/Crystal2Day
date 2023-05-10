@@ -14,6 +14,12 @@ module Crystal2Day
       Crystal2Day::Interpreter.resume_fiber(@fiber, arg) if active?
     end
 
+    # TODO: Maybe support more than two args?
+
+    def call(arg : Anyolite::RbRef, second_arg : Anyolite::RbRef)
+      Crystal2Day::Interpreter.resume_fiber(@fiber, arg, second_arg) if active?
+    end
+
     def active?
       Crystal2Day::Interpreter.check_if_fiber_is_alive(@fiber)
     end
@@ -31,6 +37,12 @@ module Crystal2Day
 
     macro from_block(&block)
       Crystal2Day::CoroutineTemplate.new(Anyolite.eval("Proc.new #{{{block.stringify}}}"))
+    end
+
+    # TODO: Add bytecode support
+
+    def self.from_string(string : String, arg_string : String = "")
+      Crystal2Day::CoroutineTemplate.new(Anyolite.eval("Proc.new do |#{arg_string}|\n#{string}\nend"))
     end
 
     # TODO: Method to load coroutines from files

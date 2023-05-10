@@ -1,17 +1,11 @@
-entity.set_state("test", 12345)
-
-100.times do
-  entity.accelerate(Crystal2Day.xy(rand - 0.5, rand - 0.5) * 100.0)
-  Fiber.yield
-end
-
 gravity = Crystal2Day.game_data.get_state("gravity")
 
-puts "ID: #{entity.get_state("id")}, Test: #{entity.get_state("test")}, Magic number: #{entity.magic_number}, Position: #{entity.position}, Gravity: #{gravity}"
-
-entity.call_proc("test_proc")
+puts "Test: #{entity.get_state("test")}, Magic number: #{entity.magic_number}, Position: #{entity.position}, Gravity: #{gravity}"
 
 loop do
+  entity.velocity.y = -200 if Crystal2Day::Keyboard.key_down?(Crystal2Day::Keyboard::K_W) && entity.position.y == 0
+  entity.position.x -= 5 if Crystal2Day::Keyboard.key_down?(Crystal2Day::Keyboard::K_A)
+  entity.position.x += 5 if Crystal2Day::Keyboard.key_down?(Crystal2Day::Keyboard::K_D) && (entity.position.y <= 0 || entity.position.x < -25)
   entity.accelerate(gravity)
   Fiber.yield
 end

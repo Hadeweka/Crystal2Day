@@ -70,13 +70,27 @@ module Crystal2Day
       Anyolite.call_rb_method_of_object(fiber.to_unsafe, :"alive?", cast_to: Bool)
     end
 
-    def self.resume_fiber(fiber : Anyolite::RbRef, arg : Anyolite::RbRef)
+    protected def self.resume_fiber_with_arg_array(fiber : Anyolite::RbRef, arg_array : Array(Anyolite::RbCore::RbValue))
       idx = Anyolite::RbCore.rb_gc_arena_save(Crystal2Day::Interpreter.get.to_unsafe)
-      Anyolite::RbCore.rb_fiber_resume(Crystal2Day::Interpreter.get.to_unsafe, fiber.to_unsafe, 1, [arg.to_unsafe])
+      Anyolite::RbCore.rb_fiber_resume(Crystal2Day::Interpreter.get.to_unsafe, fiber.to_unsafe, 1, arg_array)
       err = Anyolite::RbCore.get_last_rb_error(Crystal2Day::Interpreter.get.to_unsafe)
       converted_err = Anyolite.call_rb_method_of_object(err, "to_s", cast_to: String)
       raise "Error at Fiber execution: #{converted_err}" if converted_err != ""
       Anyolite::RbCore.rb_gc_arena_restore(Crystal2Day::Interpreter.get.to_unsafe, idx)
+    end
+
+    def self.resume_fiber(fiber : Anyolite::RbRef, arg : Anyolite::RbRef)
+      Crystal2Day::Interpreter.resume_fiber_with_arg_array(fiber, [arg.to_unsafe])
+    end
+
+    # NOTE: Two args are currently unused
+    def self.resume_fiber(fiber : Anyolite::RbRef, arg : Anyolite::RbRef, second_arg : Anyolite::RbRef)
+      Crystal2Day::Interpreter.resume_fiber_with_arg_array(fiber, [arg.to_unsafe, second_arg.to_unsafe])
+    end
+
+    # TODO: Is this relevant for optimization?
+    def self.convert_proc_to_bytecode(proc_ref : Anyolite::RbRef)
+      Anyolite::RbCore.transform_proc_to_bytecode_container(Crystal2Day::Interpreter.get, proc_ref)
     end
 
     macro cast_ref_to(value, crystal_class)

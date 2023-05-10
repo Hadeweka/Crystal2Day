@@ -31,6 +31,7 @@ module Crystal2Day
       {{event_type.stringify.gsub(/EVENT/, "").id}} = {{LibSDL::EventType.constant(event_type)}}
     {% end %}
 
+    @[Anyolite::Exclude]
     def data
       @data
     end
@@ -39,6 +40,7 @@ module Crystal2Day
       @data = other_event.data
     end
 
+    @[Anyolite::Exclude]
     def initialize(raw_event : LibSDL::Event)
       @data = raw_event
     end

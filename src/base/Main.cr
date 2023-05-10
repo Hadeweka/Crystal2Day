@@ -12,6 +12,7 @@ module Crystal2Day
   class_property clean_windows_on_scene_exit : Bool = true
   class_property game_data : Crystal2Day::GameData = Crystal2Day::GameData.new
   class_property physics_time_step : Float32 = 1.0
+  class_property last_event : Crystal2Day::Event? = nil
 
   @@current_window : Crystal2Day::Window?
 
@@ -38,14 +39,18 @@ module Crystal2Day
     Crystal2Day.init(debug: debug)
     Crystal2Day::Interpreter.start
     Crystal2Day::Interpreter.expose_module_only(Crystal2Day)
-    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, game_data, Crystal2Day::GameData)
-    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, physics_time_step, Float32)
-    Crystal2Day::Interpreter.expose_class_function(Crystal2Day, xy, [x : Float32 = 0.0f32, y : Float32 = 0.0f32])
     # TODO: Maybe just use Anyolite for the whole module
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Coords, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Color, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Entity, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::GameData, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::Event, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::Keyboard, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::Mouse, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, game_data, Crystal2Day::GameData)
+    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, physics_time_step, Float32)
+    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, last_event, Crystal2Day::Event)
+    Crystal2Day::Interpreter.expose_class_function(Crystal2Day, xy, [x : Float32 = 0.0f32, y : Float32 = 0.0f32])
     yield
     Crystal2Day::Interpreter.close
     Crystal2Day.quit
