@@ -10,6 +10,8 @@ module Crystal2Day
     @coroutine_templates = {} of String => Crystal2Day::CoroutineTemplate
     @default_procs = {} of String => Proc(Entity, Nil)
 
+    @options = Hash(String, Int64).new
+
     @sprite_templates = Array(Crystal2Day::SpriteTemplate).new
     @boxes = Array(Crystal2Day::CollisionShapeBox).new
     @shapes = Array(Crystal2Day::CollisionShape).new
@@ -27,6 +29,10 @@ module Crystal2Day
       pull.read_object do |key|
         case key
         when "name" then @name = pull.read_string
+        when "options"
+          pull.read_object do |option_key|
+            @options[option_key] = pull.read_int
+          end
         when "default_state"
           pull.read_object do |state_key|
             add_default_state_from_raw_json(name: state_key, raw_json: pull.read_raw)
@@ -147,6 +153,10 @@ module Crystal2Day
 
     def transfer_hurtshapes
       @hurtshapes
+    end
+
+    def transfer_options
+      @options
     end
   end
 end

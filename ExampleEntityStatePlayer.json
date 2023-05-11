@@ -3,6 +3,10 @@
 
   "description": "Basic player entity",
 
+  "options" :{
+    "movement_discretization": 100
+  },
+
   "default_state": {
     "test": 12345
   },

@@ -121,6 +121,7 @@ end
 
 ##### Entities
 
+* [ ] Toggling of individual sprites and shapes
 * [ ] Better sprite management
 * [ ] Entity collision system
 * [ ] Hitshapes and hurtshapes
@@ -128,6 +129,7 @@ end
 * [ ] Entity parent-children system with memory management
 * [ ] Multiple entity script pages/states
 * [ ] Initial parameters
+* [ ] Recursive option to obtain (specific?) data from other entity type
 
 ##### Maps
 
@@ -139,7 +141,7 @@ end
 
 * [ ] Tile animation
 * [ ] Text alignment options
-* [ ] Sprite flipping and simple scaling
+* [ ] Sprite flipping, simple scaling and centering
 
 ### Potential future releases
 
@@ -153,3 +155,4 @@ end
 * [ ] Bytecode loading
 * [ ] Data serializing
 * [ ] Data obfuscation
+* [ ] Adding static JSON resources at compiletime

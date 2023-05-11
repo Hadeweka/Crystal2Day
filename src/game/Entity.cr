@@ -10,11 +10,16 @@ module Crystal2Day
     PROCS_INITIAL_CAPACITY = 8
     CHILDREN_INITIAL_CAPACITY = 8
 
+    # If positive, this will discretize every motion into steps with the given size in each direction
+    DEFAULT_OPTION_MOVEMENT_DISCRETIZATION = -1
+
     property z : UInt8 = 0
 
     @state = Hash(String, Anyolite::RbRef).new(initial_capacity: STATE_INITIAL_CAPACITY)
     @hooks = Hash(String, Crystal2Day::Coroutine).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
     @procs = Hash(String, Proc(Entity, Nil)).new(initial_capacity: PROCS_INITIAL_CAPACITY)
+
+    @options = Hash(String, Int64).new
 
     @sprites = Array(Crystal2Day::Sprite).new
     @boxes = Array(Crystal2Day::CollisionShapeBox).new
@@ -39,8 +44,9 @@ module Crystal2Day
     end
 
     def initialize(entity_type : Crystal2Day::EntityType, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
-      @state.merge! entity_type.transfer_default_state # TODO: Generate these values using JSON templates instead!
+      @state.merge! entity_type.transfer_default_state
       @procs.merge! entity_type.transfer_default_procs
+      @options.merge! entity_type.transfer_options
 
       entity_type.transfer_coroutine_templates.each do |name, template|
         add_hook_from_template(name, template)
@@ -104,6 +110,14 @@ module Crystal2Day
       @state[index] = value
     end
 
+    def get_option(name : String, default : Int64)
+      if @options[name]?
+        @options[name]
+      else
+        default
+      end
+    end
+
     def call_proc(name : String)
       @procs[name].call(self)
     end
@@ -111,7 +125,7 @@ module Crystal2Day
     @[Anyolite::Exclude]
     def update(own_ref : Anyolite::RbRef)
       call_hook("update", own_ref)
-      update_physics
+      call_hook_or("custom_physics", own_ref) {update_physics}
       @sprites.each do |sprite|
         sprite.update
       end
@@ -125,9 +139,37 @@ module Crystal2Day
 
     @[Anyolite::Exclude]
     def update_physics
-      # TODO: Add units
       @velocity += @acceleration * Crystal2Day.physics_time_step
-      @position += @velocity * Crystal2Day.physics_time_step
+
+      movement_discretization = get_option("movement_discretization", DEFAULT_OPTION_MOVEMENT_DISCRETIZATION)
+      
+      if movement_discretization > 0
+        # TODO: Maybe this can be done a bit more smoothly (e.g. vx = 31 with discretization 5 into actual discretization 31/7 ~ 4.42 instead?)
+        dx = @velocity.x * Crystal2Day.physics_time_step
+        dy = @velocity.y * Crystal2Day.physics_time_step
+
+        while dx.abs + dy.abs > 0
+          if dx.abs >= movement_discretization
+            actual_difference = dx.sign * movement_discretization
+            @position.x += actual_difference
+            dx -= actual_difference
+          elsif dx.abs > 0
+            @position.x += dx
+            dx = 0
+          end
+          if dy.abs >= movement_discretization
+            actual_difference = dy.sign * movement_discretization
+            @position.y += actual_difference
+            dy -= actual_difference
+          elsif dy.abs > 0
+            @position.y += dy
+            dy = 0
+          end
+          # TODO: Check here for collisions
+        end
+      else
+        @position += @velocity * Crystal2Day.physics_time_step
+      end
       @acceleration = Crystal2Day.xy
     end
 
@@ -139,6 +181,15 @@ module Crystal2Day
     def call_hook(name : String, own_ref : Anyolite::RbRef)
       if @hooks[name]?
         @hooks[name].call(own_ref)
+      end
+    end
+
+    @[Anyolite::Exclude]
+    def call_hook_or(name : String, own_ref : Anyolite::RbRef)
+      if @hooks[name]?
+        @hooks[name].call(own_ref)
+      else
+        yield
       end
     end
 
