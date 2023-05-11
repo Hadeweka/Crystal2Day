@@ -31,7 +31,7 @@ Note that its syntax may change (frequently) until version 1.0.0.
 * Based on SDL
 * Simple framework to immediately start working
 * Scene system to organize and streamline game design
-* Drawing system with z-ordering
+* Already implemented: Cameras, z-ordering, parallax scrolling, maps, collisions, ...
 * Data-driven entitiy system with mruby behavior scripting
 
 # Prerequisites
@@ -85,7 +85,7 @@ end
 
 ## Upcoming releases
 
-### Version 0.0.1
+### Version 0.1.0
 
 #### Features
 
@@ -117,14 +117,14 @@ end
 
 ##### Data management
 
-* [ ] Data serializing
 * [ ] Database system for templates etc.
-* [ ] Data obfuscation
 
 ##### Entities
 
 * [ ] Better sprite management
 * [ ] Entity collision system
+* [ ] Hitshapes and hurtshapes
+* [ ] Collision hooks
 * [ ] Entity parent-children system with memory management
 * [ ] Multiple entity script pages/states
 * [ ] Initial parameters
@@ -150,4 +150,6 @@ end
 * [ ] Custom shape designs (colors, textures)
 * [ ] Entity type inheritance
 * [ ] ImGUI support
-
+* [ ] Bytecode loading
+* [ ] Data serializing
+* [ ] Data obfuscation
