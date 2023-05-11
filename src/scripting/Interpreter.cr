@@ -20,8 +20,8 @@ module Crystal2Day
       Anyolite.wrap_class_method(Crystal2Day::Interpreter.get, {{class_or_module}}, {{method.stringify}}, {{class_or_module}}.{{method}}, {{method_args}})
     end
 
-    macro expose_class(class_or_module, under = nil)
-      Anyolite.wrap(Crystal2Day::Interpreter.get, {{class_or_module}}, under: {{under}})
+    macro expose_class(class_or_module, under = nil, connect_to_superclass = false)
+      Anyolite.wrap(Crystal2Day::Interpreter.get, {{class_or_module}}, under: {{under}}, connect_to_superclass: {{connect_to_superclass}})
     end
 
     def self.start
@@ -101,8 +101,7 @@ module Crystal2Day
       generate_ref(convert_json_to_value(json_string))
     end
 
-    # TODO: Add shapes
-    alias JSONParserType = Nil | Bool | Int64 | Float64 | String | Crystal2Day::Coords | Crystal2Day::Rect | Crystal2Day::Color | Array(JSONParserType)
+    alias JSONParserType = Nil | Bool | Int64 | Float64 | String | Crystal2Day::Coords | Crystal2Day::Rect | Crystal2Day::Color | Crystal2Day::CollisionShape | Array(JSONParserType)
 
     def self.convert_json_to_value(json_string : String)
       pull = JSON::PullParser.new(json_string)
@@ -121,6 +120,8 @@ module Crystal2Day
       when JSON::PullParser::Kind::BeginObject
         pull.read_next
         obj_key = pull.read_object_key
+
+        # TODO: Maybe it's possible to introduce a serialized dummy class here
         case obj_key
         when "Coords" then
           return Crystal2Day::Coords.from_json(pull.read_raw)
@@ -128,6 +129,8 @@ module Crystal2Day
           return Crystal2Day::Rect.from_json(pull.read_raw)
         when "Color" then
           return Crystal2Day::Color.from_json(pull.read_raw)
+        when "Shape" then
+          return Crystal2Day::CollisionShape.from_json(pull.read_raw)
         else
           Crystal2Day.error "Unknown object type from JSON: #{obj_key}"
         end
@@ -171,5 +174,11 @@ module Anyolite
     def to_color
       Crystal2Day::Interpreter.cast_ref_to(self, Crystal2Day::Color)
     end
+
+    def to_shape
+      Crystal2Day::Interpreter.cast_ref_to(self, Crystal2Day::CollisionShape)
+    end
+
+    # TODO: Add collision shapes
   end
 end

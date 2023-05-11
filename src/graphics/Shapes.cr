@@ -1,6 +1,8 @@
 # A collection of drawable shapes.
 # You can also implement your own shapes, as long as you specifiy how to draw them.
 
+# TODO: Maybe rename them to DrawShape?
+
 module Crystal2Day
   abstract class Shape < Crystal2Day::Drawable
     property position : Crystal2Day::Coords = Crystal2Day.xy
@@ -28,7 +30,7 @@ module Crystal2Day
   class ShapeLine < Shape
     property direction : Crystal2Day::Coords
 
-    def initialize(direction : Crystal2Day::Coords, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+    def initialize(direction : Crystal2Day::Coords = Crystal2Day.xy, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       super(renderer)
       @direction = direction
       @position = position
@@ -49,7 +51,7 @@ module Crystal2Day
 
     property filled : Bool = false
 
-    def initialize(size : Crystal2Day::Coords, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+    def initialize(size : Crystal2Day::Coords = Crystal2Day.xy, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       super(renderer)
       @size = size
       @position = position
@@ -73,7 +75,7 @@ module Crystal2Day
     property number_of_render_iterations : UInt32 = 32
     property filled : Bool = false
 
-    def initialize(radius : Float32, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+    def initialize(radius : Float32 = 0.0f32, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       super(renderer)
       @radius = radius
       @position = position
@@ -178,7 +180,7 @@ module Crystal2Day
       @side_2 = value - @position
     end
 
-    def initialize(side_1 : Crystal2Day::Coords, side_2 : Crystal2Day::Coords, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+    def initialize(side_1 : Crystal2Day::Coords = Crystal2Day.xy, side_2 : Crystal2Day::Coords = Crystal2Day.xy, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       super(renderer)
       @side_1 = side_1
       @side_2 = side_2
@@ -209,7 +211,7 @@ module Crystal2Day
     property number_of_render_iterations : UInt32 = 32
     property filled : Bool = false
 
-    def initialize(semiaxes : Crystal2Day::Coords, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+    def initialize(semiaxes : Crystal2Day::Coords = Crystal2Day.xy, position : Crystal2Day::Coords = Crystal2Day.xy, renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       super(renderer)
       @semiaxes = semiaxes
       @position = position

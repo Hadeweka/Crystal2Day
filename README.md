@@ -32,7 +32,7 @@ Note that its syntax may change (frequently) until version 1.0.0.
 * Simple framework to immediately start working
 * Scene system to organize and streamline game design
 * Drawing system with z-ordering
-* Entity behavior scripting using mruby
+* Data-driven entitiy system with mruby behavior scripting
 
 # Prerequisites
 
@@ -90,7 +90,7 @@ end
 #### Features
 
 * [X] Music and sounds
-* [X] Sprites, fonts, texts
+* [X] Textures, sprites, fonts, texts
 * [X] Basic shapes (points, lines, boxes, circles, triangles, ellipses)
 * [X] Z-Ordering
 * [X] Scene system

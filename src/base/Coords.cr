@@ -20,6 +20,10 @@ module Crystal2Day
       end
     end
 
+    def to_json(json : JSON::Builder)
+      # TODO
+    end
+
     def dup
       Coords.new(x, y)
     end

@@ -1,9 +1,19 @@
 {
   "name": "Player",
 
+  "description": "Basic player entity",
+
   "default_state": {
     "test": 12345
   },
+
+  "boxes": [
+    {"size": {"x": 50, "y": 50}, "position": {"x": -25, "y": -50}}
+  ],
+
+  "shapes": [
+    {"type": "circle", "radius": 25, "position": {"x": 0, "y": -25}}
+  ],
 
   "sprite_templates": [
     {

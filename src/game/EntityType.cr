@@ -21,7 +21,7 @@ module Crystal2Day
     def initialize(name : String = DEFAULT_NAME)
     end
 
-    # TODO: Add shapes, references to Crystal procs etc. to the following routine
+    # TODO: Add hitshapes, hurtshapes, references to Crystal procs etc. to the following routine
 
     def initialize(pull : JSON::PullParser)
       pull.read_object do |key|
@@ -51,6 +51,20 @@ module Crystal2Day
               end
             end
           end
+        when "boxes"
+          pull.read_array do
+            add_collision_box_from_raw_json(raw_json: pull.read_raw)
+          end
+        when "shapes"
+          pull.read_array do
+            add_collision_shape_from_raw_json(raw_json: pull.read_raw)
+          end
+        when "hitshapes"
+          # TODO
+        when "hurtshapes"
+          # TODO
+        when "description"
+          # TODO
         end
       end
     end
@@ -75,7 +89,7 @@ module Crystal2Day
       @default_procs[name] = proc
     end
 
-    # TODO: Decide whether to access sprites by a key or not
+    # TODO: Decide whether to access sprites by a key or not (same for shapes)
 
     def add_sprite_template(sprite_template : Crystal2Day::SpriteTemplate)
       @sprite_templates.push sprite_template
@@ -85,7 +99,23 @@ module Crystal2Day
       @sprite_templates.push Crystal2Day::SpriteTemplate.from_json(raw_json)
     end
 
-    # TODO: Other routines
+    def add_collision_box(collision_box : Crystal2Day::CollisionShapeBox)
+      @boxes.push collision_box
+    end
+
+    def add_collision_box_from_raw_json(raw_json : String)
+      @boxes.push Crystal2Day::CollisionShapeBox.from_json(raw_json)
+    end
+
+    def add_collision_shape(collision_shape : Crystal2Day::CollisionShape)
+      @shapes.push collision_box
+    end
+
+    def add_collision_shape_from_raw_json(raw_json : String)
+      @shapes.push Crystal2Day::CollisionShape.from_json(raw_json)
+    end
+
+    # TODO: Adding routines for hitshapes and hurtshapes
 
     def transfer_default_state
       @default_state
