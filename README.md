@@ -83,7 +83,7 @@ end
 
 # Roadmap
 
-## Upcoming releases
+## Version releases
 
 ### Version 0.1.0
 
@@ -105,18 +105,9 @@ end
 
 #### Todo list
 
-##### Features
-
-* [ ] Particle generator
-* [ ] Documentation
-
 ##### Controls
 
 * [ ] Controller support
-
-##### Data management
-
-* [ ] Database system for templates etc.
 
 ##### Entities
 
@@ -137,22 +128,33 @@ end
 ##### Graphics
 
 * [ ] Tile animation
-* [ ] Text alignment options
 * [ ] Sprite flipping, simple scaling and centering
 
-### Potential future releases
+### Version 0.2.0
 
 #### Features
 
+* [ ] Particle generator
+* [ ] Hitshapes and hurtshapes
+* [ ] Also allow symbols as Crystal hash indices
 * [ ] Tiled support
-* [ ] Quadriliteral shapes
-* [ ] Custom shape designs (colors, textures)
-* [ ] Entity type inheritance
+* [ ] Text alignment options
+
+### Version 1.0.0
+
+#### Features
+
+* [ ] Documentation
 * [ ] ImGUI support
 * [ ] Bytecode loading
+* [ ] Adding static JSON resources at compiletime
 * [ ] Data serializing
 * [ ] Data obfuscation
-* [ ] Adding static JSON resources at compiletime
-* [ ] Hitshapes and hurtshapes
+
+### Idea list for future versions
+
+#### Features
+
+* [ ] Custom shape designs (colors, textures)
+* [ ] Quadriliteral shapes
 * [ ] Map optimization using quadtrees
-* [ ] Also allow symbols as Crystal hash indices
