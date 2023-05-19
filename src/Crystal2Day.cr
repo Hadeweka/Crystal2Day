@@ -52,5 +52,6 @@ require "./game/Limiter.cr"
 require "./game/Scene.cr"
 
 require "./input/Event.cr"
+require "./input/InputManager.cr"
 require "./input/Keyboard.cr"
 require "./input/Mouse.cr"

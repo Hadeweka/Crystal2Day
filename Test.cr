@@ -50,6 +50,11 @@ class CustomScene < CD::Scene
 
     CD.game_data.set_state("gravity", CD.xy(0, 100.0))
     CD.physics_time_step = 0.1
+
+    CD.im.set_key_table_entry("action_key", [CD::Keyboard::K_SPACE])
+    CD.im.set_key_table_entry("up", [CD::Keyboard::K_UP, CD::Keyboard::K_W])
+    CD.im.set_key_table_entry("left", [CD::Keyboard::K_LEFT, CD::Keyboard::K_A])
+    CD.im.set_key_table_entry("right", [CD::Keyboard::K_RIGHT, CD::Keyboard::K_D])
   end
 
   def update
@@ -67,6 +72,10 @@ class CustomScene < CD::Scene
       if event.as_window_event.event == CD::WindowEvent::CLOSE
         CD.next_scene = nil
       end
+    end
+
+    if CD.im.check_event_for_key_press(event, "action_key")
+      puts "Action!"
     end
 
     @player.handle_event(event)

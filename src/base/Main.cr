@@ -14,6 +14,7 @@ module Crystal2Day
   class_property physics_time_step : Float32 = 1.0
   class_property last_event : Crystal2Day::Event? = nil
   class_property database : Crystal2Day::Database = Crystal2Day::Database.new
+  class_property input_manager : Crystal2Day::InputManager = Crystal2Day::InputManager.new
 
   @@current_window : Crystal2Day::Window?
 
@@ -33,6 +34,14 @@ module Crystal2Day
 
   def self.db=(value)
     self.database = value
+  end
+
+  def self.im
+    self.input_manager
+  end
+
+  def self.im=(value)
+    self.input_manager = value
   end
 
   macro call_scene_routine(scene, name)
@@ -56,6 +65,7 @@ module Crystal2Day
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Event, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Keyboard, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Mouse, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::InputManager, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShape, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapePoint, under: Crystal2Day, connect_to_superclass: true)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapeLine, under: Crystal2Day, connect_to_superclass: true)
@@ -66,6 +76,8 @@ module Crystal2Day
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, game_data, Crystal2Day::GameData)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, physics_time_step, Float32)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, last_event, Crystal2Day::Event)
+    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, input_manager, Crystal2Day::InputManager)
+    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, im, Crystal2Day::InputManager)
     Crystal2Day::Interpreter.expose_class_function(Crystal2Day, xy, [x : Float32 = 0.0f32, y : Float32 = 0.0f32])
     yield
     Crystal2Day::Interpreter.close

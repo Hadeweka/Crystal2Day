@@ -113,7 +113,6 @@ end
 ##### Controls
 
 * [ ] Controller support
-* [ ] Key mapping helpers
 
 ##### Data management
 
@@ -127,6 +126,7 @@ end
 * [ ] Entity parent-children system with memory management
 * [ ] Multiple entity script pages/states
 * [ ] Initial parameters
+* [ ] Better names for yielding methods
 
 ##### Maps
 
@@ -155,3 +155,4 @@ end
 * [ ] Adding static JSON resources at compiletime
 * [ ] Hitshapes and hurtshapes
 * [ ] Map optimization using quadtrees
+* [ ] Also allow symbols as Crystal hash indices
