@@ -1,37 +1,16 @@
 {
   "name": "Player",
 
-  "description": "Basic player entity",
-
-  "options" : {
-    "movement_discretization": 1
-  },
+  "description": "Basic player entity derived from another entity",
 
   "default_state": {
     "test": 12345
   },
 
-  "boxes": [
-    {"size": {"x": 50, "y": 50}, "position": {"x": -25, "y": -50}}
-  ],
-
-  "shapes": [
-    {"type": "circle", "radius": 25, "position": {"x": 0, "y": -25}}
-  ],
-
-  "sprite_templates": [
-    {
-      "texture": "ExampleSprite.png",
-      "source_rect": {"width": 50, "height": 50},
-      "position": {"x": -25, "y": -50},
-      "z": 3,
-      "animation_template": {
-        "start_frame": 1,
-        "loop_end_frame": 2,
-        "frame_delay": 10
-      }
-    }
-  ],
+  "based_on": {
+    "entity_type": "Figure",
+    "overwrite_default_state": true
+  },
 
   "coroutine_templates": {
     "update": {"file": "ExampleUpdate.rb"},

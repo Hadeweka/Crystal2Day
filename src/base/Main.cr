@@ -13,6 +13,7 @@ module Crystal2Day
   class_property game_data : Crystal2Day::GameData = Crystal2Day::GameData.new
   class_property physics_time_step : Float32 = 1.0
   class_property last_event : Crystal2Day::Event? = nil
+  class_property database : Crystal2Day::Database = Crystal2Day::Database.new
 
   @@current_window : Crystal2Day::Window?
 
@@ -24,6 +25,14 @@ module Crystal2Day
 
   def self.rm=(value)
     self.current_window.resource_manager = value
+  end
+
+  def self.db
+    self.database
+  end
+
+  def self.db=(value)
+    self.database = value
   end
 
   macro call_scene_routine(scene, name)

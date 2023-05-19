@@ -123,12 +123,10 @@ end
 
 * [ ] Better sprite management
 * [ ] Entity collision system
-* [ ] Hitshapes and hurtshapes
 * [ ] Collision hooks
 * [ ] Entity parent-children system with memory management
 * [ ] Multiple entity script pages/states
 * [ ] Initial parameters
-* [ ] Recursive option to obtain (specific?) data from other entity type
 
 ##### Maps
 
@@ -155,3 +153,5 @@ end
 * [ ] Data serializing
 * [ ] Data obfuscation
 * [ ] Adding static JSON resources at compiletime
+* [ ] Hitshapes and hurtshapes
+* [ ] Map optimization using quadtrees

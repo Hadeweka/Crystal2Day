@@ -3,8 +3,28 @@
 # You can add default state values, coroutines and procs.
 
 module Crystal2Day
+  struct EntityTypeBase
+    include JSON::Serializable
+    
+    property entity_type : String = ""
+
+    property overwrite_default_state : Bool = false
+    property overwrite_options : Bool = false
+    property overwrite_coroutine_templates : Bool = false
+    property overwrite_sprite_templates : Bool = false
+    property overwrite_boxes : Bool = false
+    property overwrite_shapes : Bool = false
+    property overwrite_default_procs : Bool = false
+    property overwrite_hitshapes : Bool = false
+    property overwrite_hurtshapes : Bool = false
+
+    def initialize
+    end
+  end
+
   class EntityType
-    DEFAULT_NAME = "<nameless>"
+    EMPTY_NAME = "<empty>"
+    DEFAULT_NAME = "<default$>"
 
     @default_state = {} of String => Anyolite::RbRef
     @coroutine_templates = {} of String => Crystal2Day::CoroutineTemplate
@@ -17,10 +37,17 @@ module Crystal2Day
     @shapes = Array(Crystal2Day::CollisionShape).new
     @hitshapes = Array(Crystal2Day::CollisionShape).new
     @hurtshapes = Array(Crystal2Day::CollisionShape).new
-    
-    property name : String = DEFAULT_NAME
 
-    def initialize(name : String = DEFAULT_NAME)
+    @based_on : EntityTypeBase = EntityTypeBase.new
+    
+    property name : String = EMPTY_NAME
+
+    def initialize(name : String = EMPTY_NAME)
+      if name == EMPTY_NAME
+        @name = DEFAULT_NAME.gsub("$", object_id.to_s)
+      else
+        @name = name
+      end
     end
 
     # TODO: Add hitshapes, hurtshapes, references to Crystal procs etc. to the following routine
@@ -29,6 +56,7 @@ module Crystal2Day
       pull.read_object do |key|
         case key
         when "name" then @name = pull.read_string
+        when "based_on" then @based_on = EntityTypeBase.from_json(pull.read_raw)
         when "options"
           pull.read_object do |option_key|
             @options[option_key] = pull.read_int
@@ -124,39 +152,111 @@ module Crystal2Day
     # TODO: Adding routines for hitshapes and hurtshapes
 
     def transfer_default_state
-      @default_state
+      unless @based_on.entity_type.empty?
+        if @based_on.overwrite_default_state
+          @default_state
+        else
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_default_state.merge(@default_state)
+        end
+      else
+        @default_state
+      end
     end
 
     def transfer_coroutine_templates
-      @coroutine_templates
+      unless @based_on.entity_type.empty?
+        if @based_on.overwrite_coroutine_templates
+          @coroutine_templates
+        else
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_coroutine_templates.merge(@coroutine_templates)
+        end
+      else
+        @coroutine_templates
+      end
     end
 
     def transfer_default_procs
-      @default_procs
+      unless @based_on.entity_type.empty?
+        if @based_on.overwrite_default_procs
+          @default_procs
+        else
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_default_procs.merge(@default_procs)
+        end
+      else
+        @default_procs
+      end
     end
 
     def transfer_sprite_templates
-      @sprite_templates
+      unless @based_on.entity_type.empty?
+        if @based_on.overwrite_sprite_templates
+          @sprite_templates
+        else
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_sprite_templates + @sprite_templates
+        end
+      else
+        @sprite_templates
+      end
     end
 
     def transfer_boxes
-      @boxes
+      unless @based_on.entity_type.empty?
+        if @based_on.overwrite_boxes
+          @boxes
+        else
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_boxes + @boxes
+        end
+      else
+        @boxes
+      end
     end
 
     def transfer_shapes
-      @shapes
+      unless @based_on.entity_type.empty?
+        if @based_on.overwrite_shapes
+          @shapes
+        else
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_shapes + @shapes
+        end
+      else
+        @shapes
+      end
     end
 
     def transfer_hitshapes
-      @hitshapes
+      unless @based_on.entity_type.empty?
+        if @based_on.overwrite_hitshapes
+          @hitshapes
+        else
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_hitshapes + @hitshapes
+        end
+      else
+        @hitshapes
+      end
     end
 
     def transfer_hurtshapes
-      @hurtshapes
+      unless @based_on.entity_type.empty?
+        if @based_on.overwrite_hurtshapes
+          @hurtshapes
+        else
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_hurtshapes + @hurtshapes
+        end
+      else
+        @hurtshapes
+      end
     end
 
     def transfer_options
-      @options
+      unless @based_on.entity_type.empty?
+        if @based_on.overwrite_options
+          @options
+        else
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_options.merge(@options)
+        end
+      else
+        @options
+      end
     end
   end
 end

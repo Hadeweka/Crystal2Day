@@ -1,0 +1,41 @@
+{
+  "name": "Figure",
+
+  "description": "A simple entity, which will be the base for the player",
+
+  "options" : {
+    "movement_discretization": 1
+  },
+
+  "default_state": {
+    "test": 123
+  },
+
+  "boxes": [
+    {"size": {"x": 50, "y": 50}, "position": {"x": -25, "y": -50}}
+  ],
+
+  "shapes": [
+    {"type": "circle", "radius": 25, "position": {"x": 0, "y": -25}}
+  ],
+
+  "sprite_templates": [
+    {
+      "texture": "ExampleSprite.png",
+      "source_rect": {"width": 50, "height": 50},
+      "position": {"x": -25, "y": -50},
+      "z": 3,
+      "animation_template": {
+        "start_frame": 1,
+        "loop_end_frame": 2,
+        "frame_delay": 10
+      }
+    }
+  ],
+
+  "coroutine_templates": {
+    "update": {"file": "ExampleUpdate.rb"},
+    "post_update": {"file": "ExamplePostUpdate.rb"},
+    "handle_event": {"code": "loop do; event = Crystal2Day.last_event; if event.type == Crystal2Day::Event::WINDOW; puts \"You triggered a Window Event!\"; end; Fiber.yield; end"}
+  }
+}

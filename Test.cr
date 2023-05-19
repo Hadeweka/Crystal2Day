@@ -39,8 +39,10 @@ class CustomScene < CD::Scene
     @bg.z = 1
     @bg.pin
 
-    entity_type = CD::EntityType.from_json_file("ExampleEntityStatePlayer.json")
-    5.times {|i| @player.add_entity(entity_type, position: CD.xy(25 + 100*i, 0))}
+    CD.db.load_entity_type_from_file("ExampleEntityStateFigure.json")
+    CD.db.load_entity_type_from_file("ExampleEntityStatePlayer.json")
+
+    5.times {|i| @player.add_entity(CD.db.get_entity_type("Player"), position: CD.xy(25 + 100*i, 0))}
 
     @camera.follow_entity(@player.get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
     @camera.z = 0
