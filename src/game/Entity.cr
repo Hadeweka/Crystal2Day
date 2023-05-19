@@ -202,6 +202,30 @@ module Crystal2Day
       @sprites[index]
     end
 
+    def activate_sprite(index : UInt32)
+      @sprites[index].active = true
+    end
+
+    def deactivate_sprite(index : UInt32)
+      @sprites[index].active = false
+    end
+
+    def activate_shape(index : UInt32)
+      @shapes[index].active = true
+    end
+
+    def deactivate_shape(index : UInt32)
+      @shapes[index].active = false
+    end
+
+    def activate_box(index : UInt32)
+      @boxes[index].active = true
+    end
+
+    def deactivate_boxes(index : UInt32)
+      @boxes[index].active = false
+    end
+
     # TODO: Integrate parent-child offset
     # TODO: Is there any way to enable pinning this?
     def draw(offset : Coords = Crystal2Day.xy)

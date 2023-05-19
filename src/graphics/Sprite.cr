@@ -16,6 +16,7 @@ module Crystal2Day
     property animation_template : Crystal2Day::AnimationTemplate = Crystal2Day::AnimationTemplate.new
     property parallax : Crystal2Day::Coords = Crystal2Day.xy(1.0, 1.0)
     property z : UInt8 = 0
+    property active : Bool = true
   end
 
   class Sprite < Crystal2Day::Drawable
@@ -28,6 +29,7 @@ module Crystal2Day
     property center : Crystal2Day::Coords?
     property animation : Crystal2Day::Animation = Crystal2Day::Animation.new
     property parallax : Crystal2Day::Coords = Crystal2Day.xy(1.0, 1.0)
+    property active : Bool = true
 
     def initialize(from_texture : Crystal2Day::Texture = Crystal2Day::Texture.new, source_rect : Crystal2Day::Rect? = nil)
       super()
@@ -58,6 +60,7 @@ module Crystal2Day
     end
 
     def update
+      return unless active
       @animation.update
       if @animation.has_changed
         update_source_rect_by_frame(@animation.current_frame)
@@ -69,6 +72,7 @@ module Crystal2Day
     end
 
     def draw_directly(offset : Coords)
+      return unless active
       final_source_rect = (source_rect = @source_rect) ? source_rect.int_data : @texture.raw_int_boundary_rect
       final_offset = @position + @texture.renderer.position_shift.scale(@parallax) + offset
       final_render_rect = (render_rect = @render_rect) ? (render_rect + final_offset).data : (source_rect ? (source_rect.unshifted + final_offset).data : @texture.raw_boundary_rect(shifted_by: final_offset))

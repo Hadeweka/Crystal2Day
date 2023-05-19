@@ -17,6 +17,8 @@ module Crystal2Day
     property position : Crystal2Day::Coords = Crystal2Day.xy
     property scale : Crystal2Day::Coords = Crystal2Day.xy(1.0, 1.0)
 
+    property active : Bool = true
+
     @[Anyolite::Specialize]
     def initialize
     end
@@ -182,6 +184,7 @@ module Crystal2Day
     # General test method
 
     def self.test(shape_1 : Crystal2Day::CollisionShape, pos_1 : Crystal2Day::Coords, shape_2 : Crystal2Day::CollisionShape, pos_2 : Crystal2Day::Coords)
+      return false unless (shape_1.active && shape_2.active)
       self.check_collision(shape_1, shape_2, pos_1 + shape_1.position, pos_2 + shape_2.position)
     end
 

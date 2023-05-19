@@ -121,7 +121,6 @@ end
 
 ##### Entities
 
-* [ ] Toggling of individual sprites and shapes
 * [ ] Better sprite management
 * [ ] Entity collision system
 * [ ] Hitshapes and hurtshapes

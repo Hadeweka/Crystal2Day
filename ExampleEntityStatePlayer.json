@@ -3,8 +3,8 @@
 
   "description": "Basic player entity",
 
-  "options" :{
-    "movement_discretization": 100
+  "options" : {
+    "movement_discretization": 1
   },
 
   "default_state": {
