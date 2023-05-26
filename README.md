@@ -118,6 +118,7 @@ end
 * [ ] Multiple entity script pages/states
 * [ ] Initial parameters
 * [ ] Better names for yielding methods
+* [ ] Option to link Crystal procs directly to hooks
 
 ##### Maps
 
