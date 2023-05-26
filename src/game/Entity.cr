@@ -21,11 +21,11 @@ module Crystal2Day
 
     @options = Hash(String, Int64).new
 
-    @sprites = Array(Crystal2Day::Sprite).new
-    @boxes = Array(Crystal2Day::CollisionShapeBox).new
-    @shapes = Array(Crystal2Day::CollisionShape).new
-    @hitshapes = Array(Crystal2Day::CollisionShape).new
-    @hurtshapes = Array(Crystal2Day::CollisionShape).new
+    getter sprites = Array(Crystal2Day::Sprite).new
+    getter boxes = Array(Crystal2Day::CollisionShapeBox).new
+    getter shapes = Array(Crystal2Day::CollisionShape).new
+    getter hitshapes = Array(Crystal2Day::CollisionShape).new
+    getter hurtshapes = Array(Crystal2Day::CollisionShape).new
 
     @children = Array(Entity).new(initial_capacity: CHILDREN_INITIAL_CAPACITY)
 
@@ -232,6 +232,38 @@ module Crystal2Day
       @sprites.each do |sprite|
         sprite.draw(@position + offset)
       end
+    end
+
+    def check_collision_with_other_entity(other : Entity)
+      # Step 1: Compare boxes
+      
+      collision_detected = false
+      @boxes.each do |box_own|
+        other.boxes.each do |box_other|
+          if Crystal2Day::Collider.test(box_own, @position, box_other, other.position)
+            collision_detected = true
+            break
+          end
+        end
+      end
+      
+      return false unless collision_detected
+      
+      # Step 2: Compare actual shapes
+      
+      collision_detected = false
+      @shapes.each do |shape_own|
+        other.shapes.each do |shape_other|
+          if Crystal2Day::Collider.test(shape_own, @position, shape_other, other.position)
+            collision_detected = true
+            break
+          end
+        end
+      end
+
+      # TODO: Add collision hooks
+
+      return collision_detected
     end
   end
 end

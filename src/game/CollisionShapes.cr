@@ -218,7 +218,7 @@ module Crystal2Day
 
       x2 = pos_2.x
       y2 = pos_2.y
-      r2 = shape_2.radius * shape_2.scale.x
+      r2 = shape_2.radius * shape_2.scale
 
       Collishi.collision_point_circle(x1, y1, x2, y2, r2)
     end
@@ -289,7 +289,7 @@ module Crystal2Day
 
       x2 = pos_2.x
       y2 = pos_2.y
-      r2 = shape_2.radius * shape_2.scale.x
+      r2 = shape_2.radius * shape_2.scale
 
       Collishi.collision_line_circle(x1, y1, dx1, dy1, x2, y2, r2)
     end
@@ -351,11 +351,11 @@ module Crystal2Day
     def self.check_collision(shape_1 : Crystal2Day::CollisionShapeCircle, shape_2 : Crystal2Day::CollisionShapeCircle, pos_1 : Crystal2Day::Coords, pos_2 : Crystal2Day::Coords)
       x1 = pos_1.x
       y1 = pos_1.y
-      r1 = shape_1.radius * shape_1.scale.x
+      r1 = shape_1.radius * shape_1.scale
 
       x2 = pos_2.x
       y2 = pos_2.y
-      r2 = shape_2.radius * shape_2.scale.x
+      r2 = shape_2.radius * shape_2.scale
 
       Collishi.collision_circle_circle(x1, y1, r1, x2, y2, r2)
     end
@@ -363,7 +363,7 @@ module Crystal2Day
     def self.check_collision(shape_1 : Crystal2Day::CollisionShapeCircle, shape_2 : Crystal2Day::CollisionShapeBox, pos_1 : Crystal2Day::Coords, pos_2 : Crystal2Day::Coords)
       x1 = pos_1.x
       y1 = pos_1.y
-      r1 = shape_1.radius * shape_1.scale.x
+      r1 = shape_1.radius * shape_1.scale
 
       x2 = pos_2.x
       y2 = pos_2.y
@@ -376,7 +376,7 @@ module Crystal2Day
     def self.check_collision(shape_1 : Crystal2Day::CollisionShapeCircle, shape_2 : Crystal2Day::CollisionShapeTriangle, pos_1 : Crystal2Day::Coords, pos_2 : Crystal2Day::Coords)
       x1 = pos_1.x
       y1 = pos_1.y
-      r1 = shape_1.radius * shape_1.scale.x
+      r1 = shape_1.radius * shape_1.scale
 
       x2 = pos_2.x
       y2 = pos_2.y
@@ -391,7 +391,7 @@ module Crystal2Day
     def self.check_collision(shape_1 : Crystal2Day::CollisionShapeCircle, shape_2 : Crystal2Day::CollisionShapeEllipse, pos_1 : Crystal2Day::Coords, pos_2 : Crystal2Day::Coords)
       x1 = pos_1.x
       y1 = pos_1.y
-      r1 = shape_1.radius * shape_1.scale.x
+      r1 = shape_1.radius * shape_1.scale
 
       x2 = pos_2.x
       y2 = pos_2.y
