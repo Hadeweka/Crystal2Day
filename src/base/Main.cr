@@ -15,6 +15,8 @@ module Crystal2Day
   class_property last_event : Crystal2Day::Event? = nil
   class_property database : Crystal2Day::Database = Crystal2Day::Database.new
   class_property input_manager : Crystal2Day::InputManager = Crystal2Day::InputManager.new
+  
+  @@refs : Array(Anyolite::RbRef) = Array(Anyolite::RbRef).new
 
   @@current_window : Crystal2Day::Window?
 
@@ -79,6 +81,11 @@ module Crystal2Day
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, input_manager, Crystal2Day::InputManager)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, im, Crystal2Day::InputManager)
     Crystal2Day::Interpreter.expose_class_function(Crystal2Day, xy, [x : Float32 = 0.0f32, y : Float32 = 0.0f32])
+    
+    # TODO: Is there a better way to protect these?
+    @@refs.push Interpreter.generate_ref(input_manager)
+    @@refs.push Interpreter.generate_ref(game_data)
+
     yield
     Crystal2Day::Interpreter.close
     Crystal2Day.quit
