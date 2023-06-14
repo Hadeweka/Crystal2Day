@@ -31,11 +31,5 @@
         "frame_delay": 10
       }
     }
-  ],
-
-  "coroutine_templates": {
-    "update": {"file": "ExampleUpdate.rb"},
-    "post_update": {"file": "ExamplePostUpdate.rb"},
-    "handle_event": {"code": "loop do; call_proc(\"FigureHandleEvent\"); Fiber.yield; end"}
-  }
+  ]
 }

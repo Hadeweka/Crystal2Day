@@ -13,6 +13,13 @@ CD.db.add_entity_proc("FigureHandleEvent") do |entity|
   end
 end
 
+CD.db.add_entity_proc("FigurePostUpdate") do |entity|
+  if entity.position.y >= 0 && entity.position.x > -25
+    entity.position.y = 0
+    entity.velocity.y = 0
+  end
+end
+
 WIDTH = 1600
 HEIGHT = 900
 

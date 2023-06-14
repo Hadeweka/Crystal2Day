@@ -78,6 +78,9 @@ module Crystal2Day
               when "code"
                 coroutine = CD::CoroutineTemplate.from_string(pull.read_string, "entity")
                 add_coroutine_template(coroutine_key, coroutine)
+              when "proc"
+                coroutine = CD::CoroutineTemplate.from_proc_name(pull.read_string)
+                add_coroutine_template(coroutine_key, coroutine)
               else
                 Crystal2Day.error "Unknown EntityType loading option: #{coroutine_type}"
               end

@@ -14,25 +14,34 @@ module Crystal2Day
       Crystal2Day::Interpreter.resume_fiber(@fiber, arg) if active?
     end
 
-    # TODO: Maybe support more than two args?
-
-    def call(arg : Anyolite::RbRef, second_arg : Anyolite::RbRef)
-      Crystal2Day::Interpreter.resume_fiber(@fiber, arg, second_arg) if active?
-    end
-
     def active?
       Crystal2Day::Interpreter.check_if_fiber_is_alive(@fiber)
     end
   end
 
-  class CoroutineTemplate
-    @proc : Anyolite::RbRef
+  class ProcCoroutine
+    @name : String
 
-    def initialize(@proc : Anyolite::RbRef)
+    def initialize(@name : String)
+    end
+
+    def call(arg : Crystal2Day::Entity)
+      Crystal2Day.database.call_entity_proc(@name, arg)
+    end
+  end
+
+  class CoroutineTemplate
+    @proc : Anyolite::RbRef | String
+
+    def initialize(@proc : Anyolite::RbRef | String)
     end
 
     def generate_hook
-      return Crystal2Day::Coroutine.new(@proc)
+      if @proc.is_a?(Anyolite::RbRef)
+        return Crystal2Day::Coroutine.new(@proc.as(Anyolite::RbRef))
+      else
+        return Crystal2Day::ProcCoroutine.new(@proc.as(String))
+      end
     end
 
     macro from_block(&block)
@@ -43,6 +52,10 @@ module Crystal2Day
 
     def self.from_string(string : String, arg_string : String = "")
       Crystal2Day::CoroutineTemplate.new(Anyolite.eval("Proc.new do |#{arg_string}|\n#{string}\nend"))
+    end
+
+    def self.from_proc_name(string : String)
+      Crystal2Day::CoroutineTemplate.new(string)
     end
 
     # TODO: Method to load coroutines from files

@@ -15,7 +15,7 @@ module Crystal2Day
     property z : UInt8 = 0
 
     @state = Hash(String, Anyolite::RbRef).new(initial_capacity: STATE_INITIAL_CAPACITY)
-    @hooks = Hash(String, Crystal2Day::Coroutine).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
+    @hooks = Hash(String, Crystal2Day::Coroutine | Crystal2Day::ProcCoroutine).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
 
     @options = Hash(String, Int64).new
 
@@ -166,17 +166,25 @@ module Crystal2Day
       @acceleration += value
     end
 
+    def call_existing_hook(name : String, own_ref : Anyolite::RbRef)
+      if @hooks[name].is_a?(Crystal2Day::Coroutine)
+        @hooks[name].as(Crystal2Day::Coroutine).call(own_ref)
+      else
+        @hooks[name].as(Crystal2Day::ProcCoroutine).call(self)
+      end
+    end
+
     @[Anyolite::Exclude]
     def call_hook(name : String, own_ref : Anyolite::RbRef)
       if @hooks[name]?
-        @hooks[name].call(own_ref)
+        call_existing_hook(name, own_ref)
       end
     end
 
     @[Anyolite::Exclude]
     def call_hook_or(name : String, own_ref : Anyolite::RbRef)
       if @hooks[name]?
-        @hooks[name].call(own_ref)
+        call_existing_hook(name, own_ref)
       else
         yield
       end
