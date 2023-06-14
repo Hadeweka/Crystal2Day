@@ -1,6 +1,6 @@
 # A template for entities.
 # Each instance is essentially a different entity type.
-# You can add default state values, coroutines and procs.
+# You can add default state values and coroutines.
 
 module Crystal2Day
   struct EntityTypeBase
@@ -14,7 +14,6 @@ module Crystal2Day
     property overwrite_sprite_templates : Bool = false
     property overwrite_boxes : Bool = false
     property overwrite_shapes : Bool = false
-    property overwrite_default_procs : Bool = false
     property overwrite_hitshapes : Bool = false
     property overwrite_hurtshapes : Bool = false
 
@@ -28,7 +27,6 @@ module Crystal2Day
 
     @default_state = {} of String => Anyolite::RbRef
     @coroutine_templates = {} of String => Crystal2Day::CoroutineTemplate
-    @default_procs = {} of String => Proc(Entity, Nil)
 
     @options = Hash(String, Int64).new
 
@@ -50,7 +48,7 @@ module Crystal2Day
       end
     end
 
-    # TODO: Add hitshapes, hurtshapes, references to Crystal procs etc. to the following routine
+    # TODO: Add hitshapes, hurtshapes, etc to the following routine
 
     def initialize(pull : JSON::PullParser)
       pull.read_object do |key|
@@ -115,14 +113,6 @@ module Crystal2Day
       @coroutine_templates[name] = template
     end
 
-    def add_default_proc(name : String, proc : Proc(Entity, Nil))
-      @default_procs[name] = proc
-    end
-
-    def add_default_proc(name : String, &proc : Crystal2Day::Entity -> Nil)
-      @default_procs[name] = proc
-    end
-
     # TODO: Decide whether to access sprites by a key or not (same for shapes)
 
     def add_sprite_template(sprite_template : Crystal2Day::SpriteTemplate)
@@ -172,18 +162,6 @@ module Crystal2Day
         end
       else
         @coroutine_templates
-      end
-    end
-
-    def transfer_default_procs
-      unless @based_on.entity_type.empty?
-        if @based_on.overwrite_default_procs
-          @default_procs
-        else
-          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_default_procs.merge(@default_procs)
-        end
-      else
-        @default_procs
       end
     end
 

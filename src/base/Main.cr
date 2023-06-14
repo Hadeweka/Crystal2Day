@@ -13,6 +13,7 @@ module Crystal2Day
   class_property game_data : Crystal2Day::GameData = Crystal2Day::GameData.new
   class_property physics_time_step : Float32 = 1.0
   class_property last_event : Crystal2Day::Event? = nil
+  class_property last_colliding_entity : Crystal2Day::Entity? = nil
   class_property database : Crystal2Day::Database = Crystal2Day::Database.new
   class_property input_manager : Crystal2Day::InputManager = Crystal2Day::InputManager.new
   
@@ -78,6 +79,7 @@ module Crystal2Day
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, game_data, Crystal2Day::GameData)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, physics_time_step, Float32)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, last_event, Crystal2Day::Event)
+    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, last_colliding_entity, Crystal2Day::Entity)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, input_manager, Crystal2Day::InputManager)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, im, Crystal2Day::InputManager)
     Crystal2Day::Interpreter.expose_class_function(Crystal2Day, xy, [x : Float32 = 0.0f32, y : Float32 = 0.0f32])

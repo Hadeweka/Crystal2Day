@@ -7,7 +7,6 @@ module Crystal2Day
   class Entity
     STATE_INITIAL_CAPACITY = 8
     HOOKS_INITIAL_CAPACITY = 8
-    PROCS_INITIAL_CAPACITY = 8
     CHILDREN_INITIAL_CAPACITY = 8
 
     # If positive, this will discretize every motion into steps with the given size in each direction
@@ -17,7 +16,6 @@ module Crystal2Day
 
     @state = Hash(String, Anyolite::RbRef).new(initial_capacity: STATE_INITIAL_CAPACITY)
     @hooks = Hash(String, Crystal2Day::Coroutine).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
-    @procs = Hash(String, Proc(Entity, Nil)).new(initial_capacity: PROCS_INITIAL_CAPACITY)
 
     @options = Hash(String, Int64).new
 
@@ -45,7 +43,6 @@ module Crystal2Day
 
     def initialize(entity_type : Crystal2Day::EntityType, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       @state.merge! entity_type.transfer_default_state
-      @procs.merge! entity_type.transfer_default_procs
       @options.merge! entity_type.transfer_options
 
       entity_type.transfer_coroutine_templates.each do |name, template|
@@ -75,20 +72,16 @@ module Crystal2Day
       @type_name = entity_type.name
     end
 
+    def call_proc(name : String)
+      Crystal2Day.database.call_entity_proc(name, self)
+    end
+
     @[Anyolite::Exclude]
     def add_hook_from_template(name : String, template : Crystal2Day::CoroutineTemplate)
       if @hooks[name]?
         Crystal2Day.warning "Hook #{name} was already registered and will be overwritten."
       end
       @hooks[name] = template.generate_hook
-    end
-
-    @[Anyolite::Exclude]
-    def add_proc(name : String, &proc : Crystal2Day::Entity -> Nil)
-      if @procs[name]?
-        Crystal2Day.warning "Proc #{name} was already registered and will be overwritten."
-      end
-      @procs[name] = proc
     end
 
     @[Anyolite::Exclude]
@@ -116,10 +109,6 @@ module Crystal2Day
       else
         default
       end
-    end
-
-    def call_proc(name : String)
-      @procs[name].call(self)
     end
 
     @[Anyolite::Exclude]
@@ -261,7 +250,7 @@ module Crystal2Day
         end
       end
 
-      # TODO: Add collision hooks
+      # TODO: Add hook(s) somewhere
 
       return collision_detected
     end

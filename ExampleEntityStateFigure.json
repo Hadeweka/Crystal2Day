@@ -36,6 +36,6 @@
   "coroutine_templates": {
     "update": {"file": "ExampleUpdate.rb"},
     "post_update": {"file": "ExamplePostUpdate.rb"},
-    "handle_event": {"code": "loop do; event = Crystal2Day.last_event; if event.type == Crystal2Day::Event::WINDOW; puts \"You triggered a Window Event!\"; end; Fiber.yield; end"}
+    "handle_event": {"code": "loop do; call_proc(\"FigureHandleEvent\"); Fiber.yield; end"}
   }
 }

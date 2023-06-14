@@ -4,6 +4,15 @@ require "./src/Crystal2Day.cr"
 
 alias CD = Crystal2Day
 
+CD.db.add_entity_proc("FigureHandleEvent") do |entity|
+  event = Crystal2Day.last_event
+  if valid_event = event
+    if valid_event.type == Crystal2Day::Event::WINDOW
+      puts "You triggered a Window Event!"
+    end
+  end
+end
+
 WIDTH = 1600
 HEIGHT = 900
 
