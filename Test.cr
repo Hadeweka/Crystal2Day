@@ -31,9 +31,8 @@ class CustomScene < CD::Scene
     tileset.fill_with_default_tiles(number: 8) # NOTE: This will become relevant for tile animations and information
     tileset.tile_width = 50
     tileset.tile_height = 50
-    
-    map = CD::Map.new
-    map.tileset = tileset
+
+    map = add_map("Map1", tileset: tileset)
     map.content.load_from_array!(generate_test_map(width: 200, height: 200))
     map.background_tile = 0
     map.z = 2
@@ -51,12 +50,12 @@ class CustomScene < CD::Scene
     CD.db.load_entity_type_from_file("ExampleEntityStateFigure.json")
     CD.db.load_entity_type_from_file("ExampleEntityStatePlayer.json")
 
-    add_entity_group("Player", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 5)
+    add_entity_group("PlayerGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 5)
 
-    5.times {|i| add_entity(group: "Player", type: "Player", position: CD.xy(25 + 100*i, 0))}
+    5.times {|i| add_entity(group: "PlayerGroup", type: "Player", position: CD.xy(25 + 100*i, 0))}
 
     camera = CD::Camera.new
-    camera.follow_entity(entity_groups["Player"].get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
+    camera.follow_entity(entity_groups["PlayerGroup"].get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
     camera.z = 0
     camera.pin
 
@@ -67,6 +66,10 @@ class CustomScene < CD::Scene
     CD.im.set_key_table_entry("up", [CD::Keyboard::K_UP, CD::Keyboard::K_W])
     CD.im.set_key_table_entry("left", [CD::Keyboard::K_LEFT, CD::Keyboard::K_A])
     CD.im.set_key_table_entry("right", [CD::Keyboard::K_RIGHT, CD::Keyboard::K_D])
+
+    # TODO: Collision graphs will probably work something like this:
+    # register_collision_pair_with_entity_group("PlayerGroup", "PlayerGroup")
+    # register_collision_pair_with_map("PlayerGroup", "Map1")
   end
 
   def update

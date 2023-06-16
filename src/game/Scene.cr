@@ -8,6 +8,7 @@ module Crystal2Day
     PHYSICS_GROUP_INITIAL_CAPACITY = 8
     EVENT_GROUP_INITIAL_CAPACITY = 8
     DRAW_GROUP_INITIAL_CAPACITY = 8
+    MAPS_INITIAL_CAPACITY = 8
 
     property use_own_draw_implementation : Bool = false
 
@@ -16,6 +17,8 @@ module Crystal2Day
     getter physics_groups : Array(EntityGroup) = Array(EntityGroup).new(initial_capacity: PHYSICS_GROUP_INITIAL_CAPACITY)
     getter event_groups : Array(EntityGroup) = Array(EntityGroup).new(initial_capacity: EVENT_GROUP_INITIAL_CAPACITY)
     getter draw_groups : Array(EntityGroup) = Array(EntityGroup).new(initial_capacity: DRAW_GROUP_INITIAL_CAPACITY)
+
+    getter maps : Hash(String, Map) = Hash(String, Map).new(initial_capacity: MAPS_INITIAL_CAPACITY)
 
     def handle_event(event)
     end
@@ -97,10 +100,24 @@ module Crystal2Day
       @physics_groups.push new_entity_group if auto_physics
       @event_groups.push new_entity_group if auto_events
       @draw_groups.push new_entity_group if auto_draw
+
+      return new_entity_group
     end
 
     def add_entity(group : String, type : String | EntityType, position : Crystal2Day::Coords = Crystal2Day.xy)
       @entity_groups[group].add_entity(type, position)
+    end
+
+    def add_map(name : String, tileset : Tileset?)
+      if @maps[name]?
+        Crystal2Day.warning "Already existing map with name '#{name}' will be overwritten"
+      end
+
+      new_map = CD::Map.new
+      @maps[name] = new_map
+      new_map.tileset = tileset.not_nil! if tileset
+
+      return new_map
     end
   end
 end

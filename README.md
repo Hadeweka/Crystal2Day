@@ -124,32 +124,18 @@ end
 * [ ] Loading routines
 * [ ] Collision checks
 * [ ] Tile information
+* [ ] Loading tileset data from JSON
 
 ##### Graphics
 
 * [ ] Tile animation
 * [ ] Sprite flipping, simple scaling and centering
 
-### Version 0.2.0
-
-#### Features
-
-* [ ] Particle generator
-* [ ] Hitshapes and hurtshapes
-* [ ] Also allow symbols as Crystal hash indices
-* [ ] Tiled support
-* [ ] Text alignment options
-
 ### Version 1.0.0
 
 #### Features
 
 * [ ] Documentation
-* [ ] ImGUI support
-* [ ] Bytecode loading
-* [ ] Adding static JSON resources at compiletime
-* [ ] Data serializing
-* [ ] Data obfuscation
 
 ### Idea list for future versions
 
@@ -159,3 +145,13 @@ end
 * [ ] Quadriliteral shapes
 * [ ] Map optimization using quadtrees
 * [ ] Loading scenes and related objects from JSON files
+* [ ] Also allow symbols as Crystal hash indices
+* [ ] Tiled support
+* [ ] Particle generator
+* [ ] Hitshapes and hurtshapes
+* [ ] Text alignment options
+* [ ] ImGUI support
+* [ ] Bytecode loading
+* [ ] Adding static JSON resources at compiletime
+* [ ] Data serializing
+* [ ] Data obfuscation
