@@ -28,13 +28,6 @@ class CustomScene < CD::Scene
   @map = CD::Map.new
   @tileset = CD::Tileset.new
 
-  # Background
-  @bg = CD::Sprite.new
-
-  # Gameplay
-  @player = CD::EntityGroup.new
-  @camera = CD::Camera.new
-
   def init
     texture_tileset = CD.rm.load_texture("ExampleTileset.png")
     @tileset.link_texture(texture_tileset)
@@ -48,21 +41,25 @@ class CustomScene < CD::Scene
     @map.pin
 
     texture_bg = CD.rm.load_texture("ExampleSky.png")
-    @bg.link_texture(texture_bg)
-    @bg.position = CD.xy(-100, -100)
-    @bg.parallax = CD.xy(0.1, 0.1)
-    @bg.render_rect = CD::Rect.new(width: 2000, height: 2000)
-    @bg.z = 1
-    @bg.pin
+    bg = CD::Sprite.new
+    bg.link_texture(texture_bg)
+    bg.position = CD.xy(-100, -100)
+    bg.parallax = CD.xy(0.1, 0.1)
+    bg.render_rect = CD::Rect.new(width: 2000, height: 2000)
+    bg.z = 1
+    bg.pin
 
     CD.db.load_entity_type_from_file("ExampleEntityStateFigure.json")
     CD.db.load_entity_type_from_file("ExampleEntityStatePlayer.json")
 
-    5.times {|i| @player.add_entity(CD.db.get_entity_type("Player"), position: CD.xy(25 + 100*i, 0))}
+    add_entity_group("Player", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 5)
 
-    @camera.follow_entity(@player.get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
-    @camera.z = 0
-    @camera.pin
+    5.times {|i| add_entity(group: "Player", type: "Player", position: CD.xy(25 + 100*i, 0))}
+
+    camera = CD::Camera.new
+    camera.follow_entity(entity_groups["Player"].get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
+    camera.z = 0
+    camera.pin
 
     CD.game_data.set_state("gravity", CD.xy(0, 100.0))
     CD.physics_time_step = 0.1
@@ -75,12 +72,9 @@ class CustomScene < CD::Scene
 
   def update
     CD.current_window.title = "FPS: #{CD.get_fps.round.to_i}"
-
-    @player.update
   end
 
   def draw
-    @player.draw
   end
 
   def handle_event(event)
@@ -93,8 +87,6 @@ class CustomScene < CD::Scene
     if CD.im.check_event_for_key_press(event, "action_key")
       puts "Action!"
     end
-
-    @player.handle_event(event)
   end
 
   def exit

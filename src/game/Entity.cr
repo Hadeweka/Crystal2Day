@@ -114,11 +114,19 @@ module Crystal2Day
     @[Anyolite::Exclude]
     def update(own_ref : Anyolite::RbRef)
       call_hook("update", own_ref)
-      call_hook_or("custom_physics", own_ref) {update_physics}
+    end
+
+    @[Anyolite::Exclude]
+    def post_update(own_ref : Anyolite::RbRef)
+      update_sprites
+      call_hook("post_update", own_ref)
+    end
+
+    @[Anyolite::Exclude]
+    def update_sprites
       @sprites.each do |sprite|
         sprite.update
       end
-      call_hook("post_update", own_ref)
     end
 
     @[Anyolite::Exclude]
@@ -127,7 +135,12 @@ module Crystal2Day
     end
 
     @[Anyolite::Exclude]
-    def update_physics
+    def update_physics(own_ref : Anyolite::RbRef)
+      call_hook_or("custom_physics", own_ref) {update_physics_internal}
+    end
+
+    @[Anyolite::Exclude]
+    def update_physics_internal
       @velocity += @acceleration * Crystal2Day.physics_time_step
 
       movement_discretization = get_option("movement_discretization", DEFAULT_OPTION_MOVEMENT_DISCRETIZATION)

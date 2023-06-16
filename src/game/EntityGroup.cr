@@ -19,6 +19,13 @@ module Crystal2Day
       @members.size
     end
 
+    def add_entity(entity_type_name : String, position : Crystal2Day::Coords = Crystal2Day.xy)
+      entity_type = CD.database.get_entity_type(entity_type_name)
+      new_entity = Crystal2Day::Entity.new(entity_type, renderer: @renderer)
+      new_entity.position = position
+      register_new_entity(new_entity)
+    end
+
     def add_entity(entity_type : Crystal2Day::EntityType, position : Crystal2Day::Coords = Crystal2Day.xy)
       new_entity = Crystal2Day::Entity.new(entity_type, renderer: @renderer)
       new_entity.position = position
@@ -62,6 +69,18 @@ module Crystal2Day
         @members[index].handle_event(@refs[index])
       end
       Crystal2Day.last_event = nil
+    end
+
+    def update_physics
+      0.upto(@members.size - 1) do |index|
+        @members[index].update_physics(@refs[index])
+      end
+    end
+
+    def post_update
+      0.upto(@members.size - 1) do |index|
+        @members[index].post_update(@refs[index])
+      end
     end
 
     def clear
