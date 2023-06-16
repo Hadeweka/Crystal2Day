@@ -158,3 +158,4 @@ end
 * [ ] Custom shape designs (colors, textures)
 * [ ] Quadriliteral shapes
 * [ ] Map optimization using quadtrees
+* [ ] Loading scenes and related objects from JSON files
