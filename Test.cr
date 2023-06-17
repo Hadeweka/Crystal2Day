@@ -60,7 +60,8 @@ class CustomScene < CD::Scene
     camera.pin
 
     CD.game_data.set_state("gravity", CD.xy(0, 100.0))
-    CD.physics_time_step = 0.1
+    CD.physics_time_step = 0.01
+    CD.number_of_physics_steps = 10
 
     CD.im.set_key_table_entry("action_key", [CD::Keyboard::K_SPACE])
     CD.im.set_key_table_entry("up", [CD::Keyboard::K_UP, CD::Keyboard::K_W])

@@ -142,36 +142,10 @@ module Crystal2Day
     @[Anyolite::Exclude]
     def update_physics_internal
       @velocity += @acceleration * Crystal2Day.physics_time_step
+      @position += @velocity * Crystal2Day.physics_time_step
+    end
 
-      movement_discretization = get_option("movement_discretization", DEFAULT_OPTION_MOVEMENT_DISCRETIZATION)
-      
-      if movement_discretization > 0
-        # TODO: Maybe this can be done a bit more smoothly (e.g. vx = 31 with discretization 5 into actual discretization 31/7 ~ 4.42 instead?)
-        dx = @velocity.x * Crystal2Day.physics_time_step
-        dy = @velocity.y * Crystal2Day.physics_time_step
-
-        while dx.abs + dy.abs > 0
-          if dx.abs >= movement_discretization
-            actual_difference = dx.sign * movement_discretization
-            @position.x += actual_difference
-            dx -= actual_difference
-          elsif dx.abs > 0
-            @position.x += dx
-            dx = 0
-          end
-          if dy.abs >= movement_discretization
-            actual_difference = dy.sign * movement_discretization
-            @position.y += actual_difference
-            dy -= actual_difference
-          elsif dy.abs > 0
-            @position.y += dy
-            dy = 0
-          end
-          # TODO: Check here for collisions
-        end
-      else
-        @position += @velocity * Crystal2Day.physics_time_step
-      end
+    def reset_acceleration
       @acceleration = Crystal2Day.xy
     end
 

@@ -3,10 +3,6 @@
 
   "description": "A simple entity, which will be the base for the player",
 
-  "options" : {
-    "movement_discretization": 1
-  },
-
   "default_state": {
     "test": 123
   },

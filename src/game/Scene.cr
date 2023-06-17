@@ -54,11 +54,24 @@ module Crystal2Day
 
       @update_groups.each {|member| member.update}
 
-      @physics_groups.each {|member| member.update_physics}
+      update_physics
 
       @update_groups.each {|member| member.post_update}
 
       post_update
+    end
+
+    def update_physics
+      # TODO: Add adaptive time steps
+      Crystal2Day.number_of_physics_steps.times do |i|
+        physics_step
+      end
+
+      @physics_groups.each {|member| member.reset_acceleration}
+    end
+
+    def physics_step
+      @physics_groups.each {|member| member.update_physics}
     end
 
     def main_draw

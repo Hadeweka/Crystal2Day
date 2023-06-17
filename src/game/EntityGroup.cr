@@ -77,6 +77,12 @@ module Crystal2Day
       end
     end
 
+    def reset_acceleration
+      @members.each do |member|
+        member.reset_acceleration
+      end
+    end
+
     def post_update
       0.upto(@members.size - 1) do |index|
         @members[index].post_update(@refs[index])
