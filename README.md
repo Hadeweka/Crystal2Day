@@ -23,6 +23,9 @@ having to worry about common implementation details.
 For example, a map class is already implemented, as well as typical collision routines,
 a framerate limiter, z-ordering, cameras and many other things.
 
+And even if you want to do everything by yourself, you can just do exactly that, as
+most SDL functions are available in this library.
+
 Currently this project is in an early state, but will be expanded over time.
 Note that its syntax may change (frequently) until version 1.0.0.
 

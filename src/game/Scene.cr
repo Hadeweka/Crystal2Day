@@ -72,6 +72,7 @@ module Crystal2Day
 
     def physics_step
       @physics_groups.each {|member| member.update_physics}
+      # TODO: Test collisions and trigger hooks if available here
     end
 
     def main_draw

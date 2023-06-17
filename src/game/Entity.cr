@@ -8,6 +8,7 @@ module Crystal2Day
     STATE_INITIAL_CAPACITY = 8
     HOOKS_INITIAL_CAPACITY = 8
     CHILDREN_INITIAL_CAPACITY = 8
+    COLLISION_STACK_INITIAL_CAPACITY = 8
 
     # If positive, this will discretize every motion into steps with the given size in each direction
     DEFAULT_OPTION_MOVEMENT_DISCRETIZATION = -1
@@ -30,6 +31,8 @@ module Crystal2Day
     @type_name : String = Crystal2Day::EntityType::DEFAULT_NAME
 
     @renderer : Crystal2Day::Renderer
+
+    @collision_stack = Deque(CollisionReference).new(initial_capacity: COLLISION_STACK_INITIAL_CAPACITY)
 
     getter magic_number : UInt64 = 0u64
 
@@ -120,6 +123,7 @@ module Crystal2Day
     def post_update(own_ref : Anyolite::RbRef)
       update_sprites
       call_hook("post_update", own_ref)
+      reset_collision_stack
     end
 
     @[Anyolite::Exclude]
@@ -141,8 +145,11 @@ module Crystal2Day
 
     @[Anyolite::Exclude]
     def update_physics_internal
-      @velocity += @acceleration * Crystal2Day.physics_time_step
-      @position += @velocity * Crystal2Day.physics_time_step
+      # TODO: Maybe add other integration schemes like Leapfrog and Runge-Kutta
+      dt = Crystal2Day.physics_time_step
+
+      @velocity += @acceleration * dt
+      @position += @velocity * dt
     end
 
     def reset_acceleration
@@ -218,6 +225,10 @@ module Crystal2Day
       end
     end
 
+    def reset_collision_stack
+      @collision_stack.clear
+    end
+
     def check_collision_with_other_entity(other : Entity)
       # Step 1: Compare boxes
       
@@ -240,12 +251,15 @@ module Crystal2Day
         other.shapes.each do |shape_other|
           if Crystal2Day::Collider.test(shape_own, @position, shape_other, other.position)
             collision_detected = true
+            @collision_stack.push CollisionReference.new(CollisionReference::Kind::Entity, other)
             break
           end
         end
       end
 
+      # TODO: Actually implement this
       # TODO: Add hook(s) somewhere
+      # TODO: Test all shapes if hitshapes are becoming relevant
 
       return collision_detected
     end
