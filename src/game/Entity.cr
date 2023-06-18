@@ -28,7 +28,7 @@ module Crystal2Day
 
     @children = Array(Entity).new(initial_capacity: CHILDREN_INITIAL_CAPACITY)
 
-    @type_name : String = Crystal2Day::EntityType::DEFAULT_NAME
+    getter type_name : String = Crystal2Day::EntityType::DEFAULT_NAME
 
     @renderer : Crystal2Day::Renderer
 
