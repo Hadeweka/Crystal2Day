@@ -91,10 +91,11 @@ module Crystal2Day
     @@refs.push Interpreter.generate_ref(game_data)
 
     # TODO: Maybe there's a better way to do this?
-    # TODO: Add loops
-    # TODO: Add a module to put these into
+    # TODO: Maybe add a module to put these into
     Anyolite.eval("def pause; Fiber.yield; end")
     Anyolite.eval("def pause_times(n); n.times {pause}; end")
+    Anyolite.eval("def each_frame; loop do; yield; Fiber.yield; end; end")
+    Anyolite.eval("def for_n_frames(n); n.times do; yield; Fiber.yield; end; end")
 
     yield
 

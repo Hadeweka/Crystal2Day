@@ -1,4 +1,4 @@
-loop do
+each_frame do
   collision = entity.current_collision
   if collision.kind == Crystal2Day::CollisionReference::Kind::ENTITY
     if collision.other_object.type_name == "Figure"
@@ -12,5 +12,4 @@ loop do
     end
     collision.other_object.velocity.y = -100
   end
-  pause
 end

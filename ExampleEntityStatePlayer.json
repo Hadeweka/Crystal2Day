@@ -21,7 +21,7 @@
       }
     },
     "post_update": {"proc": "FigurePostUpdate"},
-    "handle_event": {"code": "loop do; entity.call_proc(\"FigureHandleEvent\"); pause; end"},
+    "handle_event": {"code": "each_frame do; entity.call_proc(\"FigureHandleEvent\"); end"},
     "entity_collision": {"file": "ExampleCollision.rb"}
   }
 }

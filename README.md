@@ -117,9 +117,7 @@ end
 
 * [ ] Better sprite management
 * [ ] Access to things like sounds etc.
-* [ ] Entity parent-children system with memory management
 * [ ] Initial parameters
-* [ ] Better names for yielding methods
 * [ ] Method to call hooks immediately after other hooks
 
 ##### Maps
@@ -144,6 +142,7 @@ end
 
 #### Features
 
+* [ ] Entity parent-children system with memory management
 * [ ] Custom shape designs (colors, textures)
 * [ ] Quadriliteral shapes
 * [ ] Map optimization using quadtrees
