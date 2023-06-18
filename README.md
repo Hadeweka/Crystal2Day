@@ -120,6 +120,7 @@ end
 * [ ] Entity parent-children system with memory management
 * [ ] Initial parameters
 * [ ] Better names for yielding methods
+* [ ] Method to call hooks immediately after other hooks
 
 ##### Maps
 
