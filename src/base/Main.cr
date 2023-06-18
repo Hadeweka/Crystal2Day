@@ -90,7 +90,14 @@ module Crystal2Day
     @@refs.push Interpreter.generate_ref(input_manager)
     @@refs.push Interpreter.generate_ref(game_data)
 
+    # TODO: Maybe there's a better way to do this?
+    # TODO: Add loops
+    # TODO: Add a module to put these into
+    Anyolite.eval("def pause; Fiber.yield; end")
+    Anyolite.eval("def pause_times(n); n.times {pause}; end")
+
     yield
+
     Crystal2Day::Interpreter.close
     Crystal2Day.quit
   end

@@ -7,5 +7,5 @@ loop do
   entity.accelerate(gravity)
 
   entity.change_hook_page_to("main") unless Crystal2Day.im.key_down?("fast_mode")
-  Fiber.yield
+  pause
 end

@@ -12,5 +12,5 @@ loop do
     end
     collision.other_object.velocity.y = -100
   end
-  Fiber.yield
+  pause
 end

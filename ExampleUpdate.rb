@@ -4,5 +4,5 @@ puts "Test: #{entity.get_state("test")}, Magic number: #{entity.magic_number}, P
 
 loop do
   entity.accelerate(gravity)
-  Fiber.yield
+  pause
 end
