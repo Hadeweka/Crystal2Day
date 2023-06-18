@@ -46,6 +46,15 @@ module Crystal2Day
       super()
     end
 
+    def check_for_collision_with(other : EntityGroup | Map)
+      if other.is_a?(Map)
+        Crystal2Day.error "Map-Map collisions are not implemented."
+      else
+        # No need to implement this twice
+        other.check_for_collision_with(self)
+      end
+    end
+
     def generate_vertices(view_width : UInt32, view_height : UInt32)
       @vertices = Array(LibSDL::Vertex).new(size: view_width * view_height * 6) {LibSDL::Vertex.new}
     end

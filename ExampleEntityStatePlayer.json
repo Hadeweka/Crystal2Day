@@ -13,8 +13,9 @@
   },
 
   "coroutine_templates": {
-    "update": {"file": "ExampleUpdate.rb"},
+    "update": {"file": "ExampleUpdatePlayer.rb"},
     "post_update": {"proc": "FigurePostUpdate"},
-    "handle_event": {"code": "loop do; entity.call_proc(\"FigureHandleEvent\"); Fiber.yield; end"}
+    "handle_event": {"code": "loop do; entity.call_proc(\"FigureHandleEvent\"); Fiber.yield; end"},
+    "entity_collision": {"file": "ExampleCollision.rb"}
   }
 }

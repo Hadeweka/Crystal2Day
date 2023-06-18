@@ -43,6 +43,7 @@ require "./graphics/View.cr"
 require "./graphics/Window.cr"
 
 require "./game/Collishi.cr"
+require "./game/CollisionMatrix.cr"
 require "./game/CollisionReference.cr"
 require "./game/CollisionShapes.cr"
 require "./game/Entity.cr"

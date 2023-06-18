@@ -6,7 +6,7 @@ module Crystal2Day
   class EntityGroup
     BASE_INITIAL_CAPACITY = 128u32
 
-    @members : Array(Crystal2Day::Entity)
+    getter members : Array(Crystal2Day::Entity)
     @refs : Array(Anyolite::RbRef)
     @renderer : Crystal2Day::Renderer
 
@@ -86,6 +86,39 @@ module Crystal2Day
     def post_update
       0.upto(@members.size - 1) do |index|
         @members[index].post_update(@refs[index])
+      end
+    end
+
+    def handle_entity_collision(entity_1 : Entity, entity_2 : Entity)
+      entity_1.check_for_collision_with(entity_2)
+    end
+
+    def check_for_collision_with(other : EntityGroup | Map)
+      if other.is_a?(EntityGroup)
+        if other == self
+          0.upto(@members.size - 1) do |index_1|
+            index_1.upto(@members.size - 1) do |index_2|
+              entity_1 = @members[index_1]
+              entity_2 = @members[index_2]
+
+              handle_entity_collision(entity_1, entity_2)
+            end
+          end
+        else
+          @members.each do |entity_1|
+            other.as(EntityGroup).members.each do |entity_2|
+              handle_entity_collision(entity_1, entity_2)
+            end
+          end
+        end
+      else
+        # TODO: Entity-Map collisions
+      end
+    end
+
+    def call_collision_hooks
+      0.upto(@members.size - 1) do |index|
+        @members[index].call_collision_hook(@refs[index])
       end
     end
 

@@ -103,6 +103,7 @@ end
 * [X] 2D collision routines
 * [X] Minimal mruby scripting using Anyolite
 * [X] Entities with flexible states and scripts
+* [X] Entity collision system
 * [X] Simple game state
 * [X] Resource management system
 
@@ -115,8 +116,6 @@ end
 ##### Entities
 
 * [ ] Better sprite management
-* [ ] Entity collision system
-* [ ] Collision hooks
 * [ ] Entity parent-children system with memory management
 * [ ] Multiple entity script pages/states
 * [ ] Initial parameters

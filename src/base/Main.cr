@@ -64,6 +64,7 @@ module Crystal2Day
     # TODO: Maybe just use Anyolite for the whole module
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Coords, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Color, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionReference, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Entity, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::GameData, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Event, under: Crystal2Day)
@@ -71,7 +72,6 @@ module Crystal2Day
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Mouse, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::InputManager, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShape, under: Crystal2Day)
-    Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionReference, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapePoint, under: Crystal2Day, connect_to_superclass: true)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapeLine, under: Crystal2Day, connect_to_superclass: true)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapeCircle, under: Crystal2Day, connect_to_superclass: true)

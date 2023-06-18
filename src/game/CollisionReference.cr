@@ -9,7 +9,7 @@ module Crystal2Day
     property kind : Kind = Kind::EMPTY
     property other_object : Entity | Map | Nil = nil
 
-    def initialize(kind : Kind, other_object : Entity | Map)
+    def initialize(kind : Kind, other_object : Entity | Map | Nil = nil)
       @kind = kind
       @other_object = other_object
     end
@@ -20,6 +20,10 @@ module Crystal2Day
 
     def with_entity?
       @kind = Kind::ENTITY
+    end
+
+    def inspect
+      "Kind: #{@kind}, with: #{other_object}"
     end
   end
 end

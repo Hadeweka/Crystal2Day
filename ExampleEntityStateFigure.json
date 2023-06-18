@@ -27,5 +27,11 @@
         "frame_delay": 10
       }
     }
-  ]
+  ],
+
+  "coroutine_templates": {
+    "update": {"file": "ExampleUpdate.rb"},
+    "post_update": {"proc": "FigurePostUpdate"},
+    "entity_collision": {"file": "ExampleCollision.rb"}
+  }
 }

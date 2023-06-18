@@ -20,6 +20,8 @@ module Crystal2Day
 
     getter maps : Hash(String, Map) = Hash(String, Map).new(initial_capacity: MAPS_INITIAL_CAPACITY)
 
+    getter collision_matrix : CollisionMatrix = CollisionMatrix.new
+
     def handle_event(event)
     end
 
@@ -65,6 +67,7 @@ module Crystal2Day
       # TODO: Add adaptive time steps
       Crystal2Day.number_of_physics_steps.times do |i|
         physics_step
+        collision_step
       end
 
       @physics_groups.each {|member| member.reset_acceleration}
@@ -72,7 +75,11 @@ module Crystal2Day
 
     def physics_step
       @physics_groups.each {|member| member.update_physics}
-      # TODO: Test collisions and trigger hooks if available here
+    end
+
+    def collision_step
+      @collision_matrix.determine_collisions
+      @collision_matrix.call_hooks
     end
 
     def main_draw

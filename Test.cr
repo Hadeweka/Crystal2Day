@@ -20,10 +20,19 @@ CD.db.add_entity_proc("FigurePostUpdate") do |entity|
   end
 end
 
+CD.db.add_entity_proc("PlaySound") do |entity|
+  # TODO: Since the scene is not yet fully exposed to the entities, we need to rely on this hack for now
+  sound = CD.scene.not_nil!.as(CustomScene).example_sound
+  sound.pitch = entity.get_state("sound_pitch").to_f32
+  sound.play
+end
+
 WIDTH = 1600
 HEIGHT = 900
 
 class CustomScene < CD::Scene
+  getter example_sound = CD::Sound.new
+
   def init
     texture_tileset = CD.rm.load_texture("ExampleTileset.png")
     tileset = CD::Tileset.new
@@ -50,9 +59,11 @@ class CustomScene < CD::Scene
     CD.db.load_entity_type_from_file("ExampleEntityStateFigure.json")
     CD.db.load_entity_type_from_file("ExampleEntityStatePlayer.json")
 
-    add_entity_group("PlayerGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 5)
+    add_entity_group("PlayerGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 1)
+    add_entity_group("FigureGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 5)
 
-    5.times {|i| add_entity(group: "PlayerGroup", type: "Player", position: CD.xy(25 + 100*i, 0))}
+    add_entity(group: "PlayerGroup", type: "Player", position: CD.xy(500, 0))
+    5.times {|i| add_entity(group: "FigureGroup", type: "Figure", position: CD.xy(25 + 100*i, 0))}
 
     camera = CD::Camera.new
     camera.follow_entity(entity_groups["PlayerGroup"].get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
@@ -68,9 +79,14 @@ class CustomScene < CD::Scene
     CD.im.set_key_table_entry("left", [CD::Keyboard::K_LEFT, CD::Keyboard::K_A])
     CD.im.set_key_table_entry("right", [CD::Keyboard::K_RIGHT, CD::Keyboard::K_D])
 
-    # TODO: Collision graphs will probably work something like this:
-    # register_collision_pair_with_entity_group("PlayerGroup", "PlayerGroup")
-    # register_collision_pair_with_map("PlayerGroup", "Map1")
+    self.collision_matrix.link(entity_groups["FigureGroup"])
+    self.collision_matrix.link(entity_groups["FigureGroup"], maps["Map1"])
+    self.collision_matrix.link(entity_groups["PlayerGroup"], entity_groups["FigureGroup"])
+    self.collision_matrix.link(entity_groups["PlayerGroup"], maps["Map1"])
+    
+    self.collision_matrix.determine_collisions
+
+    @example_sound.load_from_file!("ExampleSound.ogg")
   end
 
   def update

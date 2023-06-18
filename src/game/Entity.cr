@@ -32,6 +32,9 @@ module Crystal2Day
 
     @renderer : Crystal2Day::Renderer
 
+    COLLISION_NONE = CollisionReference.new(CollisionReference::Kind::EMPTY)
+    getter current_collision : Crystal2Day::CollisionReference = Crystal2Day::Entity::COLLISION_NONE
+
     @collision_stack = Deque(CollisionReference).new(initial_capacity: COLLISION_STACK_INITIAL_CAPACITY)
 
     getter magic_number : UInt64 = 0u64
@@ -75,6 +78,7 @@ module Crystal2Day
       @type_name = entity_type.name
     end
 
+    # TODO: Maybe allow args in some way?
     def call_proc(name : String)
       Crystal2Day.database.call_entity_proc(name, self)
     end
@@ -123,7 +127,6 @@ module Crystal2Day
     def post_update(own_ref : Anyolite::RbRef)
       update_sprites
       call_hook("post_update", own_ref)
-      reset_collision_stack
     end
 
     @[Anyolite::Exclude]
@@ -145,7 +148,7 @@ module Crystal2Day
 
     @[Anyolite::Exclude]
     def update_physics_internal
-      # TODO: Maybe add other integration schemes like Leapfrog and Runge-Kutta
+      # TODO: Maybe add other integration schemes like Leapfrog or Runge-Kutta
       dt = Crystal2Day.physics_time_step
 
       @velocity += @acceleration * dt
@@ -160,6 +163,7 @@ module Crystal2Day
       @acceleration += value
     end
 
+    @[Anyolite::Exclude]
     def call_existing_hook(name : String, own_ref : Anyolite::RbRef)
       if @hooks[name].is_a?(Crystal2Day::Coroutine)
         @hooks[name].as(Crystal2Day::Coroutine).call(own_ref)
@@ -225,13 +229,29 @@ module Crystal2Day
       end
     end
 
-    def reset_collision_stack
-      @collision_stack.clear
+    def call_collision_hook(own_ref : Anyolite::RbRef)
+      @collision_stack.reject! do |collision_reference|
+        @current_collision = collision_reference
+        if @current_collision.kind == CollisionReference::Kind::ENTITY
+          call_hook("entity_collision", own_ref)
+        elsif @current_collision.kind == CollisionReference::Kind::MAP
+          call_hook("map_collision", own_ref)
+        end
+        @current_collision = COLLISION_NONE
+        true
+      end
     end
 
-    def check_collision_with_other_entity(other : Entity)
-      # Step 1: Compare boxes
+    def add_entity_collision_reference(other_entity : Entity)
+      @collision_stack.push CollisionReference.new(CollisionReference::Kind::ENTITY, other_entity)
+    end
+
+    def check_for_collision_with(other : Entity)
+      # Avoid collisions with yourself
+      # TODO: Maybe add an option to turn this off
+      return false if self == other
       
+      # Step 1: Compare boxes
       collision_detected = false
       @boxes.each do |box_own|
         other.boxes.each do |box_other|
@@ -245,22 +265,19 @@ module Crystal2Day
       return false unless collision_detected
       
       # Step 2: Compare actual shapes
-      
       collision_detected = false
       @shapes.each do |shape_own|
         other.shapes.each do |shape_other|
           if Crystal2Day::Collider.test(shape_own, @position, shape_other, other.position)
             collision_detected = true
-            @collision_stack.push CollisionReference.new(CollisionReference::Kind::Entity, other)
+            add_entity_collision_reference(other)
+            other.add_entity_collision_reference(self)
             break
           end
         end
       end
 
-      # TODO: Actually implement this
-      # TODO: Add hook(s) somewhere
       # TODO: Test all shapes if hitshapes are becoming relevant
-
       return collision_detected
     end
   end
