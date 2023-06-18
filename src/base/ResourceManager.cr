@@ -2,33 +2,46 @@
 
 module Crystal2Day
   class ResourceManager
-    TEXTURES_INITIAL_CAPACITY = 256
+    macro add_resource_type(name, resource_class, initial_capacity, additional_arg = nil, plural = "s")
+      @{{(name + plural).id}} = Hash(String, Crystal2Day::{{resource_class}}).new(initial_capacity: {{initial_capacity}})
 
-    @textures = Hash(String, Crystal2Day::Texture).new(initial_capacity: TEXTURES_INITIAL_CAPACITY)
+      def load_{{name.id}}(filename : String)
+        unless @{{(name + plural).id}}[filename]?
+          {% if additional_arg %}
+            {{name.id}} = Crystal2Day::{{resource_class}}.new({{additional_arg}})
+          {% else %}
+            {{name.id}} = Crystal2Day::{{resource_class}}.new
+          {% end %}
+          {{name.id}}.load_from_file!(filename)
+          @{{(name + plural).id}}[filename] = {{name.id}}
+        end
+
+        @{{(name + plural).id}}[filename]
+      end
+
+      def unload_{{name.id}}(filename : String)
+        @{{(name + plural).id}}[filename].delete if @{{(name + plural).id}}[filename]?
+      end
+  
+      def unload_all_{{(name + plural).id}}
+        @{{(name + plural).id}}.clear
+      end
+    end
+
+    TEXTURES_INITIAL_CAPACITY = 256
+    SOUNDS_INITIAL_CAPACITY = 256
+    MUSICS_INITIAL_CAPACITY = 256
+    
     property renderer : Crystal2Day::Renderer? = nil
+
+    add_resource_type("texture", Texture, TEXTURES_INITIAL_CAPACITY, additional_arg: @renderer.not_nil!)
+    add_resource_type("sound", Sound, SOUNDS_INITIAL_CAPACITY)
+    add_resource_type("music", Music, MUSICS_INITIAL_CAPACITY, plural: "")
 
     def initialize
     end
 
-    def load_texture(filename)
-      unless @textures[filename]?
-        texture = Crystal2Day::Texture.new(@renderer.not_nil!)
-        texture.load_from_file!(filename)
-        @textures[filename] = texture
-      end
-
-      @textures[filename]
-    end
-
-    def unload_texture(filename)
-      @textures[filename].delete if @textures[filename]?
-    end
-
-    def unload_all_textures
-      @textures.clear
-    end
-
     # TODO: Make macros for all of these
-    # TODO: Add fonts, sounds, music, maybe texts
+    # TODO: Add Fonts and maybe texts
   end
 end

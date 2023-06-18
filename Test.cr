@@ -86,7 +86,7 @@ class CustomScene < CD::Scene
     
     self.collision_matrix.determine_collisions
 
-    @example_sound.load_from_file!("ExampleSound.ogg")
+    @example_sound = CD.rm.load_sound("ExampleSound.ogg")
   end
 
   def update

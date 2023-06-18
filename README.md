@@ -116,6 +116,7 @@ end
 ##### Entities
 
 * [ ] Better sprite management
+* [ ] Access to things like sounds etc.
 * [ ] Entity parent-children system with memory management
 * [ ] Multiple entity script pages/states
 * [ ] Initial parameters
