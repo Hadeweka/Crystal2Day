@@ -78,6 +78,7 @@ class CustomScene < CD::Scene
     CD.im.set_key_table_entry("up", [CD::Keyboard::K_UP, CD::Keyboard::K_W])
     CD.im.set_key_table_entry("left", [CD::Keyboard::K_LEFT, CD::Keyboard::K_A])
     CD.im.set_key_table_entry("right", [CD::Keyboard::K_RIGHT, CD::Keyboard::K_D])
+    CD.im.set_key_table_entry("fast_mode", [CD::Keyboard::K_L])
 
     self.collision_matrix.link(entity_groups["FigureGroup"])
     self.collision_matrix.link(entity_groups["FigureGroup"], maps["Map1"])

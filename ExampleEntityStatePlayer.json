@@ -9,11 +9,17 @@
 
   "based_on": {
     "entity_type": "Figure",
-    "overwrite_default_state": true
+    "overwrite_default_state": true,
+    "overwrite_coroutine_templates": true
   },
 
   "coroutine_templates": {
-    "update": {"file": "ExampleUpdatePlayer.rb"},
+    "update": {
+      "pages": {
+        "main": {"file": "ExampleUpdatePlayer.rb"},
+        "fast": {"file": "ExampleUpdatePlayerFast.rb"}
+      }
+    },
     "post_update": {"proc": "FigurePostUpdate"},
     "handle_event": {"code": "loop do; entity.call_proc(\"FigureHandleEvent\"); Fiber.yield; end"},
     "entity_collision": {"file": "ExampleCollision.rb"}

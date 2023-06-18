@@ -101,8 +101,8 @@ end
 * [X] Framerate limiter
 * [X] Maps and tilesets
 * [X] 2D collision routines
-* [X] Minimal mruby scripting using Anyolite
-* [X] Entities with flexible states and scripts
+* [X] Entity hook scripting in mruby using and Anyolite
+* [X] Entities with flexible states and multiple script pages
 * [X] Entity collision system
 * [X] Simple game state
 * [X] Resource management system
@@ -118,7 +118,6 @@ end
 * [ ] Better sprite management
 * [ ] Access to things like sounds etc.
 * [ ] Entity parent-children system with memory management
-* [ ] Multiple entity script pages/states
 * [ ] Initial parameters
 * [ ] Better names for yielding methods
 

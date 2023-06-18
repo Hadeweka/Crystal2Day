@@ -6,17 +6,20 @@
 module Crystal2Day
   class Entity
     STATE_INITIAL_CAPACITY = 8
-    HOOKS_INITIAL_CAPACITY = 8
+    HOOKS_INITIAL_CAPACITY = 16
     CHILDREN_INITIAL_CAPACITY = 8
     COLLISION_STACK_INITIAL_CAPACITY = 8
 
     # If positive, this will discretize every motion into steps with the given size in each direction
     DEFAULT_OPTION_MOVEMENT_DISCRETIZATION = -1
 
+    # TODO: This does currently nothing
     property z : UInt8 = 0
 
     @state = Hash(String, Anyolite::RbRef).new(initial_capacity: STATE_INITIAL_CAPACITY)
-    @hooks = Hash(String, Crystal2Day::Coroutine | Crystal2Day::ProcCoroutine).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
+
+    getter current_hook : String = ""
+    @hooks = Hash(String, Hook).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
 
     @options = Hash(String, Int64).new
 
@@ -165,11 +168,9 @@ module Crystal2Day
 
     @[Anyolite::Exclude]
     def call_existing_hook(name : String, own_ref : Anyolite::RbRef)
-      if @hooks[name].is_a?(Crystal2Day::Coroutine)
-        @hooks[name].as(Crystal2Day::Coroutine).call(own_ref)
-      else
-        @hooks[name].as(Crystal2Day::ProcCoroutine).call(self)
-      end
+      @current_hook = name
+      @hooks[name].call(self, own_ref)
+      @current_hook = ""
     end
 
     @[Anyolite::Exclude]
@@ -186,6 +187,10 @@ module Crystal2Day
       else
         yield
       end
+    end
+
+    def change_hook_page_to(name : String)
+      @hooks[@current_hook].change_page(name)
     end
 
     @[Anyolite::Exclude]

@@ -81,6 +81,27 @@ module Crystal2Day
               when "proc"
                 coroutine = CD::CoroutineTemplate.from_proc_name(pull.read_string)
                 add_coroutine_template(coroutine_key, coroutine)
+              when "pages"
+                string_hash = Hash(String, String).new
+                proc_hash = Hash(String, String).new
+
+                pull.read_object do |page_name|
+                  pull.read_object do |page_coroutine_type|
+                    case page_coroutine_type
+                    when "file"
+                      string_hash[page_name] = File.read(pull.read_string)
+                    when "code"
+                      string_hash[page_name] = pull.read_string
+                    when "proc"
+                      proc_hash[page_name] = pull.read_string
+                    else
+                      Crystal2Day.error "Unknown EntityType loading option for pages: #{coroutine_type}"
+                    end
+                  end
+                end
+
+                coroutine = CD::CoroutineTemplate.from_hashes(string_hash, proc_hash, "entity")
+                add_coroutine_template(coroutine_key, coroutine)
               else
                 Crystal2Day.error "Unknown EntityType loading option: #{coroutine_type}"
               end

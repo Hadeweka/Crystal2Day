@@ -20,6 +20,7 @@ require "./base/Rect.cr"
 require "./base/ResourceManager.cr"
 
 require "./scripting/Coroutine.cr"
+require "./scripting/Hook.cr"
 require "./scripting/Interpreter.cr"
 
 require "./audio/Music.cr"
