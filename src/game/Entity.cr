@@ -234,6 +234,7 @@ module Crystal2Day
       end
     end
 
+    # TODO: Maybe it could make more sense to let the coroutine handle the whole stack?
     def call_collision_hook(own_ref : Anyolite::RbRef)
       @collision_stack.reject! do |collision_reference|
         @current_collision = collision_reference

@@ -4,17 +4,25 @@
 
 module Crystal2Day
   class Tile
-    @solid = false
+    FLAGS_INITIAL_CAPACITY = 16
+
+    # Hard-coded options
+    property dummy : Bool = false # Marks a tile as being in the tileset for animation purposes only (NOTE: It still has an individual Tile ID!)
+    property no_collision : Bool = false  # The tile will not be tested for any collisions
+    property animation_template : Crystal2Day::AnimationTemplate = Crystal2Day::AnimationTemplate.new # TODO: Implement this
+
+    @flags = Hash(String, Bool).new(initial_capacity: FLAGS_INITIAL_CAPACITY)
+    # TODO: More options in other data formats
   
     def initialize
     end
-  
-    def solid
-      return @solid
+
+    def get_flag(name : String, default_value : Bool = false)
+      @flags[name]? ? @flags[name] : default_value
     end
-  
-    def solid=(value : Bool = true)
-      @solid = value
+
+    def set_flag(name : String, value : Bool = true)
+      @flags[name] = value
     end
   end
 
@@ -25,6 +33,8 @@ module Crystal2Day
     property tile_width : UInt32 = 50u32
     property tile_height : UInt32 = 50u32
     @tiles : Array(Tile) = Array(Tile).new(initial_capacity: INITIAL_CAPACITY)
+
+    # TODO: Load tiles from JSON file
 
     def link_texture(texture : Crystal2Day::Texture)
       @texture = texture

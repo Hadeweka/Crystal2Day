@@ -1,0 +1,31 @@
+{
+  "texture": "ExampleTileset.png",
+
+  "tile_width": 50,
+
+  "tile_height": 50,
+
+  "tiles": [
+    {"name": "empty", "no_collision": true},
+
+    {"name": "grass", "solid": true},
+
+    {"name": "crunchy_grass", "solid": true, "crunchy": true},
+
+    {"name": "dirt", "solid": true},
+
+    {"name": "water", "water": true,
+      "animation_template": {
+        "start_frame": 0,
+        "loop_end_frame": 1,
+        "frame_delay": 10
+      }
+    },
+
+    {"name": "water2", "dummy": true},
+    
+    {"name": "rock", "solid": true},
+
+    {"name": "empty2", "no_collision": true}
+  ]
+}
