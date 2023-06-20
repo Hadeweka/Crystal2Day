@@ -155,3 +155,4 @@ end
 * [ ] Adding static JSON resources at compiletime
 * [ ] Data serializing
 * [ ] Data obfuscation
+* [ ] Animation phase shift patterns

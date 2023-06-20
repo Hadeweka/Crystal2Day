@@ -17,7 +17,7 @@
 
   "sprite_templates": [
     {
-      "texture": "ExampleSprite.png",
+      "texture": "example/ExampleSprite.png",
       "source_rect": {"width": 50, "height": 50},
       "position": {"x": -25, "y": -50},
       "z": 3,
@@ -30,8 +30,8 @@
   ],
 
   "coroutine_templates": {
-    "update": {"file": "ExampleUpdate.rb"},
+    "update": {"file": "example/ExampleUpdate.rb"},
     "post_update": {"proc": "FigurePostUpdate"},
-    "entity_collision": {"file": "ExampleCollision.rb"}
+    "entity_collision": {"file": "example/ExampleCollision.rb"}
   }
 }

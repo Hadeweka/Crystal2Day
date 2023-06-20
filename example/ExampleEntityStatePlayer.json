@@ -16,12 +16,12 @@
   "coroutine_templates": {
     "update": {
       "pages": {
-        "main": {"file": "ExampleUpdatePlayer.rb"},
-        "fast": {"file": "ExampleUpdatePlayerFast.rb"}
+        "main": {"file": "example/ExampleUpdatePlayer.rb"},
+        "fast": {"file": "example/ExampleUpdatePlayerFast.rb"}
       }
     },
     "post_update": {"proc": "FigurePostUpdate"},
     "handle_event": {"code": "each_frame do; entity.call_proc(\"FigureHandleEvent\"); end"},
-    "entity_collision": {"file": "ExampleCollision.rb"}
+    "entity_collision": {"file": "example/ExampleCollision.rb"}
   }
 }

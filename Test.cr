@@ -34,13 +34,13 @@ class CustomScene < CD::Scene
   getter example_sound = CD::Sound.new
 
   def init
-    map = add_map("Map1", tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
+    map = add_map("Map1", tileset: CD::Tileset.from_json_file("example/ExampleTileset.json"))
     map.content.load_from_array!(generate_test_map(width: 200, height: 200))
     map.background_tile = 0
     map.z = 2
     map.pin
 
-    texture_bg = CD.rm.load_texture("ExampleSky.png")
+    texture_bg = CD.rm.load_texture("example/ExampleSky.png")
     bg = CD::Sprite.new
     bg.link_texture(texture_bg)
     bg.position = CD.xy(-100, -100)
@@ -49,8 +49,8 @@ class CustomScene < CD::Scene
     bg.z = 1
     bg.pin
 
-    CD.db.load_entity_type_from_file("ExampleEntityStateFigure.json")
-    CD.db.load_entity_type_from_file("ExampleEntityStatePlayer.json")
+    CD.db.load_entity_type_from_file("example/ExampleEntityStateFigure.json")
+    CD.db.load_entity_type_from_file("example/ExampleEntityStatePlayer.json")
 
     add_entity_group("PlayerGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 1)
     add_entity_group("FigureGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 5)
@@ -80,7 +80,7 @@ class CustomScene < CD::Scene
     
     self.collision_matrix.determine_collisions
 
-    @example_sound = CD.rm.load_sound("ExampleSound.ogg")
+    @example_sound = CD.rm.load_sound("example/ExampleSound.ogg")
   end
 
   def update
