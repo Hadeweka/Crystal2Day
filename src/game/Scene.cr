@@ -66,6 +66,8 @@ module Crystal2Day
     def update_physics
       # TODO: Add adaptive time steps
       Crystal2Day.number_of_physics_steps.times do |i|
+        # TODO: Will it help to swap these?
+        # TODO: This way, the entity can check whether it has objects to its sides first, before blindly advancing
         physics_step
         collision_step
       end
