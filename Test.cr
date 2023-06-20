@@ -14,10 +14,6 @@ CD.db.add_entity_proc("FigureHandleEvent") do |entity|
 end
 
 CD.db.add_entity_proc("FigurePostUpdate") do |entity|
-  if entity.position.y >= 0 && entity.position.x > -25
-    entity.position.y = 0
-    entity.velocity.y = 0
-  end
 end
 
 CD.db.add_entity_proc("PlaySound") do |entity|
@@ -118,6 +114,7 @@ class CustomScene < CD::Scene
         else
           array[y].push (rand(3).to_u32 + 1)
         end
+        array[y][x] = 0 if rand < 0.5
       end
     end
 

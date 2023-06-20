@@ -72,6 +72,7 @@ module Crystal2Day
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Mouse, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::InputManager, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShape, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::Tile, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapePoint, under: Crystal2Day, connect_to_superclass: true)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapeLine, under: Crystal2Day, connect_to_superclass: true)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapeCircle, under: Crystal2Day, connect_to_superclass: true)

@@ -34,6 +34,7 @@ module Crystal2Day
     property tile_width : UInt32 = 50u32
     property tile_height : UInt32 = 50u32
     @tiles : Array(Tile) = Array(Tile).new(initial_capacity: INITIAL_CAPACITY)
+    @refs : Array(Anyolite::RbRef) = Array(Anyolite::RbRef).new(initial_capacity: INITIAL_CAPACITY)
 
     def initialize
     end
@@ -84,7 +85,10 @@ module Crystal2Day
     end
   
     def add_tile(tile : Tile)
+      new_ref = Crystal2Day::Interpreter.generate_ref(tile)
+      
       @tiles.push(tile)
+      @refs.push new_ref
     end
 
     def fill_with_default_tiles(number : UInt32)

@@ -89,10 +89,6 @@ module Crystal2Day
       end
     end
 
-    def handle_entity_collision(entity_1 : Entity, entity_2 : Entity)
-      entity_1.check_for_collision_with(entity_2)
-    end
-
     def check_for_collision_with(other : EntityGroup | Map)
       if other.is_a?(EntityGroup)
         if other == self
@@ -101,24 +97,26 @@ module Crystal2Day
               entity_1 = @members[index_1]
               entity_2 = @members[index_2]
 
-              handle_entity_collision(entity_1, entity_2)
+              entity_1.check_for_collision_with(entity_2)
             end
           end
         else
           @members.each do |entity_1|
             other.as(EntityGroup).members.each do |entity_2|
-              handle_entity_collision(entity_1, entity_2)
+              entity_1.check_for_collision_with(entity_2)
             end
           end
         end
       else
-        # TODO: Entity-Map collisions
+        @members.each do |entity|
+          entity.check_for_collision_with(other.as(Map))
+        end
       end
     end
 
     def call_collision_hooks
       0.upto(@members.size - 1) do |index|
-        @members[index].call_collision_hook(@refs[index])
+        @members[index].call_collision_hooks(@refs[index])
       end
     end
 

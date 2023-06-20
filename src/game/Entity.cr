@@ -8,7 +8,8 @@ module Crystal2Day
     STATE_INITIAL_CAPACITY = 8
     HOOKS_INITIAL_CAPACITY = 16
     CHILDREN_INITIAL_CAPACITY = 8
-    COLLISION_STACK_INITIAL_CAPACITY = 8
+    COLLISION_STACK_ENTITIES_INITIAL_CAPACITY = 8
+    COLLISION_STACK_TILES_INITIAL_CAPACITY = 32
 
     # If positive, this will discretize every motion into steps with the given size in each direction
     DEFAULT_OPTION_MOVEMENT_DISCRETIZATION = -1
@@ -38,7 +39,8 @@ module Crystal2Day
     COLLISION_NONE = CollisionReference.new(CollisionReference::Kind::EMPTY)
     getter current_collision : Crystal2Day::CollisionReference = Crystal2Day::Entity::COLLISION_NONE
 
-    @collision_stack = Deque(CollisionReference).new(initial_capacity: COLLISION_STACK_INITIAL_CAPACITY)
+    @collision_stack_entities = Deque(CollisionReference).new(initial_capacity: COLLISION_STACK_ENTITIES_INITIAL_CAPACITY)
+    @collision_stack_tiles = Deque(CollisionReference).new(initial_capacity: COLLISION_STACK_TILES_INITIAL_CAPACITY)
 
     getter magic_number : UInt64 = 0u64
 
@@ -235,23 +237,82 @@ module Crystal2Day
     end
 
     # TODO: Maybe it could make more sense to let the coroutine handle the whole stack?
-    def call_collision_hook(own_ref : Anyolite::RbRef)
-      @collision_stack.reject! do |collision_reference|
+    def call_collision_hooks(own_ref : Anyolite::RbRef)
+      @collision_stack_tiles.reject! do |collision_reference|
         @current_collision = collision_reference
-        if @current_collision.kind == CollisionReference::Kind::ENTITY
-          call_hook("entity_collision", own_ref)
-        elsif @current_collision.kind == CollisionReference::Kind::MAP
-          call_hook("map_collision", own_ref)
-        end
+        call_hook("tile_collision", own_ref)
+        @current_collision = COLLISION_NONE
+        true
+      end
+
+      @collision_stack_entities.reject! do |collision_reference|
+        @current_collision = collision_reference
+        call_hook("entity_collision", own_ref)
         @current_collision = COLLISION_NONE
         true
       end
     end
 
     def add_entity_collision_reference(other_entity : Entity)
-      @collision_stack.push CollisionReference.new(CollisionReference::Kind::ENTITY, other_entity)
+      @collision_stack_entities.push CollisionReference.new(CollisionReference::Kind::ENTITY, other_entity, other_entity.position)
     end
 
+    def add_tile_collision_reference(tile : Tile, position : Coords)
+      @collision_stack_tiles.push CollisionReference.new(CollisionReference::Kind::TILE, tile, position)
+    end
+
+    def check_for_collision_with(map : Map)
+      map_width = map.content.width
+      map_height = map.content.height
+      tile_width = map.tileset.tile_width
+      tile_height = map.tileset.tile_height
+
+      minimum_x = (map_width + 100) * tile_width
+      minimum_y = (map_height + 100) * tile_height
+      maximum_x = -100.0 * tile_width
+      maximum_y = -100.0 * tile_height
+
+      @boxes.each do |box|
+        box_corner_low = @position + box.position
+        box_corner_high = box_corner_low + box.size.scale(box.scale)
+        box_minimum_x = box_corner_low.x
+        box_minimum_y = box_corner_low.y
+        box_maximum_x = box_corner_high.x
+        box_maximum_y = box_corner_high.y
+
+        minimum_x = box_minimum_x if box_minimum_x < minimum_x
+        minimum_y = box_minimum_y if box_minimum_y < minimum_y
+        maximum_x = box_maximum_x if box_maximum_x > maximum_x
+        maximum_y = box_maximum_y if box_maximum_y > maximum_y
+      end
+
+      # Add one pixel for tolerance
+
+      minimum_map_x = ((minimum_x - 1) / tile_width).floor.to_i
+      minimum_map_y = ((minimum_y - 1) / tile_height).floor.to_i
+      maximum_map_x = ((maximum_x + 1) / tile_width).floor.to_i
+      maximum_map_y = ((maximum_y + 1) / tile_height).floor.to_i
+
+      # TODO: Add map shifts
+
+      minimum_map_x.upto(maximum_map_x) do |x|
+        next if x < 0 || x >= map.content.width
+        minimum_map_y.upto(maximum_map_y) do |y|
+          next if y < 0 || y >= map.content.height
+          tile_id = map.content.tiles[y][x]
+          tile = map.tileset.get_tile(tile_id)
+          tile_shape = CollisionShapeBox.new(size: Crystal2Day.xy(tile_width, tile_height))
+          tile_position = Crystal2Day.xy(x * tile_width, y * tile_height)
+          @shapes.each do |shape_own|
+            if Crystal2Day::Collider.test(shape_own, @position, tile_shape, tile_position)
+              add_tile_collision_reference(tile, tile_position)
+            end
+          end
+        end
+      end
+    end
+
+    @[Anyolite::Specialize]
     def check_for_collision_with(other : Entity)
       # Avoid collisions with yourself
       # TODO: Maybe add an option to turn this off
