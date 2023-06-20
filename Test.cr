@@ -34,14 +34,7 @@ class CustomScene < CD::Scene
   getter example_sound = CD::Sound.new
 
   def init
-    texture_tileset = CD.rm.load_texture("ExampleTileset.png")
-    tileset = CD::Tileset.new
-    tileset.link_texture(texture_tileset)
-    tileset.fill_with_default_tiles(number: 8) # NOTE: This will become relevant for tile animations and information
-    tileset.tile_width = 50
-    tileset.tile_height = 50
-
-    map = add_map("Map1", tileset: tileset)
+    map = add_map("Map1", tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
     map.content.load_from_array!(generate_test_map(width: 200, height: 200))
     map.background_tile = 0
     map.z = 2

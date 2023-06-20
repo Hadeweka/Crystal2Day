@@ -124,8 +124,6 @@ end
 
 * [ ] Loading routines
 * [ ] Collision checks
-* [ ] Tile information
-* [ ] Loading tileset data from JSON
 
 ##### Graphics
 
