@@ -119,7 +119,6 @@ end
 * [ ] Access to things like sounds etc.
 * [ ] Initial parameters
 * [ ] Method to call hooks immediately after other hooks
-* [ ] Change collision routines to intersection-only checks (if wanted?)
 * [ ] Maybe use special boxes (or shapes?) for interacting with maps?
 
 ##### Maps
