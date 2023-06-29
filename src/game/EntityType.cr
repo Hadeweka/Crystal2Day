@@ -12,7 +12,8 @@ module Crystal2Day
     property overwrite_options : Bool = false
     property overwrite_coroutine_templates : Bool = false
     property overwrite_sprite_templates : Bool = false
-    property overwrite_boxes : Bool = false
+    property overwrite_bounding_boxes : Bool = false
+    property overwrite_map_boxes : Bool = false
     property overwrite_shapes : Bool = false
     property overwrite_hitshapes : Bool = false
     property overwrite_hurtshapes : Bool = false
@@ -31,7 +32,8 @@ module Crystal2Day
     @options = Hash(String, Int64).new
 
     @sprite_templates = Array(Crystal2Day::SpriteTemplate).new
-    @boxes = Array(Crystal2Day::CollisionShapeBox).new
+    @bounding_boxes = Array(Crystal2Day::CollisionShapeBox).new
+    @map_boxes = Array(Crystal2Day::CollisionShapeBox).new
     @shapes = Array(Crystal2Day::CollisionShape).new
     @hitshapes = Array(Crystal2Day::CollisionShape).new
     @hurtshapes = Array(Crystal2Day::CollisionShape).new
@@ -107,7 +109,11 @@ module Crystal2Day
               end
             end
           end
-        when "boxes"
+        when "map_boxes"
+          pull.read_array do
+            add_map_box_from_raw_json(raw_json: pull.read_raw)
+          end
+        when "bounding_boxes"
           pull.read_array do
             add_collision_box_from_raw_json(raw_json: pull.read_raw)
           end
@@ -148,11 +154,11 @@ module Crystal2Day
     end
 
     def add_collision_box(collision_box : Crystal2Day::CollisionShapeBox)
-      @boxes.push collision_box
+      @bounding_boxes.push collision_box
     end
 
     def add_collision_box_from_raw_json(raw_json : String)
-      @boxes.push Crystal2Day::CollisionShapeBox.from_json(raw_json)
+      @bounding_boxes.push Crystal2Day::CollisionShapeBox.from_json(raw_json)
     end
 
     def add_collision_shape(collision_shape : Crystal2Day::CollisionShape)
@@ -161,6 +167,14 @@ module Crystal2Day
 
     def add_collision_shape_from_raw_json(raw_json : String)
       @shapes.push Crystal2Day::CollisionShape.from_json(raw_json)
+    end
+
+    def add_map_box(collision_box : Crystal2Day::CollisionShapeBox)
+      @map_boxes.push collision_box
+    end
+
+    def add_map_box_from_raw_json(raw_json : String)
+      @map_boxes.push Crystal2Day::CollisionShapeBox.from_json(raw_json)
     end
 
     # TODO: Adding routines for hitshapes and hurtshapes
@@ -201,15 +215,27 @@ module Crystal2Day
       end
     end
 
-    def transfer_boxes
+    def transfer_bounding_boxes
       unless @based_on.entity_type.empty?
-        if @based_on.overwrite_boxes
-          @boxes
+        if @based_on.overwrite_bounding_boxes
+          @bounding_boxes
         else
-          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_boxes + @boxes
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_bounding_boxes + @bounding_boxes
         end
       else
-        @boxes
+        @bounding_boxes
+      end
+    end
+
+    def transfer_map_boxes
+      unless @based_on.entity_type.empty?
+        if @based_on.overwrite_map_boxes
+          @map_boxes
+        else
+          Crystal2Day.database.get_entity_type(@based_on.entity_type).transfer_map_boxes + @map_boxes
+        end
+      else
+        @map_boxes
       end
     end
 

@@ -1,18 +1,25 @@
 each_frame do
   collision = entity.current_collision
-  if collision.tile.get_flag("solid") && collision.other_position.y >= entity.position.y - 5
-    entity.velocity.y = 0.0
-    entity.position.y -= 1
-    entity.set_state("on_ground", true)
-  end
 
-  if collision.tile.get_flag("solid") && collision.other_position.y < entity.position.y - 55
-    entity.velocity.y = 0.0
-  end
+  if collision.tile.get_flag("solid")
+    if collision.other_position.x + 25 > entity.position.x
+      puts "Blocked: Right" if entity.velocity.x > 0
+      entity.velocity.x = 0 if entity.velocity.x > 0
+    end
 
-  if collision.tile.get_flag("solid") && collision.other_position.x > entity.position.x
-    entity.position.x -= 1
-  elsif collision.tile.get_flag("solid") && collision.other_position.x < entity.position.x - 50
-    entity.position.x += 1
+    if collision.other_position.x + 25 < entity.position.x
+      puts "Blocked: Left" if entity.velocity.x < 0
+      entity.velocity.x = 0 if entity.velocity.x < 0
+    end
+
+    if collision.other_position.y + 25 > entity.position.y
+      puts "Blocked: Down" if entity.velocity.y > 0
+      entity.velocity.y = 0 if entity.velocity.y > 0
+    end
+    
+    if collision.other_position.y + 25 < entity.position.y
+      puts "Blocked: Up" if entity.velocity.y < 0
+      entity.velocity.y = 0 if entity.velocity.y < 0
+    end
   end
 end

@@ -71,9 +71,15 @@ module Crystal2Day
       Crystal2Day.last_event = nil
     end
 
-    def update_physics
+    def update_physics(time_step : Float32)
       0.upto(@members.size - 1) do |index|
-        @members[index].update_physics(@refs[index])
+        @members[index].update_physics(@refs[index], time_step)
+      end
+    end
+
+    def acceleration_step
+      @members.each do |member|
+        member.acceleration_step
       end
     end
 
@@ -118,6 +124,17 @@ module Crystal2Day
       0.upto(@members.size - 1) do |index|
         @members[index].call_collision_hooks(@refs[index])
       end
+    end
+
+    def get_max_velocity
+      velocity = Crystal2Day.xy
+
+      @members.each do |entity|
+        velocity.x = entity.velocity.x.abs if entity.velocity.abs > velocity.x
+        velocity.y = entity.velocity.y.abs if entity.velocity.abs > velocity.y
+      end
+
+      velocity
     end
 
     def clear

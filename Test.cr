@@ -51,20 +51,18 @@ class CustomScene < CD::Scene
     add_entity_group("PlayerGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 1)
     add_entity_group("FigureGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 5)
 
-    add_entity(group: "PlayerGroup", type: "Player", position: CD.xy(500, 0))
-    5.times {|i| add_entity(group: "FigureGroup", type: "Figure", position: CD.xy(25 + 100*i, 0))}
+    add_entity(group: "PlayerGroup", type: "Player", position: CD.xy(500, -50))
+    5.times {|i| add_entity(group: "FigureGroup", type: "Figure", position: CD.xy(25 + 100*i, -50))}
 
     camera = CD::Camera.new
     camera.follow_entity(entity_groups["PlayerGroup"].get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
     camera.z = 0
     camera.pin
 
-    CD.game_data.set_state("gravity", CD.xy(0, 100.0))
-    CD.physics_time_step = 0.01
-    CD.number_of_physics_steps = 10
-
+    # TODO: Make it possible to load this from JSON
     CD.im.set_key_table_entry("action_key", [CD::Keyboard::K_SPACE])
     CD.im.set_key_table_entry("up", [CD::Keyboard::K_UP, CD::Keyboard::K_W])
+    CD.im.set_key_table_entry("down", [CD::Keyboard::K_DOWN, CD::Keyboard::K_S])
     CD.im.set_key_table_entry("left", [CD::Keyboard::K_LEFT, CD::Keyboard::K_A])
     CD.im.set_key_table_entry("right", [CD::Keyboard::K_RIGHT, CD::Keyboard::K_D])
     CD.im.set_key_table_entry("fast_mode", [CD::Keyboard::K_L])
@@ -94,7 +92,9 @@ class CustomScene < CD::Scene
     end
 
     if CD.im.check_event_for_key_press(event, "action_key")
-      puts "Action!"
+      puts "R Position: #{entity_groups["PlayerGroup"].get_entity(0).position.inspect}"
+      puts "A Position: #{entity_groups["PlayerGroup"].get_entity(0).aligned_position.inspect}"
+      puts "O Position: #{entity_groups["PlayerGroup"].get_entity(0).old_position.inspect}"
     end
   end
 

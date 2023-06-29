@@ -7,19 +7,27 @@
     "test": 123
   },
 
-  "boxes": [
-    {"size": {"x": 50, "y": 50}, "position": {"x": -25, "y": -50}}
+  "options": {
+    "grid_alignment": 1
+  },
+
+  "map_boxes": [
+    {"size": {"x": 50, "y": 50}, "position": {"x": -25, "y": -25}}
+  ],
+
+  "bounding_boxes": [
+    {"size": {"x": 50, "y": 50}, "position": {"x": -25, "y": -25}}
   ],
 
   "shapes": [
-    {"type": "circle", "radius": 25, "position": {"x": 0, "y": -25}}
+    {"type": "circle", "radius": 25, "position": {"x": 0, "y": 0}}
   ],
 
   "sprite_templates": [
     {
       "texture": "example/ExampleSprite.png",
       "source_rect": {"width": 50, "height": 50},
-      "position": {"x": -25, "y": -50},
+      "position": {"x": -25, "y": -25},
       "z": 3,
       "animation_template": {
         "start_frame": 1,

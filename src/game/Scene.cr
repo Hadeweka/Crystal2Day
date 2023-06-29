@@ -63,20 +63,38 @@ module Crystal2Day
       post_update
     end
 
+    def get_max_speed
+      max_speed = 0.0
+      @physics_groups.each do |member|
+        max_velocity = member.get_max_velocity
+        potential_max_speed = {max_velocity.x, max_velocity.y}.max
+        max_speed = potential_max_speed if potential_max_speed > max_speed
+      end
+      max_speed
+    end
+
     def update_physics
-      # TODO: Add adaptive time steps
-      Crystal2Day.number_of_physics_steps.times do |i|
-        # TODO: Will it help to swap these?
-        # TODO: This way, the entity can check whether it has objects to its sides first, before blindly advancing
-        physics_step
-        collision_step
+      @physics_groups.each {|member| member.acceleration_step}
+
+      if Crystal2Day.number_of_physics_steps == 0
+        dynamic_number_of_physics_steps = get_max_speed.round.to_i
+        # TODO: Actually do something with this
+        dynamic_number_of_physics_steps.times do |i|
+          collision_step
+          physics_step(Crystal2Day.physics_time_step / dynamic_number_of_physics_steps)
+        end
+      else
+        Crystal2Day.number_of_physics_steps.times do |i|
+          collision_step
+          physics_step(Crystal2Day.physics_time_step / Crystal2Day.number_of_physics_steps)
+        end
       end
 
       @physics_groups.each {|member| member.reset_acceleration}
     end
 
-    def physics_step
-      @physics_groups.each {|member| member.update_physics}
+    def physics_step(time_step : Float32)
+      @physics_groups.each {|member| member.update_physics(time_step)}
     end
 
     def collision_step
