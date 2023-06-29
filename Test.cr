@@ -72,7 +72,7 @@ class CustomScene < CD::Scene
     self.collision_matrix.link(entity_groups["PlayerGroup"], entity_groups["FigureGroup"])
     self.collision_matrix.link(entity_groups["PlayerGroup"], maps["Map1"])
     
-    self.collision_matrix.determine_collisions
+    Crystal2Day.grid_alignment = 5
 
     @example_sound = CD.rm.load_sound("example/ExampleSound.ogg")
   end
@@ -94,7 +94,6 @@ class CustomScene < CD::Scene
     if CD.im.check_event_for_key_press(event, "action_key")
       puts "R Position: #{entity_groups["PlayerGroup"].get_entity(0).position.inspect}"
       puts "A Position: #{entity_groups["PlayerGroup"].get_entity(0).aligned_position.inspect}"
-      puts "O Position: #{entity_groups["PlayerGroup"].get_entity(0).old_position.inspect}"
     end
   end
 

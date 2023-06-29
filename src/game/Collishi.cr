@@ -392,6 +392,12 @@ module Collishi
 		return false if x2 + w2 < x1
 		return false if y2 + h2 < y1
 
+		# TODO: This is for the case that the edges should not trigger a collision if touching
+		# return false if x1 + w1 <= x2 && y1 + h1 <= y2
+		# return false if y1 + h1 <= y2 && x2 + w2 <= x1
+		# return false if x2 + w2 <= x1 && y2 + h2 <= y1
+		# return false if y2 + h2 <= y1 && x1 + w1 <= x2
+
 		return true
   end
 

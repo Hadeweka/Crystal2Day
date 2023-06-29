@@ -7,10 +7,6 @@
     "test": 123
   },
 
-  "options": {
-    "grid_alignment": 1
-  },
-
   "map_boxes": [
     {"size": {"x": 50, "y": 50}, "position": {"x": -25, "y": -25}}
   ],

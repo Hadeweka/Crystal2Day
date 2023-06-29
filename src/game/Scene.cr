@@ -76,6 +76,8 @@ module Crystal2Day
     def update_physics
       @physics_groups.each {|member| member.acceleration_step}
 
+      # TODO: Maybe put some graphics resolution factor here
+
       if Crystal2Day.number_of_physics_steps == 0
         dynamic_number_of_physics_steps = get_max_speed.round.to_i
         # TODO: Actually do something with this

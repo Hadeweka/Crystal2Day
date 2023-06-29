@@ -47,19 +47,9 @@ module Crystal2Day
 
     getter magic_number : UInt64 = 0u64
 
-    getter position : Crystal2Day::Coords = Crystal2Day.xy
-    getter aligned_position : Crystal2Day::Coords = Crystal2Day.xy
-    getter old_position : Crystal2Day::Coords = Crystal2Day.xy
+    property position : Crystal2Day::Coords = Crystal2Day.xy
     property velocity : Crystal2Day::Coords = Crystal2Day.xy
     property acceleration : Crystal2Day::Coords = Crystal2Day.xy
-
-    property grid_alignment : Int64 = 0
-
-    def position=(value : Crystal2Day::Coords)
-      @position = value
-      @old_position = value
-      align_to_new_position 
-    end
 
     @[Anyolite::Specialize(nil)]
     def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
@@ -98,8 +88,6 @@ module Crystal2Day
       end
 
       @type_name = entity_type.name
-
-      @grid_alignment = get_option("grid_alignment", 0)
     end
 
     # TODO: Maybe allow args in some way?
@@ -179,20 +167,7 @@ module Crystal2Day
     @[Anyolite::Exclude]
     def update_physics_internal
       # TODO: Maybe add other integration schemes like Leapfrog or Runge-Kutta
-      @old_position = Crystal2Day.xy(@position.x, @position.y)
-
       @position += @velocity * @current_time_step
-
-      if @grid_alignment != 0
-        if (@position.x - @old_position.x).abs >= @grid_alignment
-          @aligned_position.x += ((@position.x - @old_position.x) / @grid_alignment).round.to_i
-        end
-        if (@position.y - @old_position.y).abs >= @grid_alignment
-          @aligned_position.y += ((@position.y - @old_position.y) / @grid_alignment).round.to_i
-        end
-      else
-        @aligned_position = @position
-      end
     end
 
     def reset_acceleration
@@ -349,7 +324,7 @@ module Crystal2Day
           tile_shape = CollisionShapeBox.new(size: Crystal2Day.xy(tile_width, tile_height))
           tile_position = Crystal2Day.xy(x * tile_width, y * tile_height)
           @map_boxes.each do |shape_own|
-            if Crystal2Day::Collider.test(shape_own, @aligned_position, tile_shape, tile_position)
+            if Crystal2Day::Collider.test(shape_own, aligned_position, tile_shape, tile_position)
               add_tile_collision_reference(tile, tile_position)
             end
           end
@@ -357,11 +332,11 @@ module Crystal2Day
       end
     end
 
-    def align_to_new_position
-      if @grid_alignment == 0
-        @aligned_position = @position
+    def aligned_position
+      if Crystal2Day.grid_alignment == 0
+        @position
       else
-        @aligned_position = Crystal2Day.xy((@position.x / @grid_alignment).round * @grid_alignment, (@position.y / @grid_alignment).round * @grid_alignment)
+        Crystal2Day.xy((@position.x / Crystal2Day.grid_alignment).round * Crystal2Day.grid_alignment, (@position.y / Crystal2Day.grid_alignment).round * Crystal2Day.grid_alignment)
       end
     end
 
