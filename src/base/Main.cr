@@ -13,6 +13,7 @@ module Crystal2Day
   class_property game_data : Crystal2Day::GameData = Crystal2Day::GameData.new
   class_property physics_time_step : Float32 = 1.0
   class_property number_of_physics_steps : UInt32 = 0
+  class_property max_number_of_physics_step_splits : UInt32 = 10  # Essentially reduces the physics resolution
   class_property grid_alignment : Int64 = 0
   class_property last_event : Crystal2Day::Event? = nil
   class_property last_colliding_entity : Crystal2Day::Entity? = nil

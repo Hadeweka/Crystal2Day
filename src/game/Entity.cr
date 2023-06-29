@@ -51,6 +51,8 @@ module Crystal2Day
     property velocity : Crystal2Day::Coords = Crystal2Day.xy
     property acceleration : Crystal2Day::Coords = Crystal2Day.xy
 
+    property terminal_speed : Float32 = 100.0 # TODO: Implement this as an option
+
     @[Anyolite::Specialize(nil)]
     def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
     end
@@ -162,6 +164,10 @@ module Crystal2Day
     @[Anyolite::Exclude]
     def acceleration_step
       @velocity += @acceleration * Crystal2Day.physics_time_step
+      @velocity.x = @terminal_speed if @velocity.x > @terminal_speed
+      @velocity.x = -@terminal_speed if @velocity.x < -@terminal_speed
+      @velocity.y = @terminal_speed if @velocity.y > @terminal_speed
+      @velocity.y = -@terminal_speed if @velocity.y < -@terminal_speed
     end
 
     @[Anyolite::Exclude]

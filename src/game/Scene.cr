@@ -77,10 +77,10 @@ module Crystal2Day
       @physics_groups.each {|member| member.acceleration_step}
 
       # TODO: Maybe put some graphics resolution factor here
+      # TODO: Obtain max speed from first acceleration loop
 
       if Crystal2Day.number_of_physics_steps == 0
-        dynamic_number_of_physics_steps = get_max_speed.round.to_i
-        # TODO: Actually do something with this
+        dynamic_number_of_physics_steps = {Crystal2Day.max_number_of_physics_step_splits, get_max_speed.round.to_i}.min
         dynamic_number_of_physics_steps.times do |i|
           collision_step
           physics_step(Crystal2Day.physics_time_step / dynamic_number_of_physics_steps)
