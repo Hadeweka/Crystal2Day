@@ -37,6 +37,6 @@
     "update": {"file": "example/ExampleUpdate.rb"},
     "post_update": {"proc": "FigurePostUpdate"},
     "entity_collisions": {"file": "example/ExampleCollisionEntity.rb"},
-    "tile_collisions": {"file": "example/ExampleCollisionTile.rb"}
+    "tile_collisions": {"proc": "TileCollision"}
   }
 }
