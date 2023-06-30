@@ -37,9 +37,6 @@ module Crystal2Day
 
     @renderer : Crystal2Day::Renderer
 
-    COLLISION_NONE = CollisionReference.new(CollisionReference::Kind::EMPTY)
-    getter current_collision : Crystal2Day::CollisionReference = Crystal2Day::Entity::COLLISION_NONE
-
     getter current_time_step : Float32 = 0.0
 
     @collision_stack_entities = Deque(CollisionReference).new(initial_capacity: COLLISION_STACK_ENTITIES_INITIAL_CAPACITY)
@@ -260,21 +257,26 @@ module Crystal2Day
       end
     end
 
-    # TODO: Maybe it could make more sense to let the coroutine handle the whole stack?
-    def call_collision_hooks(own_ref : Anyolite::RbRef)
-      @collision_stack_tiles.reject! do |collision_reference|
-        @current_collision = collision_reference
-        call_hook("tile_collision", own_ref)
-        @current_collision = COLLISION_NONE
-        true
+    @[Anyolite::AddBlockArg(1, Nil)]
+    def each_tile_collision
+      @collision_stack_tiles.each do |collision_reference|
+        yield collision_reference
       end
+    end
 
-      @collision_stack_entities.reject! do |collision_reference|
-        @current_collision = collision_reference
-        call_hook("entity_collision", own_ref)
-        @current_collision = COLLISION_NONE
-        true
+    @[Anyolite::AddBlockArg(1, Nil)]
+    def each_entity_collision
+      @collision_stack_entities.each do |collision_reference|
+        yield collision_reference
       end
+    end
+
+    def call_collision_hooks(own_ref : Anyolite::RbRef)
+      call_hook("tile_collisions", own_ref)
+      @collision_stack_tiles.clear
+
+      call_hook("entity_collisions", own_ref)
+      @collision_stack_entities.clear
     end
 
     def add_entity_collision_reference(other_entity : Entity)
