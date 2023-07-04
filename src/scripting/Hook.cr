@@ -13,6 +13,10 @@ module Crystal2Day
       @pages[name] = coroutine
     end
 
+    def is_currently_ruby?
+      @pages[@current_page].is_a?(Coroutine)
+    end
+
     def change_page(name : String)
       Crystal2Day.error "Unknown coroutine page: '#{name}'" unless @pages[name]?
       @current_page = name

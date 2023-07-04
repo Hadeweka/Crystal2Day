@@ -118,7 +118,6 @@ end
 * [ ] Better sprite management
 * [ ] Access to things like sounds etc.
 * [ ] Initial parameters
-* [ ] Method to call hooks immediately after other hooks
 
 ##### Maps
 

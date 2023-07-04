@@ -8,6 +8,7 @@ module Crystal2Day
     STATE_INITIAL_CAPACITY = 8
     HOOKS_INITIAL_CAPACITY = 16
     CHILDREN_INITIAL_CAPACITY = 8
+    HOOK_STACK_INITIAL_CAPACITY = 8
     COLLISION_STACK_ENTITIES_INITIAL_CAPACITY = 8
     COLLISION_STACK_TILES_INITIAL_CAPACITY = 32
 
@@ -21,6 +22,8 @@ module Crystal2Day
 
     getter current_hook : String = ""
     @hooks = Hash(String, Hook).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
+    @hook_stack = Deque(String).new(initial_capacity: HOOK_STACK_INITIAL_CAPACITY)
+    property next_hook : String? = nil
 
     @options = Hash(String, Int64).new
 
@@ -184,7 +187,14 @@ module Crystal2Day
     @[Anyolite::Exclude]
     def call_existing_hook(name : String, own_ref : Anyolite::RbRef)
       @current_hook = name
+      is_ruby = @hooks[name].is_currently_ruby?
       @hooks[name].call(self, own_ref)
+      if next_hook_name = @next_hook
+        @hook_stack.push name if is_ruby
+        @next_hook = nil
+        call_hook(next_hook_name, own_ref)
+        call_hook(@hook_stack.pop, own_ref) if is_ruby
+      end
       @current_hook = ""
     end
 

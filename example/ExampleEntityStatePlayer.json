@@ -23,6 +23,7 @@
     "post_update": {"proc": "FigurePostUpdate"},
     "handle_event": {"code": "each_frame do; entity.call_proc(\"FigureHandleEvent\"); end"},
     "entity_collisions": {"file": "example/ExampleCollisionEntity.rb"},
-    "tile_collisions": {"proc": "TileCollision"}
+    "tile_collisions": {"proc": "TileCollision"},
+    "mid_hook": {"file": "example/ExampleMidHook.rb"}
   }
 }

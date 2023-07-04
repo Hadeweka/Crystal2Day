@@ -18,6 +18,8 @@ each_frame do
   end
   if Crystal2Day.im.key_down?("down")
     entity.velocity.y = 2
+    entity.next_hook = "mid_hook"
+    pause
   end
 
   entity.velocity.x = 0 unless x_input
