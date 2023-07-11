@@ -17,6 +17,8 @@ module Crystal2Day
     property parallax : Crystal2Day::Coords = Crystal2Day.xy(1.0, 1.0)
     property z : UInt8 = 0
     property active : Bool = true
+    property flip_x : Bool = false
+    property flip_y : Bool = false
   end
 
   class Sprite < Crystal2Day::Drawable
@@ -30,7 +32,10 @@ module Crystal2Day
     property animation : Crystal2Day::Animation = Crystal2Day::Animation.new
     property parallax : Crystal2Day::Coords = Crystal2Day.xy(1.0, 1.0)
     property active : Bool = true
+    property flip_x : Bool = false
+    property flip_y : Bool = false
 
+    @[Anyolite::Specialize]
     def initialize(from_texture : Crystal2Day::Texture = Crystal2Day::Texture.new, source_rect : Crystal2Day::Rect? = nil)
       super()
       @source_rect = source_rect
@@ -48,6 +53,8 @@ module Crystal2Day
       @animation = Animation.new(sprite_template.animation_template)
       @parallax = sprite_template.parallax
       @z = sprite_template.z
+      @flip_x = sprite_template.flip_x
+      @flip_y = sprite_template.flip_y
     end
 
     def update_source_rect_by_frame(frame : UInt16)
@@ -76,7 +83,8 @@ module Crystal2Day
       final_source_rect = (source_rect = @source_rect) ? source_rect.int_data : @texture.raw_int_boundary_rect
       final_offset = @position + @texture.renderer.position_shift.scale(@parallax) + offset
       final_render_rect = (render_rect = @render_rect) ? (render_rect + final_offset).data : (source_rect ? (source_rect.unshifted + final_offset).data : @texture.raw_boundary_rect(shifted_by: final_offset))
-      flip_flag = LibSDL::RendererFlip::FLIP_NONE
+      flip_flag = (@flip_x ? LibSDL::RendererFlip::FLIP_HORIZONTAL : LibSDL::RendererFlip::FLIP_NONE) | (@flip_y ? LibSDL::RendererFlip::FLIP_VERTICAL : LibSDL::RendererFlip::FLIP_NONE)
+      # TODO: Cache flip flag
       if center = @center
         final_center_point = center.data
         LibSDL.render_copy_ex_f(@texture.renderer_data, @texture.data, pointerof(final_source_rect), pointerof(final_render_rect), @angle, pointerof(final_center_point), flip_flag)

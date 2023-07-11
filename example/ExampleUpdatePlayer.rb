@@ -8,10 +8,12 @@ each_frame do
   if Crystal2Day.im.key_down?("left")
     x_input = true
     entity.velocity.x = -2
+    entity.call_proc("TurnLeft")
   end
   if Crystal2Day.im.key_down?("right")
     x_input = true
     entity.velocity.x = 2
+    entity.call_proc("TurnRight")
   end
   if Crystal2Day.im.key_down?("up")
     entity.velocity.y = -2

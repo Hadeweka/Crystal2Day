@@ -115,7 +115,6 @@ end
 
 ##### Entities
 
-* [ ] Better sprite management
 * [ ] Access to things like sounds etc.
 * [ ] Initial parameters
 
@@ -126,7 +125,7 @@ end
 ##### Graphics
 
 * [ ] Tile animation
-* [ ] Sprite flipping, simple scaling and centering
+* [ ] Simple sprite scaling and centering
 
 ### Version 1.0.0
 
@@ -154,3 +153,4 @@ end
 * [ ] Data serializing
 * [ ] Data obfuscation
 * [ ] Animation phase shift patterns
+* [ ] Various optimizations

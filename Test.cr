@@ -4,6 +4,14 @@ require "./src/Crystal2Day.cr"
 
 alias CD = Crystal2Day
 
+CD.db.add_entity_proc("TurnLeft") do |entity|
+  entity.get_sprite(0).flip_x = false
+end
+
+CD.db.add_entity_proc("TurnRight") do |entity|
+  entity.get_sprite(0).flip_x = true
+end
+
 CD.db.add_entity_proc("FigureHandleEvent") do |entity|
   event = Crystal2Day.last_event
   if valid_event = event
