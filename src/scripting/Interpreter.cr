@@ -151,6 +151,10 @@ module Anyolite
       Crystal2Day::Interpreter.cast_ref_to(self, Int)
     end
 
+    def to_i32
+      Crystal2Day::Interpreter.cast_ref_to(self, Int32)
+    end
+
     def to_f
       Crystal2Day::Interpreter.cast_ref_to(self, Float)
     end

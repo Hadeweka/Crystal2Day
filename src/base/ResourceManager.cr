@@ -5,22 +5,22 @@ module Crystal2Day
     macro add_resource_type(name, resource_class, initial_capacity, additional_arg = nil, plural = "s")
       @{{(name + plural).id}} = Hash(String, Crystal2Day::{{resource_class}}).new(initial_capacity: {{initial_capacity}})
 
-      def load_{{name.id}}(filename : String)
-        unless @{{(name + plural).id}}[filename]?
+      def load_{{name.id}}(filename : String, additional_tag : String = "")
+        unless @{{(name + plural).id}}[filename + additional_tag]?
           {% if additional_arg %}
             {{name.id}} = Crystal2Day::{{resource_class}}.new({{additional_arg}})
           {% else %}
             {{name.id}} = Crystal2Day::{{resource_class}}.new
           {% end %}
           {{name.id}}.load_from_file!(filename)
-          @{{(name + plural).id}}[filename] = {{name.id}}
+          @{{(name + plural).id}}[filename + additional_tag] = {{name.id}}
         end
 
-        @{{(name + plural).id}}[filename]
+        @{{(name + plural).id}}[filename + additional_tag]
       end
 
-      def unload_{{name.id}}(filename : String)
-        @{{(name + plural).id}}[filename].delete if @{{(name + plural).id}}[filename]?
+      def unload_{{name.id}}(filename : String, additional_tag : String = "")
+        @{{(name + plural).id}}[filename + additional_tag].delete if @{{(name + plural).id}}[filename + additional_tag]?
       end
   
       def unload_all_{{(name + plural).id}}
@@ -41,7 +41,6 @@ module Crystal2Day
     def initialize
     end
 
-    # TODO: Make macros for all of these
     # TODO: Add Fonts and maybe texts
   end
 end

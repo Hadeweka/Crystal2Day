@@ -25,6 +25,7 @@ require "./scripting/Interpreter.cr"
 
 require "./audio/Music.cr"
 require "./audio/Sound.cr"
+require "./audio/SoundBoard.cr"
 
 require "./graphics/Drawable.cr"
 

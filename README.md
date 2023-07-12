@@ -115,7 +115,6 @@ end
 
 ##### Entities
 
-* [ ] Access to things like sounds etc.
 * [ ] Initial parameters
 
 ##### Maps

@@ -17,10 +17,10 @@ CD.db.add_entity_proc("FigurePostUpdate") do |entity|
 end
 
 CD.db.add_entity_proc("PlaySound") do |entity|
-  # TODO: Since the scene is not yet fully exposed to the entities, we need to rely on this hack for now
-  sound = CD.scene.not_nil!.as(CustomScene).example_sound
-  sound.pitch = entity.get_state("sound_pitch").to_f32
-  sound.play
+  channel = entity.get_state("sound_channel").to_i32
+  unless CD.sb.sound_playing?(channel: channel)
+    CD.sb.play_sound("example/ExampleSound.ogg", channel: channel, pitch: entity.get_state("sound_pitch").to_f32)
+  end
 end
 
 CD.db.add_entity_proc("TileCollision") do |entity|
@@ -51,8 +51,6 @@ WIDTH = 1600
 HEIGHT = 900
 
 class CustomScene < CD::Scene
-  getter example_sound = CD::Sound.new
-
   def init
     map = add_map("Map1", tileset: CD::Tileset.from_json_file("example/ExampleTileset.json"))
     map.content.load_from_array!(generate_test_map(width: 200, height: 200))
@@ -97,8 +95,6 @@ class CustomScene < CD::Scene
     self.collision_matrix.link(entity_groups["PlayerGroup"], maps["Map1"])
     
     Crystal2Day.grid_alignment = 5
-
-    @example_sound = CD.rm.load_sound("example/ExampleSound.ogg")
   end
 
   def update

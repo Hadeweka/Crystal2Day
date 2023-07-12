@@ -19,6 +19,7 @@ module Crystal2Day
   class_property last_colliding_entity : Crystal2Day::Entity? = nil
   class_property database : Crystal2Day::Database = Crystal2Day::Database.new
   class_property input_manager : Crystal2Day::InputManager = Crystal2Day::InputManager.new
+  class_property sound_board : Crystal2Day::SoundBoard = Crystal2Day::SoundBoard.new
   
   @@refs : Array(Anyolite::RbRef) = Array(Anyolite::RbRef).new
 
@@ -50,6 +51,14 @@ module Crystal2Day
     self.input_manager = value
   end
 
+  def self.sb
+    self.sound_board
+  end
+
+  def self.sb=(value)
+    self.sound_board = value
+  end
+
   macro call_scene_routine(scene, name)
     %scene_temp = {{scene}}
     if %scene_temp.is_a?(Crystal2Day::Scene)
@@ -75,6 +84,7 @@ module Crystal2Day
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Rect, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::InputManager, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShape, under: Crystal2Day)
+    Crystal2Day::Interpreter.expose_class(Crystal2Day::SoundBoard, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Sprite, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::Tile, under: Crystal2Day)
     Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapePoint, under: Crystal2Day, connect_to_superclass: true)
@@ -89,6 +99,7 @@ module Crystal2Day
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, last_colliding_entity, Crystal2Day::Entity)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, input_manager, Crystal2Day::InputManager)
     Crystal2Day::Interpreter.expose_class_property(Crystal2Day, im, Crystal2Day::InputManager)
+    Crystal2Day::Interpreter.expose_class_property(Crystal2Day, sb, Crystal2Day::SoundBoard)
     Crystal2Day::Interpreter.expose_class_function(Crystal2Day, xy, [x : Float32 = 0.0f32, y : Float32 = 0.0f32])
     
     # TODO: Is there a better way to protect these?

@@ -8,7 +8,7 @@ module Crystal2Day
     Crystal2DayHelper.wrap_type(Pointer(LibSDL::MixChunk))
     
     property pitch : Float32 = 1.0
-    property channel : Int32 = 0
+    property channel : Int32 = 0  # NOTE: Change this only before playing the sound!
 
     @passed_data : Pointer(PassedData) = Pointer(PassedData).null
     @original_length : UInt32 = 0
@@ -92,7 +92,7 @@ module Crystal2Day
         received_data.value.buffer_counter += length
       end
 
-      LibSDL.mix_halt_channel(@channel)
+      pause
       LibSDL.mix_register_effect(@channel, pitch_callback, nil, @passed_data.as(Pointer(Void)))
       LibSDL.mix_play_channel(@channel, data, 0)
     end
@@ -113,6 +113,14 @@ module Crystal2Day
     def self.master_volume=(value : Number)
       LibSDL.mix_master_volume(value)
       self.master_volume
+    end
+
+    def pause
+      LibSDL.mix_halt_channel(@channel)
+    end
+
+    def playing?
+      LibSDL.mix_playing(@channel) != 0
     end
 
     def free
