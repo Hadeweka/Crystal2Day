@@ -147,8 +147,8 @@ module Crystal2Day
       return new_entity_group
     end
 
-    def add_entity(group : String, type : String | EntityType, position : Crystal2Day::Coords = Crystal2Day.xy)
-      @entity_groups[group].add_entity(type, position)
+    def add_entity(group : String, type : String | EntityType, position : Crystal2Day::Coords = Crystal2Day.xy, initial_param : Entity::InitialParamType = nil)
+      @entity_groups[group].add_entity(type, position, initial_param)
     end
 
     def add_map(name : String, tileset : Tileset?)

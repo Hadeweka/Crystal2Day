@@ -113,13 +113,10 @@ end
 
 * [ ] Controller support
 
-##### Entities
-
-* [ ] Initial parameters
-
 ##### Maps
 
 * [ ] Loading routines
+* [ ] Fix weird bug that sometimes tiles are not displayed
 
 ##### Graphics
 

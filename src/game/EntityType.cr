@@ -50,6 +50,18 @@ module Crystal2Day
       end
     end
 
+    def based_on?(other_type_name : String)
+      if @name == other_type_name
+        return true
+      elsif @based_on.entity_type == other_type_name
+        return true
+      elsif @based_on.entity_type != ""
+        Crystal2Day.database.get_entity_type(@based_on.entity_type).based_on?(other_type_name)
+      else
+        return false
+      end
+    end
+
     # TODO: Add hitshapes, hurtshapes, etc to the following routine
 
     def initialize(pull : JSON::PullParser)

@@ -74,7 +74,9 @@ class CustomScene < CD::Scene
     add_entity_group("FigureGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 5)
 
     add_entity(group: "PlayerGroup", type: "Player", position: CD.xy(500, -50))
-    5.times {|i| add_entity(group: "FigureGroup", type: "Figure", position: CD.xy(25 + 100*i, -50))}
+    5.times do |i|
+       add_entity(group: "FigureGroup", type: "Figure", position: CD.xy(25 + 100*i, -50), initial_param: i)
+    end
 
     camera = CD::Camera.new
     camera.follow_entity(entity_groups["PlayerGroup"].get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))

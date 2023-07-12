@@ -3,7 +3,10 @@
 # This class is also exposed to the internal mruby interpreter.
 # Most properties can also be modified at runtime, so this class is very flexible.
 
+# TODO: Fix vanishing map tiles (at real 425.99997 and aligned 425.0, for example)
+
 module Crystal2Day
+  @[Anyolite::ExcludeConstant("InitialParamType")]
   class Entity
     STATE_INITIAL_CAPACITY = 8
     HOOKS_INITIAL_CAPACITY = 16
@@ -11,6 +14,9 @@ module Crystal2Day
     HOOK_STACK_INITIAL_CAPACITY = 8
     COLLISION_STACK_ENTITIES_INITIAL_CAPACITY = 8
     COLLISION_STACK_TILES_INITIAL_CAPACITY = 32
+
+    alias InitialParamType = Nil | Bool | Int32 | Int64 | Float32 | Float64 | String | Crystal2Day::Coords | Crystal2Day::Rect | Crystal2Day::Color
+    INITIAL_PARAM_NAME = "initial_param"
 
     # If positive, this will discretize every motion into steps with the given size in each direction
     DEFAULT_OPTION_MOVEMENT_DISCRETIZATION = -1
@@ -106,8 +112,10 @@ module Crystal2Day
     end
 
     @[Anyolite::Exclude]
-    def init(own_ref : Anyolite::RbRef)
+    def init(own_ref : Anyolite::RbRef, initial_param : Entity::InitialParamType = nil)
+      puts "Initial param: #{initial_param}"
       @magic_number = self.object_id
+      set_state(INITIAL_PARAM_NAME, initial_param)
       call_hook("init", own_ref)
     end
 
@@ -257,6 +265,14 @@ module Crystal2Day
 
     def deactivate_map_box(index : UInt32)
       @map_boxes[index].active = false
+    end
+
+    def is_exactly_type?(other_type_name : String)
+      @type_name == other_type_name
+    end
+
+    def is_type?(other_type_name : String)
+      Crystal2Day.database.get_entity_type(@type_name).based_on?(other_type_name)
     end
 
     # TODO: Integrate parent-child offset
