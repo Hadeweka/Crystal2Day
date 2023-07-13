@@ -58,9 +58,10 @@ module Crystal2Day
     end
 
     def update_source_rect_by_frame(frame : UInt16)
-      # TODO: This currently only works for texture stripes, but not squares
       if source_rect = @source_rect
-        source_rect.x = source_rect.width * frame
+        n_tiles_x = @texture.width // source_rect.width
+        source_rect.x = (frame % n_tiles_x) * source_rect.width
+        source_rect.y = (frame // n_tiles_x) * source_rect.height
       else
         Crystal2Day.error "No source rect defined"
       end
@@ -69,7 +70,7 @@ module Crystal2Day
     def update
       return unless active
       @animation.update
-      if @animation.has_changed
+      if @animation.has_changed # TODO: This might likely be discarded
         update_source_rect_by_frame(@animation.current_frame)
       end
     end
