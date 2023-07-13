@@ -116,7 +116,6 @@ end
 ##### Maps
 
 * [ ] Loading routines
-* [ ] Fix weird bug that sometimes tiles are not displayed
 
 ##### Graphics
 

@@ -74,13 +74,17 @@ module Crystal2Day
       n_tiles_x = @tileset.texture.width // @tileset.tile_width
       n_tiles_y = @tileset.texture.height // @tileset.tile_height
 
+      puts "___"
+
       0.upto(view_width - 1) do |x|
         0.upto(view_height - 1) do |y|
           exact_actual_x = x.to_f32 + exact_shift_x / @tileset.tile_width
           exact_actual_y = y.to_f32 + exact_shift_y / @tileset.tile_height
 
-          actual_x = exact_actual_x.floor.to_i32
-          actual_y = exact_actual_y.floor.to_i32
+          # NOTE: The rounding here is to prevent floating point errors for now
+          # This should work, but maybe there's a better solution
+          actual_x = exact_actual_x.round(2).floor.to_i32
+          actual_y = exact_actual_y.round(2).floor.to_i32
 
           invalid_tile = actual_x < 0 || actual_x.to_u32 >= @content.width || actual_y < 0 || actual_y.to_u32 >= @content.height
 
