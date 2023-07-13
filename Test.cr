@@ -53,7 +53,8 @@ HEIGHT = 900
 class CustomScene < CD::Scene
   def init
     map = add_map("Map1", tileset: CD::Tileset.from_json_file("example/ExampleTileset.json"))
-    map.content.load_from_array!(generate_test_map(width: 200, height: 200))
+    #map.content.load_from_array!(generate_test_map(width: 200, height: 200))
+    map.content.load_from_text_file!("example/ExampleMap.txt")
     map.background_tile = 0
     map.z = 2
     map.pin

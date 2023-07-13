@@ -113,15 +113,6 @@ end
 
 * [ ] Controller support
 
-##### Maps
-
-* [ ] Loading routines
-
-##### Graphics
-
-* [ ] Tile animation
-* [ ] Simple sprite scaling and centering
-
 ### Version 1.0.0
 
 #### Features
@@ -132,6 +123,7 @@ end
 
 #### Features
 
+* [ ] Tile animation
 * [ ] Entity parent-children system with memory management
 * [ ] Custom shape designs (colors, textures)
 * [ ] Quadriliteral shapes
@@ -148,4 +140,5 @@ end
 * [ ] Data serializing
 * [ ] Data obfuscation
 * [ ] Animation phase shift patterns
+* [ ] Collision routines for layered maps
 * [ ] Various optimizations

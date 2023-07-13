@@ -28,6 +28,25 @@ module Crystal2Day
         end
       end
     end
+
+    def load_from_text_file!(filename : String)
+      line_number = 0
+      File.each_line(filename) do |line|
+        if line_number == 0
+        elsif line_number == 1
+          @width = line.split[0].to_u32
+          @height = line.split[1].to_u32
+          @tiles = Array(Array(TileID)).new(initial_capacity: @height)
+        else
+          split_line = line.split
+          @tiles.push Array(TileID).new(initial_capacity: @width)
+          split_line.each do |split_part|
+            @tiles[-1].push TileID.new(split_part.to_u32)
+          end
+        end
+        line_number += 1
+      end
+    end
   end
 
   class Map < Crystal2Day::Drawable
