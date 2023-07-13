@@ -74,8 +74,6 @@ module Crystal2Day
       n_tiles_x = @tileset.texture.width // @tileset.tile_width
       n_tiles_y = @tileset.texture.height // @tileset.tile_height
 
-      puts "___"
-
       0.upto(view_width - 1) do |x|
         0.upto(view_height - 1) do |y|
           exact_actual_x = x.to_f32 + exact_shift_x / @tileset.tile_width
