@@ -92,26 +92,20 @@ end
 
 #### Features
 
-* [X] Music and sounds
-* [X] Textures, sprites, fonts, texts
-* [X] Basic shapes (points, lines, boxes, circles, triangles, ellipses)
-* [X] Z-Ordering
-* [X] Scene system
-* [X] Support for multiple windows
-* [X] Framerate limiter
-* [X] Maps and tilesets
-* [X] 2D collision routines
-* [X] Entity hook scripting in mruby using and Anyolite
-* [X] Entities with flexible states and multiple script pages
-* [X] Entity collision system
-* [X] Simple game state
-* [X] Resource management system
-
-#### Todo list
-
-##### Controls
-
-* [ ] Controller support
+* Music and sounds
+* Textures, sprites, fonts, texts
+* Basic shapes (points, lines, boxes, circles, triangles, ellipses)
+* Z-Ordering
+* Scene system
+* Support for multiple windows
+* Framerate limiter
+* Maps and tilesets
+* 2D collision routines
+* Entity hook scripting in mruby using and Anyolite
+* Entities with flexible states and multiple script pages
+* Entity collision system
+* Simple game state
+* Resource management system
 
 ### Version 1.0.0
 
@@ -123,6 +117,7 @@ end
 
 #### Features
 
+* [ ] Game controller support
 * [ ] Tile animation
 * [ ] Entity parent-children system with memory management
 * [ ] Custom shape designs (colors, textures)

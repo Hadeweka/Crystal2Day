@@ -25,22 +25,26 @@ end
 
 CD.db.add_entity_proc("TileCollision") do |entity|
   entity.each_tile_collision do |collision|
-    # TODO: Add tile and entity size to this somehow
+    tile_width = collision.tileset.tile_width
+    tile_height = collision.tileset.tile_height
+
+    entity_width = entity.map_boxes[0].size.x
+    entity_height = entity.map_boxes[0].size.y
 
     if collision.tile.get_flag("solid")
-      if collision.other_position.x + 25 > entity.aligned_position.x && (entity.aligned_position.y - collision.other_position.y - 25).abs < 50
+      if collision.other_position.x + tile_width // 2 > entity.aligned_position.x && (entity.aligned_position.y - collision.other_position.y - tile_height // 2).abs < entity_width
         entity.velocity.x = 0 if entity.velocity.x > 0
       end
 
-      if collision.other_position.x + 25 < entity.aligned_position.x && (entity.aligned_position.y - collision.other_position.y - 25).abs < 50
+      if collision.other_position.x + tile_width // 2 < entity.aligned_position.x && (entity.aligned_position.y - collision.other_position.y - tile_height // 2).abs < entity_width
         entity.velocity.x = 0 if entity.velocity.x < 0
       end
 
-      if collision.other_position.y + 25 > entity.aligned_position.y && (entity.aligned_position.x - collision.other_position.x - 25).abs < 50
+      if collision.other_position.y + tile_height // 2 > entity.aligned_position.y && (entity.aligned_position.x - collision.other_position.x - tile_width // 2).abs < entity_height
         entity.velocity.y = 0 if entity.velocity.y > 0
       end
       
-      if collision.other_position.y + 25 < entity.aligned_position.y && (entity.aligned_position.x - collision.other_position.x - 25).abs < 50
+      if collision.other_position.y + tile_height // 2 < entity.aligned_position.y && (entity.aligned_position.x - collision.other_position.x - tile_width // 2).abs < entity_height
         entity.velocity.y = 0 if entity.velocity.y < 0
       end
     end

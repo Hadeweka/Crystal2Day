@@ -3,8 +3,6 @@
 # This class is also exposed to the internal mruby interpreter.
 # Most properties can also be modified at runtime, so this class is very flexible.
 
-# TODO: Fix vanishing map tiles (at real 425.99997 and aligned 425.0, for example)
-
 module Crystal2Day
   @[Anyolite::ExcludeConstant("InitialParamType")]
   class Entity
@@ -309,8 +307,8 @@ module Crystal2Day
       @collision_stack_entities.push CollisionReference.new(CollisionReference::Kind::ENTITY, other_entity, other_entity.position)
     end
 
-    def add_tile_collision_reference(tile : Tile, position : Coords)
-      @collision_stack_tiles.push CollisionReference.new(CollisionReference::Kind::TILE, tile, position)
+    def add_tile_collision_reference(tile : Tile, position : Coords, tileset : Tileset)
+      @collision_stack_tiles.push CollisionReference.new(CollisionReference::Kind::TILE, tile, position, tileset)
     end
 
     def check_for_collision_with(map : Map)
@@ -359,7 +357,7 @@ module Crystal2Day
           tile_position = Crystal2Day.xy(x * tile_width, y * tile_height)
           @map_boxes.each do |shape_own|
             if Crystal2Day::Collider.test(shape_own, aligned_position, tile_shape, tile_position)
-              add_tile_collision_reference(tile, tile_position)
+              add_tile_collision_reference(tile, tile_position, map.tileset)
             end
           end
         end

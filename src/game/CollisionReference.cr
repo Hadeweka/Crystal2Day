@@ -9,11 +9,21 @@ module Crystal2Day
     property kind : Kind = Kind::EMPTY
     property other_object : Entity | Tile | Nil = nil
     property other_position : Coords = Crystal2Day.xy
+    @tileset : Tileset? = nil
 
-    def initialize(kind : Kind, other_object : Entity | Tile | Nil = nil, other_position : Coords = Crystal2Day.xy)
+    def initialize(kind : Kind, other_object : Entity | Tile | Nil = nil, other_position : Coords = Crystal2Day.xy, tileset : Tileset? = nil)
       @kind = kind
       @other_object = other_object
       @other_position = other_position
+      @tileset = tileset
+    end
+
+    def tileset
+      @tileset.not_nil!
+    end
+
+    def tileset=(value : Tileset?)
+      @tileset = value
     end
 
     def with_tile?

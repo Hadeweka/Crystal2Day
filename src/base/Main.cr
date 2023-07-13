@@ -105,6 +105,7 @@ module Crystal2Day
     # TODO: Is there a better way to protect these?
     @@refs.push Interpreter.generate_ref(input_manager)
     @@refs.push Interpreter.generate_ref(game_data)
+    @@refs.push Interpreter.generate_ref(sound_board)
 
     # TODO: Maybe there's a better way to do this?
     # TODO: Maybe add a module to put these into
