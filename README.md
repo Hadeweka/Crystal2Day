@@ -112,6 +112,7 @@ end
 #### Features
 
 * [ ] Imgui support
+* [ ] Special plugin system for Anyolite and Imgui
 
 ### Version 1.0.0
 
