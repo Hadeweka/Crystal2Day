@@ -111,7 +111,7 @@ end
 
 #### Features
 
-[ ] Imgui support
+* [ ] Imgui support
 
 ### Version 1.0.0
 
