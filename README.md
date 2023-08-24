@@ -107,6 +107,12 @@ end
 * Simple game state
 * Resource management system
 
+### Version 0.2.0
+
+#### Features
+
+[ ] Imgui support
+
 ### Version 1.0.0
 
 #### Features
@@ -129,7 +135,6 @@ end
 * [ ] Particle generator
 * [ ] Hitshapes and hurtshapes
 * [ ] Text alignment options
-* [ ] ImGUI support
 * [ ] Bytecode loading
 * [ ] Adding static JSON resources at compiletime
 * [ ] Data serializing
