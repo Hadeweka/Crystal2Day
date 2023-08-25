@@ -93,9 +93,12 @@ module Crystal2Day
       @render_queue.delete_static_content
     end
 
-    def render_and_display
+    def render
       @renderer.reset
       @render_queue.draw
+    end
+
+    def display
       LibSDL.render_present(@renderer.data)
     end
 

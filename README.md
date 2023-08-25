@@ -42,6 +42,7 @@ Note that its syntax may change (frequently) until version 1.0.0.
 ## Optional features
 
 * Behavior scripting using mruby via Anyolite
+* Simple GUI construction (e.g. for debugging) using Dear ImGui (currently only on Windows)
 
 # Prerequisites
 
@@ -64,8 +65,16 @@ as long as all dependencies are installed correctly.
 
 Make sure to have SDL 2 and its libraries installed, or linking will fail.
 
-If you want to make use of mruby scripting, you need to add Anyolite as a feature.
-This can be done by running `rake add_feature_anyolite`.
+If you want to add features like Anyolite or ImGui,
+you can install them using `rake add_feature_XXX`, where `XXX` is one of the
+following features:
+
+* anyolite - Support for scripting using mruby
+* imgui - A simple GUI application, useful for debugging
+
+It is also possible to install these manually. Crystal2Day will automatically
+include these features, if they are found in the `lib` directory (for example
+after installing them as shards together with Crystal2Day).
 
 # A simple example
 

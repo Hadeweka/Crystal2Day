@@ -56,6 +56,8 @@ HEIGHT = 900
 
 class CustomScene < CD::Scene
   def init
+    init_imgui if CRYSTAL2DAY_CONFIGS_IMGUI
+
     map = add_map("Map1", tileset: CD::Tileset.from_json_file("example/ExampleTileset.json"))
     #map.content.load_from_array!(generate_test_map(width: 200, height: 200))
     map.content.load_from_text_file!("example/ExampleMap.txt")
@@ -111,6 +113,12 @@ class CustomScene < CD::Scene
   def draw
   end
 
+  def imgui_draw
+    ImGui.window("Test Window") do
+      ImGui.text("Hello world!")
+    end
+  end
+
   def handle_event(event)
     if event.type == CD::Event::WINDOW
       if event.as_window_event.event == CD::WindowEvent::CLOSE
@@ -125,8 +133,9 @@ class CustomScene < CD::Scene
   end
 
   def exit
+    shutdown_imgui if CRYSTAL2DAY_CONFIGS_IMGUI
     CD.current_window.close
-    CD.current_window = nil
+    CD.current_window = nil 
   end
 end
 

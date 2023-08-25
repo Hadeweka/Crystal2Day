@@ -5,3 +5,5 @@ shard.lock
 *.dll
 *.exe
 *.bat
+imgui.ini
+temp/

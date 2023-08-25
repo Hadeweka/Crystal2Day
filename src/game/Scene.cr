@@ -22,6 +22,8 @@ module Crystal2Day
 
     getter collision_matrix : CollisionMatrix = CollisionMatrix.new
 
+    getter using_imgui : Bool = false
+
     def handle_event(event)
     end
 
@@ -40,11 +42,21 @@ module Crystal2Day
     def draw
     end
 
+    def imgui_draw
+    end
+
     def initialize
     end
 
     def process_events
       Crystal2Day.poll_events do |event|
+        {% if CRYSTAL2DAY_CONFIGS_IMGUI %}
+          if @using_imgui
+            p = event.data
+            ImGuiImplSDL.process_event(pointerof(p))
+          end
+        {% end %}
+
         handle_event(event.not_nil!)
 
         @event_groups.each {|member| member.handle_event(event.not_nil!)}
@@ -110,7 +122,9 @@ module Crystal2Day
       elsif win = Crystal2Day.current_window_if_any
         win.clear
         call_inner_draw_block
-        win.render_and_display
+        win.render
+        render_imgui
+        win.display
       end
     end
 
@@ -129,6 +143,8 @@ module Crystal2Day
     def call_inner_draw_block
       draw
       @draw_groups.each {|member| member.draw}
+      imgui_frame if @using_imgui
+      imgui_draw if @using_imgui
     end
 
     def add_entity_group(name, auto_update : Bool = false, auto_physics : Bool = false, auto_events : Bool = false, auto_draw : Bool = false, capacity : UInt32 = 0)
@@ -161,6 +177,42 @@ module Crystal2Day
       new_map.tileset = tileset.not_nil! if tileset
 
       return new_map
+    end
+
+    def init_imgui
+      # TODO: Support multiple windows for Imgui instead of just the current one
+      {% if CRYSTAL2DAY_CONFIGS_IMGUI %}
+        ctx = ImGui.create_context
+        win = Crystal2Day.current_window
+        ImGuiImplSDL.init(pointerof(ctx), win.data, win.renderer.data)
+        @using_imgui = true
+      {% else %}
+        {% raise "Feature for Imgui is not activated." %}
+      {% end %}
+    end
+  
+    def shutdown_imgui
+      {% if CRYSTAL2DAY_CONFIGS_IMGUI %}
+        @using_imgui = false
+        ImGuiImplSDL.shutdown
+        ImGui.destroy_context
+      {% end %}
+    end
+
+    def imgui_frame
+      {% if CRYSTAL2DAY_CONFIGS_IMGUI %}
+        ImGuiImplSDL.new_frame
+        ImGui.new_frame
+      {% end %}
+    end
+
+    def render_imgui
+      {% if CRYSTAL2DAY_CONFIGS_IMGUI %}
+        if @using_imgui
+          ImGui.render
+          ImGuiImplSDL.render
+        end
+      {% end %}
     end
   end
 end
