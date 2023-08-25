@@ -42,7 +42,7 @@ Note that its syntax may change (frequently) until version 1.0.0.
 ## Optional features
 
 * Behavior scripting using mruby via Anyolite
-* Simple GUI construction (e.g. for debugging) using Dear ImGui (currently only on Windows)
+* Simple GUI construction (e.g. for debugging) using Dear ImGui
 
 # Prerequisites
 
@@ -75,6 +75,10 @@ following features:
 It is also possible to install these manually. Crystal2Day will automatically
 include these features, if they are found in the `lib` directory (for example
 after installing them as shards together with Crystal2Day).
+
+NOTE: ImGui currently only works on Windows AND you either need to copy both
+`cimgui.dll` and `cimgui.lib` from the Crystal2Day directory to your working directory or set the Crystal
+environmental variables so that they are included.
 
 # A simple example
 
