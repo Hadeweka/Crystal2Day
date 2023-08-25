@@ -130,12 +130,7 @@ end
 * Simple game state
 * Resource management system
 * Special plugin system
-
-### Version 0.2.0
-
-#### Features
-
-* [ ] Imgui support
+* Imgui support
 
 ### Version 1.0.0
 
