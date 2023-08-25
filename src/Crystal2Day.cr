@@ -8,9 +8,8 @@ require "sdl-crystal-bindings/sdl-mixer-bindings"
 require "sdl-crystal-bindings/sdl-image-bindings"
 require "sdl-crystal-bindings/sdl-ttf-bindings"
 
-require "anyolite"
-
-ANYOLITE_DEFAULT_OPTIONAL_ARGS_TO_KEYWORD_ARGS = true
+require "./config/AnyoliteConfig.cr"
+require "./config/ImguiConfig.cr"
 
 require "./base/Coords.cr"
 require "./base/Database.cr"
@@ -21,7 +20,6 @@ require "./base/ResourceManager.cr"
 
 require "./scripting/Coroutine.cr"
 require "./scripting/Hook.cr"
-require "./scripting/Interpreter.cr"
 
 require "./audio/Music.cr"
 require "./audio/Sound.cr"

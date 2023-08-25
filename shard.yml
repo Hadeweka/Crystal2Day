@@ -8,9 +8,6 @@ dependencies:
   sdl-crystal-bindings:
     github: Hadeweka/SDL-Crystal-Bindings
     branch: main
-  anyolite:
-    github: Anyolite/anyolite
-    branch: main
 
 license: MIT
 

@@ -122,7 +122,9 @@ module Crystal2Day
     end
 
     def set_state(index : String, value)
-      @state[index] = Crystal2Day::Interpreter.generate_ref(value)
+      {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+        @state[index] = Crystal2Day::Interpreter.generate_ref(value)
+      {% end %}
     end
 
     @[Anyolite::Specialize]

@@ -39,12 +39,17 @@ Note that its syntax may change (frequently) until version 1.0.0.
 
 # Prerequisites
 
+## Essential
+
 * Crystal (obviously)
 * SDL 2 (media library; SDL 3 is not yet supported)
-* Git (for installing Anyolite)
-* GCC or Microsoft Visual Studio (for installing Anyolite)
-* Ruby (for installing Anyolite)
-* Rake (for installing Anyolite)
+
+## Optional
+
+* Git (for installing additional features)
+* GCC or Microsoft Visual Studio (for installing additional features)
+* Ruby (for installing additional features)
+* Rake (for installing additional features)
 
 # Installing
 
@@ -52,6 +57,9 @@ Currently, this shard can simply be used by adding it into your `shard.yml`,
 as long as all dependencies are installed correctly.
 
 Make sure to have SDL 2 and its libraries installed, or linking will fail.
+
+If you want to make use of mruby scripting, you need to add Anyolite as a feature.
+This can be done by running `rake add_feature_anyolite`.
 
 # A simple example
 
@@ -106,13 +114,13 @@ end
 * Entity collision system
 * Simple game state
 * Resource management system
+* Special plugin system
 
 ### Version 0.2.0
 
 #### Features
 
 * [ ] Imgui support
-* [ ] Special plugin system for Anyolite and Imgui
 
 ### Version 1.0.0
 

@@ -11,11 +11,17 @@ module Crystal2Day
     end
 
     def call(arg : Anyolite::RbRef)
-      Crystal2Day::Interpreter.resume_fiber(@fiber, arg) if active?
+      {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+        Crystal2Day::Interpreter.resume_fiber(@fiber, arg) if active?
+      {% end %}
     end
 
     def active?
-      Crystal2Day::Interpreter.check_if_fiber_is_alive(@fiber)
+      {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+        Crystal2Day::Interpreter.check_if_fiber_is_alive(@fiber)
+      {% else %}
+        false
+      {% end %}
     end
   end
 
