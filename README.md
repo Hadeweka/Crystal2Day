@@ -31,11 +31,17 @@ Note that its syntax may change (frequently) until version 1.0.0.
 
 # Features
 
+## Main features
+
 * Based on SDL
 * Simple framework to immediately start working
 * Scene system to organize and streamline game design
 * Already implemented: Cameras, z-ordering, parallax scrolling, maps, collisions, ...
-* Data-driven entitiy system with mruby behavior scripting
+* Data-driven entitiy system
+
+## Optional features
+
+* Behavior scripting using mruby via Anyolite
 
 # Prerequisites
 
