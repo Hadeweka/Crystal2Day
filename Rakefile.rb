@@ -21,11 +21,13 @@ task :add_feature_anyolite do
 end
 
 task :add_feature_imgui do
+  orig_dir = Dir.pwd
   system("git clone --recursive https://github.com/oprypin/crystal-imgui lib/imgui")
   Dir.chdir("lib/imgui/cimgui")
   system("cmake -DCMAKE_CXX_FLAGS='-DIMGUI_USE_WCHAR32' .")
   system("cmake --build .")
-  Dir.chdir("../../..")
+  system("ln -s cimgui.so libcimgui.so")
+  Dir.chdir(orig_dir)
   if ENV["OS"] == "Windows_NT"
     FileUtils.cp("lib/imgui/cimgui/Debug/cimgui.lib", "./cimgui.lib")
     FileUtils.cp("lib/imgui/cimgui/Debug/cimgui.dll", "./cimgui.dll")
