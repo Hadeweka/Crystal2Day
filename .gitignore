@@ -3,6 +3,7 @@ lib
 shard.lock
 *.lib
 *.dll
+*.so
 *.exe
 *.bat
 imgui.ini
