@@ -135,6 +135,7 @@ end
 * Resource management system
 * Special plugin system
 * Imgui support
+* [ ] Text alignment options
 
 ### Version 1.0.0
 
@@ -157,7 +158,6 @@ end
 * [ ] Tiled support
 * [ ] Particle generator
 * [ ] Hitshapes and hurtshapes
-* [ ] Text alignment options
 * [ ] Bytecode loading
 * [ ] Adding static JSON resources at compiletime
 * [ ] Data serializing
