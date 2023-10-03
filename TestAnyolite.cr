@@ -59,7 +59,6 @@ class CustomScene < CD::Scene
     init_imgui if CRYSTAL2DAY_CONFIGS_IMGUI
 
     map = add_map("Map1", tileset: CD::Tileset.from_json_file("example/ExampleTileset.json"))
-    #map.content.load_from_array!(generate_test_map(width: 200, height: 200))
     map.content.load_from_text_file!("example/ExampleMap.txt")
     map.background_tile = 0
     map.z = 2
@@ -73,6 +72,16 @@ class CustomScene < CD::Scene
     bg.render_rect = CD::Rect.new(width: 2000, height: 2000)
     bg.z = 1
     bg.pin
+
+    ui_camera = CD::Camera.new
+    ui_camera.z = 4
+    ui_camera.pin
+
+    default_font = CD.rm.load_font(CD::Font.default_font_path, size: 50)
+    some_text = CD::Text.new("Test", default_font)
+    some_text.z = 4
+    some_text.position = CD.xy(400, 0)
+    some_text.pin
 
     CD.db.load_entity_type_from_file("example/ExampleEntityStateFigure.json")
     CD.db.load_entity_type_from_file("example/ExampleEntityStatePlayer.json")

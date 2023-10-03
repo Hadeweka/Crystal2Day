@@ -135,7 +135,7 @@ end
 * Resource management system
 * Special plugin system
 * Imgui support
-* [ ] Text alignment options
+* [ ] Some UI helpers
 
 ### Version 1.0.0
 

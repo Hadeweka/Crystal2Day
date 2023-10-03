@@ -39,6 +39,7 @@ require "./graphics/Sprite.cr"
 require "./graphics/Text.cr"
 require "./graphics/Texture.cr"
 require "./graphics/Tileset.cr"
+require "./graphics/UI.cr"
 require "./graphics/View.cr"
 require "./graphics/Window.cr"
 

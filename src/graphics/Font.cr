@@ -4,6 +4,17 @@ module Crystal2Day
   class Font
     Crystal2DayHelper.wrap_type(Pointer(LibSDL::TTFFont))
 
+    def self.default_font_path
+      # NOTE: You should always use your own fonts to prevent this method from failing
+      {% if flag?(:win32) %}
+        # TODO: Use WINDIR if defined
+        "C:/Windows/Fonts/arial.ttf"
+      {% else %}
+        # TODO: Is there a better way to find this?
+        "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
+      {% end %}
+    end
+
     def initialize
 
     end
