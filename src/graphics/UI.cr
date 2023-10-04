@@ -1,5 +1,3 @@
-# TODO: Finish this
-# TODO: Include this into the scene
 module Crystal2Day
   class UI
     INITIAL_CAPACITY_TEXTS = 32
@@ -19,7 +17,7 @@ module Crystal2Day
       @texts.each_value do |text|
         text.draw(offset)
       end
-      # TODO: Maybe extend this to include pictures, padding and such?
+      # TODO: Maybe extend this to include pictures in some way?
     end
 
     def update_text(name : String, new_text : String)

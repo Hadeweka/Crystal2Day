@@ -152,6 +152,7 @@ end
 * [ ] Custom shape designs (colors, textures)
 * [ ] Quadriliteral shapes
 * [ ] Map optimization using quadtrees
+* [ ] Multiple map parts
 * [ ] Loading scenes and related objects from JSON files
 * [ ] Also allow symbols as Crystal hash indices
 * [ ] Tiled support
