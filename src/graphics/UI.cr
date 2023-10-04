@@ -1,13 +1,29 @@
 # TODO: Finish this
 # TODO: Include this into the scene
 module Crystal2Day
-  class UI < Crystal2Day::Drawable
-    property texts : Hash(String, Text) = {} of String => Text
+  class UI
+    INITIAL_CAPACITY_TEXTS = 32
+
+    property texts : Hash(String, Text) = Hash(String, Text).new(initial_capacity: INITIAL_CAPACITY_TEXTS)
     property position : Crystal2Day::Coords = Crystal2Day.xy
 
-    def draw_directly(offset : Coords)
-      # TODO: Draw texts (obviously)
+    def add_text(name : String, text : Text)
+      if @texts[name]?
+        Crystal2Day.warning "Already existing text with name '#{name}' will be overwritten"
+      end  
+      
+      @texts[name] = text
+    end
+
+    def draw(offset : Coords = Crystal2Day.xy)
+      @texts.each_value do |text|
+        text.draw(offset)
+      end
       # TODO: Maybe extend this to include pictures, padding and such?
+    end
+
+    def update_text(name : String, new_text : String)
+      @texts[name].text = new_text
     end
   end
 end

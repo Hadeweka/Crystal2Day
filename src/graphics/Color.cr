@@ -56,16 +56,28 @@ module Crystal2Day
       @data.a = value
     end
 
-    def self.red
+    def self.max_red
       Crystal2Day::Color.new(255, 0, 0)
     end
 
-    def self.green
+    def self.red
+      self.max_red
+    end
+
+    def self.max_green
       Crystal2Day::Color.new(0, 255, 0)
     end
 
-    def self.blue
+    def self.lime
+      self.max_green
+    end
+
+    def self.max_blue
       Crystal2Day::Color.new(0, 0, 255)
+    end
+
+    def self.blue
+      self.max_blue
     end
 
     def self.black
@@ -96,8 +108,34 @@ module Crystal2Day
       Crystal2Day::Color.new(255, 255, 0)
     end
 
+    def self.maroon
+      Crystal2Day::Color.new(128, 0, 0)
+    end
+
+    def self.olive
+      Crystal2Day::Color.new(128, 128, 0)
+    end
+
+    def self.purple
+      Crystal2Day::Color.new(128, 0, 128)
+    end
+
+    def self.teal
+      Crystal2Day::Color.new(0, 128, 128)
+    end
+
+    def self.navy
+      Crystal2Day::Color.new(0, 0, 128)
+    end
+
+    def self.green
+      Crystal2Day::Color.new(0, 128, 0)
+    end
+
     def self.transparent
       Crystal2Day::Color.new(0, 0, 0, 0)
     end
+
+    # TODO: More color codes (orange, brown, dark/light tones, silver, pink, ...)
   end
 end

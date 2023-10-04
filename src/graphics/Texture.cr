@@ -42,7 +42,7 @@ module Crystal2Day
     def load_text_from_font!(text : String, font : Crystal2Day::Font, color : Crystal2Day::Color = Crystal2Day::Color.black)
       free
 
-      text_surface = LibSDL.ttf_render_text_solid(font.data, text, color.data)
+      text_surface = LibSDL.ttf_render_utf8_solid_wrapped(font.data, text, color.data, 0)
       Crystal2Day.error "Could not create texture from rendered text" unless text_surface
 
       @data = LibSDL.create_texture_from_surface(@renderer.data, text_surface)

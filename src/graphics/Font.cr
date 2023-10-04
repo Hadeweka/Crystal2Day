@@ -39,6 +39,11 @@ module Crystal2Day
       end
     end
 
+    def calculate_text_rect(text : String)
+      LibSDL.ttf_size_text(@data, text, out w, out h)
+      Crystal2Day::Rect.new(0, 0, w, h)
+    end
+
     def finalize
       free
     end

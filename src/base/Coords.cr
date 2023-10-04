@@ -72,6 +72,14 @@ module Crystal2Day
       self.dot(self)
     end
 
+    def to_s
+      "#{x} #{y}"
+    end
+
+    def inspect
+      "(#{x} | #{y})"
+    end
+
     # Some synonyms
 
     def norm

@@ -35,6 +35,11 @@ module Crystal2Day
       update!
     end
 
+    def size
+      LibSDL.ttf_size_utf8(@font.data, @text, out w, out h)
+      Crystal2Day::Rect.new(@positon.x, @position.y, w, h)
+    end
+
     def update!
       @texture.load_text_from_font!(@text, @font, color: @color)
     end

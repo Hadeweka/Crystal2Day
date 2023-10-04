@@ -9,6 +9,7 @@ module Crystal2Day
     EVENT_GROUP_INITIAL_CAPACITY = 8
     DRAW_GROUP_INITIAL_CAPACITY = 8
     MAPS_INITIAL_CAPACITY = 8
+    UIS_INITIAL_CAPACITY = 8
 
     property use_own_draw_implementation : Bool = false
 
@@ -19,6 +20,7 @@ module Crystal2Day
     getter draw_groups : Array(EntityGroup) = Array(EntityGroup).new(initial_capacity: DRAW_GROUP_INITIAL_CAPACITY)
 
     getter maps : Hash(String, Map) = Hash(String, Map).new(initial_capacity: MAPS_INITIAL_CAPACITY)
+    getter uis : Hash(String, UI) = Hash(String, UI).new(initial_capacity: UIS_INITIAL_CAPACITY)
 
     getter collision_matrix : CollisionMatrix = CollisionMatrix.new
 
@@ -143,6 +145,7 @@ module Crystal2Day
     def call_inner_draw_block
       draw
       @draw_groups.each {|member| member.draw}
+      @uis.each_value {|member| member.draw}
       imgui_frame if @using_imgui
       imgui_draw if @using_imgui
     end
@@ -177,6 +180,19 @@ module Crystal2Day
       new_map.tileset = tileset.not_nil! if tileset
 
       return new_map
+    end
+
+    # TODO: Methods to delete maps and UIs
+
+    def add_ui(name : String)
+      if @uis[name]?
+        Crystal2Day.warning "Already existing UI with name '#{name}' will be overwritten"
+      end
+
+      new_ui = UI.new
+      @uis[name] = new_ui
+
+      return new_ui
     end
 
     def init_imgui

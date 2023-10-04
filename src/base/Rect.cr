@@ -71,6 +71,14 @@ module Crystal2Day
       Rect.new(0.0, 0.0, width, height)
     end
 
+    def to_s
+      "#{x} #{y} #{width} #{height}"
+    end
+
+    def inspect
+      "(#{x} | #{y}) with (#{width} x #{height})"
+    end
+
     def int_data
       LibSDL::Rect.new(x: self.x, y: self.y, w: self.width, h: self.height)
     end

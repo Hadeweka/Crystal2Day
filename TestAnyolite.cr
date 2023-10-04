@@ -78,10 +78,12 @@ class CustomScene < CD::Scene
     ui_camera.pin
 
     default_font = CD.rm.load_font(CD::Font.default_font_path, size: 50)
-    some_text = CD::Text.new("Test", default_font)
+    some_text = CD::Text.new("FPS: 0", default_font)
     some_text.z = 4
-    some_text.position = CD.xy(400, 0)
-    some_text.pin
+    some_text.color = CD::Color.white
+    some_text.position = CD.xy(0, 0)
+    
+    add_ui("FPS").add_text("Tracker", some_text)
 
     CD.db.load_entity_type_from_file("example/ExampleEntityStateFigure.json")
     CD.db.load_entity_type_from_file("example/ExampleEntityStatePlayer.json")
@@ -116,7 +118,7 @@ class CustomScene < CD::Scene
   end
 
   def update
-    CD.current_window.title = "FPS: #{CD.get_fps.round.to_i}"
+    @uis["FPS"].update_text("Tracker", "FPS: #{CD.get_fps.round.to_i}\nThis even works multilined!")
   end
 
   def draw
