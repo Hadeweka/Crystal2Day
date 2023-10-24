@@ -37,7 +37,7 @@ task :add_feature_imgui do
   Utils.compile_imgui_backend("lib/imgui/cimgui/cimgui.cpp", "temp/cimgui")
   Utils.compile_imgui_backend("src/glue/imgui_impl_sdl.cpp", "temp/imgui_impl_sdl")
   Utils.compile_imgui_backend("lib/imgui/cimgui/imgui/backends/imgui_impl_sdl2.cpp", "temp/imgui_impl")
-  Utils.compile_imgui_backend("lib/imgui/cimgui/imgui/backends/imgui_impl_sdlrenderer.cpp", "temp/imgui_impl_renderer")
+  Utils.compile_imgui_backend("lib/imgui/cimgui/imgui/backends/imgui_impl_sdlrenderer2.cpp", "temp/imgui_impl_renderer")
   ["imgui", "imgui_draw", "imgui_widgets", "imgui_tables", "imgui_demo"].each do |name|
     Utils.compile_imgui_backend("lib/imgui/cimgui/imgui/#{name}.cpp", "temp/#{name}")
   end
