@@ -46,6 +46,9 @@
       w : LibC::ULongLong
     end
 
+    class RbInterpreter
+    end
+
     class RbRef
       @value : RbValue
 
