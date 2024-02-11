@@ -59,8 +59,9 @@ class CustomScene < CD::Scene
     init_imgui if CRYSTAL2DAY_CONFIGS_IMGUI
 
     map = add_map("Map1", tileset: CD::Tileset.from_json_file("example/ExampleTileset.json"))
-    map.content.load_from_text_file!("example/ExampleMap.txt")
-    map.background_tile = 0
+    map.set_as_stream!
+    map.content.load_from_text_file!("example/ExampleWorld.txt")
+    map.content.background_tile = 0
     map.z = 2
     map.pin
 

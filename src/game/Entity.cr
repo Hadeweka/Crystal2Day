@@ -353,7 +353,7 @@ module Crystal2Day
         next if x < 0 || x >= map.content.width
         minimum_map_y.upto(maximum_map_y) do |y|
           next if y < 0 || y >= map.content.height
-          tile_id = map.content.tiles[y][x]
+          tile_id = map.content.get_tile(x, y)
           tile = map.tileset.get_tile(tile_id)
           tile_shape = CollisionShapeBox.new(size: Crystal2Day.xy(tile_width, tile_height))
           tile_position = Crystal2Day.xy(x * tile_width, y * tile_height)
