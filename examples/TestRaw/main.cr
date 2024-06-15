@@ -1,6 +1,6 @@
 # A simple example program to showcase some of the features of Crystal2Day.
 
-require "./src/Crystal2Day.cr"
+require "../../src/Crystal2Day.cr"
 
 alias CD = Crystal2Day
 
@@ -9,7 +9,7 @@ HEIGHT = 900
 
 class CustomScene < CD::Scene
   def init
-    texture_bg = CD.rm.load_texture("example/ExampleSky.png")
+    texture_bg = CD.rm.load_texture("examples/TestRaw/ExampleSky.png")
     bg = CD::Sprite.new
     bg.link_texture(texture_bg)
     bg.position = CD.xy(-100, -100)
