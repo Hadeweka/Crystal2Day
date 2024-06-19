@@ -27,11 +27,13 @@ module Crystal2Day
     def load_from_file!(filename : String)
       free
 
-      loaded_surface = LibSDL.img_load(filename)
-      Crystal2Day.error "Could not load image from file #{filename}" unless loaded_surface
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
+      loaded_surface = LibSDL.img_load(full_filename)
+      Crystal2Day.error "Could not load image from file #{full_filename}" unless loaded_surface
 
       @data = LibSDL.create_texture_from_surface(@renderer.data, loaded_surface)
-      Crystal2Day.error "Could not create texture from file #{filename}" unless @data
+      Crystal2Day.error "Could not create texture from file #{full_filename}" unless @data
 
       @width = loaded_surface.value.w
       @height = loaded_surface.value.h

@@ -7,9 +7,11 @@ module Crystal2Day
     @entity_procs = Hash(String, Proc(Entity, Nil)).new(initial_capacity: ENTITY_PROCS_INITIAL_CAPACITY)
 
     def load_entity_type_from_file(filename)
-      entity_type = Crystal2Day::EntityType.from_json_file(filename)
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
+      entity_type = Crystal2Day::EntityType.from_json_file(full_filename)
       if @entity_types[entity_type.name]?
-        Crystal2Day.debug_log "Updated entity type: #{entity_type.name} from #{filename}."
+        Crystal2Day.debug_log "Updated entity type: #{entity_type.name} from #{full_filename}."
       end
       @entity_types[entity_type.name] = entity_type
     end

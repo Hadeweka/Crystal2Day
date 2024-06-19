@@ -16,14 +16,14 @@
   "coroutine_templates": {
     "update": {
       "pages": {
-        "main": {"file": "examples/TestAnyolite/ExampleUpdatePlayer.rb"},
-        "fast": {"file": "examples/TestAnyolite/ExampleUpdatePlayerFast.rb"}
+        "main": {"file": "ExampleUpdatePlayer.rb"},
+        "fast": {"file": "ExampleUpdatePlayerFast.rb"}
       }
     },
     "post_update": {"proc": "FigurePostUpdate"},
     "handle_event": {"code": "each_frame do; entity.call_proc(\"FigureHandleEvent\"); end"},
-    "entity_collisions": {"file": "examples/TestAnyolite/ExampleCollisionEntity.rb"},
+    "entity_collisions": {"file": "ExampleCollisionEntity.rb"},
     "tile_collisions": {"proc": "TileCollision"},
-    "mid_hook": {"file": "examples/TestAnyolite/ExampleMidHook.rb"}
+    "mid_hook": {"file": "ExampleMidHook.rb"}
   }
 }

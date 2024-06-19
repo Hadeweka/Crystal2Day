@@ -86,10 +86,12 @@ module Crystal2Day
     end
 
     def load_from_file!(filename : String)
-      free 
+      free
 
-      @data = LibSDL.mix_load_mus(filename)
-      Crystal2Day.error "Could not load music from file #{filename}" unless @data
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
+      @data = LibSDL.mix_load_mus(full_filename)
+      Crystal2Day.error "Could not load music from file #{full_filename}" unless @data
     end
   end
 end

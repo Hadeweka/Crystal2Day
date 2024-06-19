@@ -9,7 +9,9 @@ HEIGHT = 900
 
 class CustomScene < CD::Scene
   def init
-    texture_bg = CD.rm.load_texture("examples/TestRaw/ExampleSky.png")
+    Crystal2Day.custom_loading_path = "examples/TestRaw"
+
+    texture_bg = CD.rm.load_texture("ExampleSky.png")
     bg = CD::Sprite.new
     bg.link_texture(texture_bg)
     bg.position = CD.xy(-100, -100)

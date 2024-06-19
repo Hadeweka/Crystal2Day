@@ -136,6 +136,13 @@ end
 * Special plugin system
 * Imgui support
 
+#### Open design questions:
+
+* How should the examples be structured?
+* What is the best way to install additional features?
+* Should all shards be installed, but their postinstall hooks only be triggered when desired?
+* What examples should be made?
+
 ### Version 1.0.0
 
 #### Features

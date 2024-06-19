@@ -19,7 +19,7 @@ end
 CD.db.add_entity_proc("PlaySound") do |entity|
   channel = entity.get_state("sound_channel").to_i32
   unless CD.sb.sound_playing?(channel: channel)
-    CD.sb.play_sound("examples/TestAnyolite/ExampleSound.ogg", channel: channel, pitch: entity.get_state("sound_pitch").to_f32)
+    CD.sb.play_sound("ExampleSound.ogg", channel: channel, pitch: entity.get_state("sound_pitch").to_f32)
   end
 end
 
@@ -58,14 +58,16 @@ class CustomScene < CD::Scene
   def init
     init_imgui if CRYSTAL2DAY_CONFIGS_IMGUI
 
-    map = add_map("Map1", tileset: CD::Tileset.from_json_file("examples/TestAnyolite/ExampleTileset.json"))
+    Crystal2Day.custom_loading_path = "examples/TestAnyolite"
+
+    map = add_map("Map1", tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
     map.set_as_stream!
-    map.content.load_from_text_file!("examples/TestAnyolite/ExampleWorld.txt")
+    map.content.load_from_text_file!("ExampleWorld.txt")
     map.content.background_tile = 0
     map.z = 2
     map.pin
 
-    texture_bg = CD.rm.load_texture("examples/TestAnyolite/ExampleSky.png")
+    texture_bg = CD.rm.load_texture("ExampleSky.png")
     bg = CD::Sprite.new
     bg.link_texture(texture_bg)
     bg.position = CD.xy(-100, -100)
@@ -86,8 +88,8 @@ class CustomScene < CD::Scene
     
     add_ui("FPS").add_text("Tracker", some_text)
 
-    CD.db.load_entity_type_from_file("examples/TestAnyolite/ExampleEntityStateFigure.json")
-    CD.db.load_entity_type_from_file("examples/TestAnyolite/ExampleEntityStatePlayer.json")
+    CD.db.load_entity_type_from_file("ExampleEntityStateFigure.json")
+    CD.db.load_entity_type_from_file("ExampleEntityStatePlayer.json")
 
     add_entity_group("PlayerGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 1)
     add_entity_group("FigureGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 5)

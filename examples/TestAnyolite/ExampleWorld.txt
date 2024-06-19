@@ -4,4 +4,4 @@ Example World
 1 1 1 1 0 0 1 1 1 1 1 1
 0 0 0 0 0 1 1 1 1 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0
-examples/TestAnyolite/ExampleMap.txt
+ExampleMap.txt

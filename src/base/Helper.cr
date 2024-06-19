@@ -20,8 +20,9 @@ end
 
 class Object
   def Object.from_json_file(filename : String)
+    full_filename = Crystal2Day.convert_to_absolute_path(filename)
     result = uninitialized self
-    File.open(filename, "r") do |f|
+    File.open(full_filename, "r") do |f|
       result = self.from_json(f)
     end
     return result

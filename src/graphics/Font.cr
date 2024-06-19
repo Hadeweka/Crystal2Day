@@ -29,8 +29,10 @@ module Crystal2Day
     def load_from_file!(filename : String, size : Number)
       free
 
-      @data = LibSDL.ttf_open_font(filename, size)
-      Crystal2Day.error "Could not font from file #{filename}" unless @data
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
+      @data = LibSDL.ttf_open_font(full_filename, size)
+      Crystal2Day.error "Could not font from file #{full_filename}" unless @data
     end
 
     def free

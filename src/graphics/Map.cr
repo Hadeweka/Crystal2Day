@@ -41,8 +41,10 @@ module Crystal2Day
     end
 
     def load_from_text_file!(filename : String)
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
       line_number = 0
-      File.each_line(filename) do |line|
+      File.each_line(full_filename) do |line|
         if line_number == 0
         elsif line_number == 1
           @total_width_in_chunks = line.split[0].to_u32
@@ -113,8 +115,10 @@ module Crystal2Day
     end
 
     def load_from_text_file!(filename : String)
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
       line_number = 0
-      File.each_line(filename) do |line|
+      File.each_line(full_filename) do |line|
         if line_number == 0
         elsif line_number == 1
           @width = line.split[0].to_u32

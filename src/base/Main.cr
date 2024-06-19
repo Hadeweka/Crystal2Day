@@ -20,6 +20,7 @@ module Crystal2Day
   class_property database : Crystal2Day::Database = Crystal2Day::Database.new
   class_property input_manager : Crystal2Day::InputManager = Crystal2Day::InputManager.new
   class_property sound_board : Crystal2Day::SoundBoard = Crystal2Day::SoundBoard.new
+  class_property custom_loading_path : String = ""
   
   @@refs : Array(Anyolite::RbRef) = Array(Anyolite::RbRef).new
 
@@ -122,6 +123,15 @@ module Crystal2Day
       yield
     {% end %}
     Crystal2Day.quit
+  end
+
+  def self.convert_to_absolute_path(filename : String)
+    original_path = Path[filename]
+    if original_path.absolute? || Crystal2Day.custom_loading_path.empty?
+      return original_path.expand.to_s
+    else
+      return Path.new(Crystal2Day.custom_loading_path, original_path).expand.to_s
+    end
   end
 
   def self.main_routine

@@ -87,7 +87,8 @@ module Crystal2Day
             pull.read_object do |coroutine_type|
               case coroutine_type
               when "file"
-                coroutine = CD::CoroutineTemplate.from_string(File.read(pull.read_string), "entity")
+                full_filename = Crystal2Day.convert_to_absolute_path(pull.read_string)
+                coroutine = CD::CoroutineTemplate.from_string(File.read(full_filename), "entity")
                 add_coroutine_template(coroutine_key, coroutine)
               when "code"
                 coroutine = CD::CoroutineTemplate.from_string(pull.read_string, "entity")
@@ -103,7 +104,8 @@ module Crystal2Day
                   pull.read_object do |page_coroutine_type|
                     case page_coroutine_type
                     when "file"
-                      string_hash[page_name] = File.read(pull.read_string)
+                      full_filename = Crystal2Day.convert_to_absolute_path(pull.read_string)
+                      string_hash[page_name] = File.read(full_filename)
                     when "code"
                       string_hash[page_name] = pull.read_string
                     when "proc"

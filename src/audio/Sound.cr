@@ -144,8 +144,10 @@ module Crystal2Day
     def load_from_file!(filename : String)
       free 
 
-      @data = LibSDL.mix_load_wav(filename)
-      Crystal2Day.error "Could not load sound from file #{filename}" unless @data
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
+      @data = LibSDL.mix_load_wav(full_filename)
+      Crystal2Day.error "Could not load sound from file #{full_filename}" unless @data
       @original_length = data.value.alen
     end
   end
