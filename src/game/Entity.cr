@@ -111,7 +111,6 @@ module Crystal2Day
 
     @[Anyolite::Exclude]
     def init(own_ref : Anyolite::RbRef, initial_param : Entity::InitialParamType = nil)
-      puts "Initial param: #{initial_param}"
       @magic_number = self.object_id
       set_state(INITIAL_PARAM_NAME, initial_param)
       call_hook("init", own_ref)

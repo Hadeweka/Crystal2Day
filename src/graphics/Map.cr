@@ -77,7 +77,6 @@ module Crystal2Day
         end
         line_number += 1
       end
-      puts @map_starting_points.inspect
     end
   end
 

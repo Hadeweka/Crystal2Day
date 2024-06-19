@@ -1,0 +1,28 @@
+{
+  "name": "Player",
+  
+  "description": "The player entity",
+
+  "default_state": {
+    "moving_direction": 2,
+    "speed": 2
+  },
+
+  "sprite_templates": [
+    {
+      "texture": "ExampleSprite.png",
+      "source_rect": {"width": 50, "height": 50},
+      "position": {"x": -25, "y": -25},
+      "z": 3,
+      "animation_template": {
+        "start_frame": 1,
+        "loop_end_frame": 2,
+        "frame_delay": 10
+      }
+    }
+  ],
+
+  "coroutine_templates": {
+    "update": {"proc": "FigureMove"}
+  }
+}

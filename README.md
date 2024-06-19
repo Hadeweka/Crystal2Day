@@ -142,6 +142,8 @@ end
 * What is the best way to install additional features?
 * Should all shards be installed, but their postinstall hooks only be triggered when desired?
 * What examples should be made?
+* How can maps be improved?
+* Fix state variables if Anyolite isn't used
 
 ### Version 1.0.0
 
