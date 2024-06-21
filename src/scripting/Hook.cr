@@ -22,13 +22,20 @@ module Crystal2Day
       @current_page = name
     end
 
-    def call(entity : Entity, entity_ref : Anyolite::RbRef)
-      current_page = @pages[@current_page]
-      if current_page.is_a?(Coroutine)
-        current_page.as(Coroutine).call(entity_ref)
-      elsif current_page.is_a?(ProcCoroutine)
-        current_page.as(ProcCoroutine).call(entity)
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def call(entity : Entity, entity_ref : Anyolite::RbRef)
+        current_page = @pages[@current_page]
+        if current_page.is_a?(Coroutine)
+          current_page.as(Coroutine).call(entity_ref)
+        elsif current_page.is_a?(ProcCoroutine)
+          current_page.as(ProcCoroutine).call(entity)
+        end
       end
+    {% end %}
+
+    def call(entity : Entity)
+      current_page = @pages[@current_page]
+      current_page.as(ProcCoroutine).call(entity)
     end
   end
 end

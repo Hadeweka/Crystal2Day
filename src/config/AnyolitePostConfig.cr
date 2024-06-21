@@ -36,6 +36,21 @@
     @[Anyolite::ExcludeInstanceMethod("add_entity_proc")]
     class Database; end
 
+    @[Anyolite::ExcludeConstant("InitialParamType")]
+    @[Anyolite::ExcludeInstanceMethod("initialize", nil)]
+    @[Anyolite::ExcludeInstanceMethod("add_hook_from_template")]
+    @[Anyolite::ExcludeInstanceMethod("init")]
+    @[Anyolite::ExcludeInstanceMethod("update")]
+    @[Anyolite::ExcludeInstanceMethod("post_update")]
+    @[Anyolite::ExcludeInstanceMethod("handle_event")]
+    @[Anyolite::ExcludeInstanceMethod("update_physics")]
+    @[Anyolite::ExcludeInstanceMethod("call_existing_hook")]
+    @[Anyolite::ExcludeInstanceMethod("call_hook")]
+    @[Anyolite::ExcludeInstanceMethod("call_hook_or")]
+    @[Anyolite::ExcludeInstanceMethod("delete")]
+    @[Anyolite::ExcludeInstanceMethod("call_collision_hooks")]
+    class Entity; end
+
     @[Anyolite::SpecializeInstanceMethod("initialize", other_event : Crystal2Day::Event)]
     @[Anyolite::ExcludeInstanceMethod("data")]
     class Event

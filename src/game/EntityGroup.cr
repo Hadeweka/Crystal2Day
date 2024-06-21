@@ -7,12 +7,19 @@ module Crystal2Day
     BASE_INITIAL_CAPACITY = 128u32
 
     getter members : Array(Crystal2Day::Entity)
-    @refs : Array(Anyolite::RbRef)
+    
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      @refs : Array(Anyolite::RbRef) = [] of Anyolite::RbRef
+    {% end %}
+    
     @renderer : Crystal2Day::Renderer
 
     def initialize(capacity : UInt32 = BASE_INITIAL_CAPACITY, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
       @members = Array(Crystal2Day::Entity).new(initial_capacity: capacity)
-      @refs = Array(Anyolite::RbRef).new(initial_capacity: capacity)
+
+      {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+        @refs = Array(Anyolite::RbRef).new(initial_capacity: capacity)
+      {% end %}
     end
 
     def number
@@ -33,13 +40,15 @@ module Crystal2Day
     end
 
     def register_new_entity(entity : Crystal2Day::Entity, initial_param : Entity::InitialParamType = nil)
-      new_ref = Crystal2Day::Interpreter.generate_ref(entity)
-      
       @members.push entity
-      @refs.push new_ref
 
-      entity.init(new_ref, initial_param)
-
+      {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+        new_ref = Crystal2Day::Interpreter.generate_ref(entity)
+        @refs.push new_ref
+        entity.init(new_ref, initial_param)
+      {% else %}
+        entity.init(initial_param)
+      {% end %}
       return @members.size
     end
 
@@ -48,26 +57,42 @@ module Crystal2Day
     end
 
     def delete_entity_at(index : Number)
-      @members.delete_at(index).delete(@refs.delete_at(index))
+      {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+        @members.delete_at(index).delete(@refs.delete_at(index))
+      {% else %}
+        @members.delete_at(index).delete
+      {% end %}
     end
 
     def update
       0.upto(@members.size - 1) do |index|
-        @members[index].update(@refs[index])
+        {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+          @members[index].update(@refs[index])
+        {% else %}
+          @members[index].update
+        {% end %}
       end
     end
 
     def handle_event(event : Crystal2Day::Event)
       Crystal2Day.last_event = event
       0.upto(@members.size - 1) do |index|
-        @members[index].handle_event(@refs[index])
+        {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+          @members[index].handle_event(@refs[index])
+        {% else %}
+          @members[index].handle_event
+        {% end %}
       end
       Crystal2Day.last_event = nil
     end
 
     def update_physics(time_step : Float32)
       0.upto(@members.size - 1) do |index|
-        @members[index].update_physics(@refs[index], time_step)
+        {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+          @members[index].update_physics(@refs[index], time_step)
+        {% else %}
+          @members[index].update_physics
+        {% end %}
       end
     end
 
@@ -85,7 +110,11 @@ module Crystal2Day
 
     def post_update
       0.upto(@members.size - 1) do |index|
-        @members[index].post_update(@refs[index])
+        {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+          @members[index].post_update(@refs[index])
+        {% else %}
+          @members[index].post_update
+        {% end %}
       end
     end
 
@@ -116,7 +145,11 @@ module Crystal2Day
 
     def call_collision_hooks
       0.upto(@members.size - 1) do |index|
-        @members[index].call_collision_hooks(@refs[index])
+        {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+          @members[index].call_collision_hooks(@refs[index])
+        {% else %}
+          @members[index].call_collision_hooks
+        {% end %}
       end
     end
 

@@ -4,7 +4,6 @@
 # Most properties can also be modified at runtime, so this class is very flexible.
 
 module Crystal2Day
-  @[Anyolite::ExcludeConstant("InitialParamType")]
   class Entity
     STATE_INITIAL_CAPACITY = 8
     HOOKS_INITIAL_CAPACITY = 16
@@ -57,7 +56,6 @@ module Crystal2Day
 
     property terminal_speed : Float32 = 100.0 # TODO: Implement this as an option
 
-    @[Anyolite::Specialize(nil)]
     def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
     end
 
@@ -101,7 +99,6 @@ module Crystal2Day
       Crystal2Day.database.call_entity_proc(name, self)
     end
 
-    @[Anyolite::Exclude]
     def add_hook_from_template(name : String, template : Crystal2Day::CoroutineTemplate)
       if @hooks[name]?
         Crystal2Day.warning "Hook #{name} was already registered and will be overwritten."
@@ -109,11 +106,67 @@ module Crystal2Day
       @hooks[name] = template.generate_hook
     end
 
-    @[Anyolite::Exclude]
     def init(own_ref : Anyolite::RbRef, initial_param : Entity::InitialParamType = nil)
       @magic_number = self.object_id
       set_state(INITIAL_PARAM_NAME, initial_param)
       call_hook("init", own_ref)
+    end
+
+    def update(own_ref : Anyolite::RbRef?)
+      call_hook("update", own_ref)
+    end
+
+    def post_update(own_ref : Anyolite::RbRef)
+      update_sprites
+      call_hook("post_update", own_ref)
+    end
+
+    def handle_event(own_ref : Anyolite::RbRef)
+      call_hook("handle_event", own_ref)
+    end
+
+    def update_physics(own_ref : Anyolite::RbRef, time_step : Float32)
+      @current_time_step = time_step
+      call_hook_or("custom_physics", own_ref) {update_physics_internal}
+    end
+
+    def call_existing_hook(name : String, own_ref : Anyolite::RbRef)
+      @current_hook = name
+      is_ruby = @hooks[name].is_currently_ruby?
+      @hooks[name].call(self, own_ref)
+      if next_hook_name = @next_hook
+        @hook_stack.push name if is_ruby
+        @next_hook = nil
+        call_hook(next_hook_name, own_ref)
+        call_hook(@hook_stack.pop, own_ref) if is_ruby
+      end
+      @current_hook = ""
+    end
+
+    def call_hook(name : String, own_ref : Anyolite::RbRef)
+      if @hooks[name]?
+        call_existing_hook(name, own_ref)
+      end
+    end
+
+    def call_hook_or(name : String, own_ref : Anyolite::RbRef)
+      if @hooks[name]?
+        call_existing_hook(name, own_ref)
+      else
+        yield
+      end
+    end
+
+    def delete(own_ref : Anyolite::RbRef)
+      call_hook("delete", own_ref)
+    end
+
+    def call_collision_hooks(own_ref : Anyolite::RbRef)
+      call_hook("tile_collisions", own_ref)
+      @collision_stack_tiles.clear
+
+      call_hook("entity_collisions", own_ref)
+      @collision_stack_entities.clear
     end
 
     def get_state(index : String)
@@ -140,32 +193,10 @@ module Crystal2Day
     end
 
     @[Anyolite::Exclude]
-    def update(own_ref : Anyolite::RbRef)
-      call_hook("update", own_ref)
-    end
-
-    @[Anyolite::Exclude]
-    def post_update(own_ref : Anyolite::RbRef)
-      update_sprites
-      call_hook("post_update", own_ref)
-    end
-
-    @[Anyolite::Exclude]
     def update_sprites
       @sprites.each do |sprite|
         sprite.update
       end
-    end
-
-    @[Anyolite::Exclude]
-    def handle_event(own_ref : Anyolite::RbRef)
-      call_hook("handle_event", own_ref)
-    end
-
-    @[Anyolite::Exclude]
-    def update_physics(own_ref : Anyolite::RbRef, time_step : Float32)
-      @current_time_step = time_step
-      call_hook_or("custom_physics", own_ref) {update_physics_internal}
     end
 
     @[Anyolite::Exclude]
@@ -191,43 +222,8 @@ module Crystal2Day
       @acceleration += value
     end
 
-    @[Anyolite::Exclude]
-    def call_existing_hook(name : String, own_ref : Anyolite::RbRef)
-      @current_hook = name
-      is_ruby = @hooks[name].is_currently_ruby?
-      @hooks[name].call(self, own_ref)
-      if next_hook_name = @next_hook
-        @hook_stack.push name if is_ruby
-        @next_hook = nil
-        call_hook(next_hook_name, own_ref)
-        call_hook(@hook_stack.pop, own_ref) if is_ruby
-      end
-      @current_hook = ""
-    end
-
-    @[Anyolite::Exclude]
-    def call_hook(name : String, own_ref : Anyolite::RbRef)
-      if @hooks[name]?
-        call_existing_hook(name, own_ref)
-      end
-    end
-
-    @[Anyolite::Exclude]
-    def call_hook_or(name : String, own_ref : Anyolite::RbRef)
-      if @hooks[name]?
-        call_existing_hook(name, own_ref)
-      else
-        yield
-      end
-    end
-
     def change_hook_page_to(name : String)
       @hooks[@current_hook].change_page(name)
-    end
-
-    @[Anyolite::Exclude]
-    def delete(own_ref : Anyolite::RbRef)
-      call_hook("delete", own_ref)
     end
 
     def get_sprite(index : UInt32)
@@ -294,14 +290,6 @@ module Crystal2Day
       @collision_stack_entities.each do |collision_reference|
         yield collision_reference
       end
-    end
-
-    def call_collision_hooks(own_ref : Anyolite::RbRef)
-      call_hook("tile_collisions", own_ref)
-      @collision_stack_tiles.clear
-
-      call_hook("entity_collisions", own_ref)
-      @collision_stack_entities.clear
     end
 
     def add_entity_collision_reference(other_entity : Entity)
