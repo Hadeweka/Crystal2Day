@@ -8,7 +8,6 @@ module Crystal2Day
 
     @key_table = Hash(String, Array(LibSDL::Keycode)).new(initial_capacity: KEY_TABLE_INITIAL_CAPACITY)
 
-    @[Anyolite::Exclude]
     def set_key_table_entry(name : String, keys : Array(LibSDL::Keycode))
       @key_table[name] = keys
     end

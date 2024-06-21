@@ -19,7 +19,6 @@ module Crystal2Day
 
     property active : Bool = true
 
-    @[Anyolite::Specialize]
     def initialize
     end
 
@@ -33,7 +32,6 @@ module Crystal2Day
   end
   
   class CollisionShapePoint < CollisionShape
-    @[Anyolite::Specialize]
     def initialize(position : Crystal2Day::Coords = Crystal2Day.xy)
       super()
       self.position = position
@@ -45,7 +43,6 @@ module Crystal2Day
       return_shape
     end
   
-    @[Anyolite::Specialize]
     def inspect
       "Point-#{self.position.inspect}"
     end
@@ -54,7 +51,6 @@ module Crystal2Day
   class CollisionShapeLine < CollisionShape
     property line : Crystal2Day::Coords = Crystal2Day.xy
   
-    @[Anyolite::Specialize]
     def initialize(position : Crystal2Day::Coords = Crystal2Day.xy, line : Crystal2Day::Coords = Crystal2Day.xy)
       super()
       self.position = position
@@ -67,7 +63,6 @@ module Crystal2Day
       return_shape
     end
   
-    @[Anyolite::Specialize]
     def inspect
       "Line-#{self.position.inspect}-#{@line.inspect}"
     end
@@ -76,7 +71,6 @@ module Crystal2Day
   class CollisionShapeCircle < CollisionShape
     property radius : Float32 = 0.0
   
-    @[Anyolite::Specialize]
     def initialize(position : Crystal2Day::Coords = Crystal2Day.xy, radius : Float32 = 0.0f32)
       super()
       self.position = position
@@ -97,7 +91,6 @@ module Crystal2Day
       self.scale = Crystal2Day.xy(value.to_f32, value.to_f32)
     end
   
-    @[Anyolite::Specialize]
     def inspect
       "Circle-#{self.position.inspect}-#{@radius}"
     end
@@ -106,7 +99,6 @@ module Crystal2Day
   class CollisionShapeBox < CollisionShape
     property size : Crystal2Day::Coords = Crystal2Day.xy
   
-    @[Anyolite::Specialize]
     def initialize(position : Crystal2Day::Coords = Crystal2Day.xy, size : Crystal2Day::Coords = Crystal2Day.xy)
       super()
       self.position = position
@@ -119,7 +111,6 @@ module Crystal2Day
       return_shape
     end
   
-    @[Anyolite::Specialize]
     def inspect
       "Box-#{self.position.inspect}-#{@size.inspect}"
     end
@@ -129,7 +120,6 @@ module Crystal2Day
     property side_1 : Crystal2Day::Coords = Crystal2Day.xy 
     property side_2 : Crystal2Day::Coords = Crystal2Day.xy
   
-    @[Anyolite::Specialize]
     def initialize(position : Crystal2Day::Coords = Crystal2Day.xy, side_1 : Crystal2Day::Coords = Crystal2Day.xy, side_2 : Crystal2Day::Coords = Crystal2Day.xy)
       super()
       self.position = position
@@ -143,7 +133,6 @@ module Crystal2Day
       return_shape
     end
   
-    @[Anyolite::Specialize]
     def inspect
       "Triangle-#{self.position.inspect}-#{@side_1.inspect}-#{@side_2.inspect}"
     end
@@ -154,7 +143,6 @@ module Crystal2Day
   class CollisionShapeEllipse < CollisionShape
     property semiaxes : Crystal2Day::Coords = Crystal2Day.xy
   
-    @[Anyolite::Specialize]
     def initialize(position : Crystal2Day::Coords = Crystal2Day.xy, semiaxes : Crystal2Day::Coords = Crystal2Day.xy)
       super()
       self.position = position
@@ -167,7 +155,6 @@ module Crystal2Day
       return_shape
     end
     
-    @[Anyolite::Specialize]
     def inspect
       "Ellipse-#{self.position.inspect}-#{@semiaxes.inspect}"
     end

@@ -35,7 +35,6 @@ module Crystal2Day
     property flip_x : Bool = false
     property flip_y : Bool = false
 
-    @[Anyolite::Specialize]
     def initialize(from_texture : Crystal2Day::Texture = Crystal2Day::Texture.new, source_rect : Crystal2Day::Rect? = nil)
       super()
       @source_rect = source_rect

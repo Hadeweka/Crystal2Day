@@ -4,6 +4,8 @@ Crystal2Day is designed as a tool to develop games with Crystal fast.
 
 Less work for you, therefore more time for actual game design.
 
+IMPORTANT NOTE: This commit doesn't work without Anyolite, but this will be fixed soon
+
 # Why should I use Crystal2Day?
 
 Did you ever want to start a game, but then got frustrated while programming something

@@ -21,8 +21,6 @@ module Crystal2Day
   class_property input_manager : Crystal2Day::InputManager = Crystal2Day::InputManager.new
   class_property sound_board : Crystal2Day::SoundBoard = Crystal2Day::SoundBoard.new
   class_property custom_loading_path : String = ""
-  
-  @@refs : Array(Anyolite::RbRef) = Array(Anyolite::RbRef).new
 
   @@current_window : Crystal2Day::Window?
 
@@ -72,53 +70,9 @@ module Crystal2Day
   def self.run(debug : Bool = false)
     Crystal2Day.init(debug: debug)
     {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
-      Crystal2Day::Interpreter.start
-      Crystal2Day::Interpreter.expose_module_only(Crystal2Day)
-      # TODO: Maybe just use Anyolite for the whole module
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::Coords, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::Color, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionReference, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::Entity, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::GameData, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::Event, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::Keyboard, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::Mouse, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::Rect, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::InputManager, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShape, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::SoundBoard, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::Sprite, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::Tile, under: Crystal2Day)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapePoint, under: Crystal2Day, connect_to_superclass: true)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapeLine, under: Crystal2Day, connect_to_superclass: true)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapeCircle, under: Crystal2Day, connect_to_superclass: true)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapeBox, under: Crystal2Day, connect_to_superclass: true)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapeTriangle, under: Crystal2Day, connect_to_superclass: true)
-      Crystal2Day::Interpreter.expose_class(Crystal2Day::CollisionShapeEllipse, under: Crystal2Day, connect_to_superclass: true)
-      Crystal2Day::Interpreter.expose_class_property(Crystal2Day, game_data, Crystal2Day::GameData)
-      Crystal2Day::Interpreter.expose_class_property(Crystal2Day, physics_time_step, Float32)
-      Crystal2Day::Interpreter.expose_class_property(Crystal2Day, last_event, Crystal2Day::Event)
-      Crystal2Day::Interpreter.expose_class_property(Crystal2Day, last_colliding_entity, Crystal2Day::Entity)
-      Crystal2Day::Interpreter.expose_class_property(Crystal2Day, input_manager, Crystal2Day::InputManager)
-      Crystal2Day::Interpreter.expose_class_property(Crystal2Day, im, Crystal2Day::InputManager)
-      Crystal2Day::Interpreter.expose_class_property(Crystal2Day, sb, Crystal2Day::SoundBoard)
-      Crystal2Day::Interpreter.expose_class_function(Crystal2Day, xy, [x : Float32 = 0.0f32, y : Float32 = 0.0f32])
-      
-      # TODO: Is there a better way to protect these?
-      @@refs.push Interpreter.generate_ref(input_manager)
-      @@refs.push Interpreter.generate_ref(game_data)
-      @@refs.push Interpreter.generate_ref(sound_board)
-
-      # TODO: Maybe there's a better way to do this?
-      # TODO: Maybe add a module to put these into
-      Anyolite.eval("def pause; Fiber.yield; end")
-      Anyolite.eval("def pause_times(n); n.times {pause}; end")
-      Anyolite.eval("def each_frame; loop do; yield; pause; end; end")
-      Anyolite.eval("def for_n_frames(n); n.times do; yield; pause; end; end")
-
-      yield
-
-      Crystal2Day::Interpreter.close
+      Crystal2Day.run_interpreter do
+        yield
+      end
     {% else %}
       yield
     {% end %}

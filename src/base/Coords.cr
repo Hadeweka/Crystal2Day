@@ -4,7 +4,6 @@ module Crystal2Day
   class Coords
     getter data : LibSDL::FPoint
     
-    @[Anyolite::Specialize]
     def initialize(x : Number = 0.0, y : Number = 0.0)
       @data = LibSDL::FPoint.new(x: x, y: y)
     end

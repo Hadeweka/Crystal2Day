@@ -20,12 +20,10 @@ module Crystal2Day
       @entity_types[name]
     end
 
-    @[Anyolite::Exclude]
     def add_entity_proc(name : String, proc : Proc(Entity, Nil))
       @entity_procs[name] = proc
     end
 
-    @[Anyolite::Exclude]
     def add_entity_proc(name : String, &proc : Crystal2Day::Entity -> Nil)
       @entity_procs[name] = proc
     end

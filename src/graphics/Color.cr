@@ -6,7 +6,6 @@ module Crystal2Day
 
     # TODO: Add constructor to load color from hex string
 
-    @[Anyolite::Specialize]
     def initialize(r : Number = 0, g : Number = 0, b : Number = 0, a : Number = 255)
       @data = LibSDL::Color.new(r: r, g: g, b: b, a: a)
     end

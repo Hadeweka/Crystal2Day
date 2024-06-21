@@ -18,9 +18,6 @@ require "./base/Main.cr"
 require "./base/Rect.cr"
 require "./base/ResourceManager.cr"
 
-require "./scripting/Coroutine.cr"
-require "./scripting/Hook.cr"
-
 require "./audio/Music.cr"
 require "./audio/Sound.cr"
 require "./audio/SoundBoard.cr"
@@ -58,3 +55,5 @@ require "./input/Event.cr"
 require "./input/InputManager.cr"
 require "./input/Keyboard.cr"
 require "./input/Mouse.cr"
+
+require "./config/AnyolitePostConfig.cr"
