@@ -45,7 +45,7 @@ module Crystal2Day
       {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
         Crystal2Day::CoroutineTemplate.new(Anyolite.eval("Proc.new #{{{block.stringify}}}"))
       {% else %}
-        raise "Coroutines from blocks are only avilable with Anyolite support"
+        Crystal2Day.error "Coroutines from blocks are only avilable with Anyolite support"
       {% end %}
     end
 
@@ -61,7 +61,7 @@ module Crystal2Day
       {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
         Crystal2Day::CoroutineTemplate.new(Crystal2Day::CoroutineTemplate.convert_string_to_ref(string, arg_string))
       {% else %}
-        raise "Coroutines from strings are only avilable with Anyolite support"
+        Crystal2Day.error "Coroutines from strings are only avilable with Anyolite support"
       {% end %}
     end
 

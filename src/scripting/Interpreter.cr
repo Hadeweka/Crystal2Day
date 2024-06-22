@@ -75,7 +75,7 @@ module Crystal2Day
       Anyolite::RbCore.rb_fiber_resume(Crystal2Day::Interpreter.get.to_unsafe, fiber.to_unsafe, 1, arg_array)
       err = Anyolite::RbCore.get_last_rb_error(Crystal2Day::Interpreter.get.to_unsafe)
       converted_err = Anyolite.call_rb_method_of_object(err, "to_s", cast_to: String)
-      raise "Error at Fiber execution: #{converted_err}" if converted_err != ""
+      Crystal2Day.error "Error at Fiber execution: #{converted_err}" if converted_err != ""
       Anyolite::RbCore.rb_gc_arena_restore(Crystal2Day::Interpreter.get.to_unsafe, idx)
     end
 
@@ -101,8 +101,6 @@ module Crystal2Day
       generate_ref(convert_json_to_value(json_string))
     end
 
-    alias JSONParserType = Nil | Bool | Int64 | Float64 | String | Crystal2Day::Coords | Crystal2Day::Rect | Crystal2Day::Color | Crystal2Day::CollisionShape | Array(JSONParserType)
-
     def self.convert_json_to_value(json_string : String)
       pull = JSON::PullParser.new(json_string)
       case pull.kind
@@ -112,7 +110,7 @@ module Crystal2Day
       when JSON::PullParser::Kind::Float then return pull.read_float
       when JSON::PullParser::Kind::String then return pull.read_string
       when JSON::PullParser::Kind::BeginArray
-        array = [] of JSONParserType
+        array = [] of Crystal2Day::ParamType
         pull.read_array do
           array.push convert_json_to_value(pull.read_raw)
         end
@@ -187,6 +185,8 @@ module Anyolite
       Crystal2Day::Interpreter.cast_ref_to(self, Crystal2Day::CollisionShape)
     end
 
-    # TODO: Add collision shapes
+    # TODO: Add array access
+
+    # TODO: Add collision shapes? Is this still necessary?
   end
 end

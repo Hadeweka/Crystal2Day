@@ -26,20 +26,20 @@ module Crystal2Day
       @members.size
     end
 
-    def add_entity(entity_type_name : String, position : Crystal2Day::Coords = Crystal2Day.xy, initial_param : Entity::InitialParamType = nil)
+    def add_entity(entity_type_name : String, position : Crystal2Day::Coords = Crystal2Day.xy, initial_param : Crystal2Day::ParamType = nil)
       entity_type = CD.database.get_entity_type(entity_type_name)
       new_entity = Crystal2Day::Entity.new(entity_type, renderer: @renderer)
       new_entity.position = position
       register_new_entity(new_entity, initial_param)
     end
 
-    def add_entity(entity_type : Crystal2Day::EntityType, position : Crystal2Day::Coords = Crystal2Day.xy, initial_param : Entity::InitialParamType = nil)
+    def add_entity(entity_type : Crystal2Day::EntityType, position : Crystal2Day::Coords = Crystal2Day.xy, initial_param : Crystal2Day::ParamType = nil)
       new_entity = Crystal2Day::Entity.new(entity_type, renderer: @renderer)
       new_entity.position = position
       register_new_entity(new_entity, initial_param)
     end
 
-    def register_new_entity(entity : Crystal2Day::Entity, initial_param : Entity::InitialParamType = nil)
+    def register_new_entity(entity : Crystal2Day::Entity, initial_param : Crystal2Day::ParamType = nil)
       @members.push entity
 
       {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}

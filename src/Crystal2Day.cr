@@ -58,6 +58,7 @@ require "./input/Mouse.cr"
 
 require "./scripting/CoroutineTemplate.cr"
 require "./scripting/Hook.cr"
+require "./scripting/Parameter.cr"
 require "./scripting/ProcCoroutine.cr"
 
 require "./config/AnyolitePostConfig.cr"

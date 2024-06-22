@@ -10,7 +10,7 @@ module Crystal2Day
       @fiber = Crystal2Day::Interpreter.fiber_from_proc(template_proc)
     end
 
-    def call(arg : Anyolite::RbRef)
+    def call(arg : Crystal2Day::Parameter)
       Crystal2Day::Interpreter.resume_fiber(@fiber, arg) if active?
     end
 

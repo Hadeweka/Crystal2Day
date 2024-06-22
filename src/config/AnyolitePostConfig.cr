@@ -36,7 +36,6 @@
     @[Anyolite::ExcludeInstanceMethod("add_entity_proc")]
     class Database; end
 
-    @[Anyolite::ExcludeConstant("InitialParamType")]
     @[Anyolite::ExcludeInstanceMethod("initialize", nil)]
     @[Anyolite::ExcludeInstanceMethod("add_hook_from_template")]
     @[Anyolite::ExcludeInstanceMethod("init")]
@@ -49,11 +48,13 @@
     @[Anyolite::ExcludeInstanceMethod("call_hook_or")]
     @[Anyolite::ExcludeInstanceMethod("delete")]
     @[Anyolite::ExcludeInstanceMethod("call_collision_hooks")]
-    @[Anyolite::SpecializeInstanceMethod("set_state", [index : String, value : Anyolite::RbRef])]
+    @[Anyolite::SpecializeInstanceMethod("set_state", [index : String, value : Crystal2Day::Parameter])]
     @[Anyolite::ExcludeInstanceMethod("update_sprites")]
     @[Anyolite::ExcludeInstanceMethod("acceleration_step")]
     @[Anyolite::ExcludeInstanceMethod("update_physics_internal")]
     @[Anyolite::SpecializeInstanceMethod("check_for_collision_with", [other : Entity])]
+    @[Anyolite::AddBlockArgInstanceMethod("each_tile_collision", 1, Nil)]
+    @[Anyolite::AddBlockArgInstanceMethod("each_entity_collision", 1, Nil)]
     class Entity; end
 
     @[Anyolite::SpecializeInstanceMethod("initialize", [other_event : Crystal2Day::Event])]

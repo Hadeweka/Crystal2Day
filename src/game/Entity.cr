@@ -12,7 +12,6 @@ module Crystal2Day
     COLLISION_STACK_ENTITIES_INITIAL_CAPACITY = 8
     COLLISION_STACK_TILES_INITIAL_CAPACITY = 32
 
-    alias InitialParamType = Nil | Bool | Int32 | Int64 | Float32 | Float64 | String | Crystal2Day::Coords | Crystal2Day::Rect | Crystal2Day::Color
     INITIAL_PARAM_NAME = "initial_param"
 
     # If positive, this will discretize every motion into steps with the given size in each direction
@@ -21,7 +20,7 @@ module Crystal2Day
     # TODO: This does currently nothing
     property z : UInt8 = 0
 
-    @state = Hash(String, Anyolite::RbRef).new(initial_capacity: STATE_INITIAL_CAPACITY)
+    @state = Hash(String, Crystal2Day::Parameter).new(initial_capacity: STATE_INITIAL_CAPACITY)
 
     getter current_hook : String = ""
     @hooks = Hash(String, Hook).new(initial_capacity: HOOKS_INITIAL_CAPACITY)
@@ -106,7 +105,7 @@ module Crystal2Day
       @hooks[name] = template.generate_hook
     end
 
-    def init(own_ref : Anyolite::RbRef, initial_param : Entity::InitialParamType = nil)
+    def init(own_ref : Anyolite::RbRef, initial_param : Crystal2Day::ParamType = nil)
       @magic_number = self.object_id
       set_state(INITIAL_PARAM_NAME, initial_param)
       call_hook("init", own_ref)
@@ -176,10 +175,12 @@ module Crystal2Day
     def set_state(index : String, value)
       {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
         @state[index] = Crystal2Day::Interpreter.generate_ref(value)
+      {% else %}
+        # TODO
       {% end %}
     end
 
-    def set_state(index : String, value : Anyolite::RbRef)
+    def set_state(index : String, value : Crystal2Day::Parameter)
       @state[index] = value
     end
 
@@ -274,14 +275,12 @@ module Crystal2Day
       end
     end
 
-    @[Anyolite::AddBlockArg(1, Nil)]
     def each_tile_collision
       @collision_stack_tiles.each do |collision_reference|
         yield collision_reference
       end
     end
 
-    @[Anyolite::AddBlockArg(1, Nil)]
     def each_entity_collision
       @collision_stack_entities.each do |collision_reference|
         yield collision_reference

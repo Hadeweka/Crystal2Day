@@ -26,7 +26,7 @@ module Crystal2Day
     EMPTY_NAME = "<empty>"
     DEFAULT_NAME = "<default$>"
 
-    @default_state = {} of String => Anyolite::RbRef
+    @default_state = {} of String => Crystal2Day::Parameter
     @coroutine_templates = {} of String => Crystal2Day::CoroutineTemplate
 
     @options = Hash(String, Int64).new
