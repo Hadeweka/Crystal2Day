@@ -3,34 +3,34 @@
     @[Anyolite::SpecializeInstanceMethod("initialize")]
     class CollisionShape; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", position : Crystal2Day::Coords = Crystal2Day.xy)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [position : Crystal2Day::Coords = Crystal2Day.xy])]
     @[Anyolite::SpecializeInstanceMethod("inspect")]
     class CollisionShapePoint; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", position : Crystal2Day::Coords = Crystal2Day.xy, line : Crystal2Day::Coords = Crystal2Day.xy)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [position : Crystal2Day::Coords = Crystal2Day.xy, line : Crystal2Day::Coords = Crystal2Day.xy])]
     @[Anyolite::SpecializeInstanceMethod("inspect")]
     class CollisionShapeLine; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", position : Crystal2Day::Coords = Crystal2Day.xy, radius : Float32 = 0.0f32)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [position : Crystal2Day::Coords = Crystal2Day.xy, radius : Float32 = 0.0f32])]
     @[Anyolite::SpecializeInstanceMethod("inspect")]
     class CollisionShapeCircle; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", position : Crystal2Day::Coords = Crystal2Day.xy, size : Crystal2Day::Coords = Crystal2Day.xy)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [position : Crystal2Day::Coords = Crystal2Day.xy, size : Crystal2Day::Coords = Crystal2Day.xy])]
     @[Anyolite::SpecializeInstanceMethod("inspect")]
     class CollisionShapeBox; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", position : Crystal2Day::Coords = Crystal2Day.xy, side_1 : Crystal2Day::Coords = Crystal2Day.xy, side_2 : Crystal2Day::Coords = Crystal2Day.xy)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [position : Crystal2Day::Coords = Crystal2Day.xy, side_1 : Crystal2Day::Coords = Crystal2Day.xy, side_2 : Crystal2Day::Coords = Crystal2Day.xy])]
     @[Anyolite::SpecializeInstanceMethod("inspect")]
     class CollisionShapeTriangle; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", position : Crystal2Day::Coords = Crystal2Day.xy, semiaxes : Crystal2Day::Coords = Crystal2Day.xy)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [position : Crystal2Day::Coords = Crystal2Day.xy, semiaxes : Crystal2Day::Coords = Crystal2Day.xy])]
     @[Anyolite::SpecializeInstanceMethod("inspect")]
     class CollisionShapeEllipse; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", r : Number = 0, g : Number = 0, b : Number = 0, a : Number = 255)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [r : Number = 0, g : Number = 0, b : Number = 0, a : Number = 255])]
     class Color; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", x : Number = 0.0, y : Number = 0.0)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [x : Number = 0.0, y : Number = 0.0])]
     class Coords; end
 
     @[Anyolite::ExcludeInstanceMethod("add_entity_proc")]
@@ -49,24 +49,24 @@
     @[Anyolite::ExcludeInstanceMethod("call_hook_or")]
     @[Anyolite::ExcludeInstanceMethod("delete")]
     @[Anyolite::ExcludeInstanceMethod("call_collision_hooks")]
+    @[Anyolite::SpecializeInstanceMethod("set_state", [index : String, value : Anyolite::RbRef])]
+    @[Anyolite::ExcludeInstanceMethod("update_sprites")]
+    @[Anyolite::ExcludeInstanceMethod("acceleration_step")]
+    @[Anyolite::ExcludeInstanceMethod("update_physics_internal")]
+    @[Anyolite::SpecializeInstanceMethod("check_for_collision_with", [other : Entity])]
     class Entity; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", other_event : Crystal2Day::Event)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [other_event : Crystal2Day::Event])]
     @[Anyolite::ExcludeInstanceMethod("data")]
-    class Event
-      # TODO: For some reason Anyolite wants this method - make sure that this doesn't break anything
-      def initialize
-        @data = LibSDL::Event.new
-      end
-    end
+    class Event; end
 
     @[Anyolite::ExcludeInstanceMethod("set_key_table_entry")]
     class InputManager; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", x : Number = 0.0, y : Number = 0.0, width : Number = 0.0, height : Number = 0.0)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [x : Number = 0.0, y : Number = 0.0, width : Number = 0.0, height : Number = 0.0])]
     class Rect; end
 
-    @[Anyolite::SpecializeInstanceMethod("initialize", from_texture : Crystal2Day::Texture = Crystal2Day::Texture.new, source_rect : Crystal2Day::Rect? = nil)]
+    @[Anyolite::SpecializeInstanceMethod("initialize", [from_texture : Crystal2Day::Texture = Crystal2Day::Texture.new, source_rect : Crystal2Day::Rect? = nil])]
     class Sprite; end
 
     @@refs : Array(Anyolite::RbRef) = Array(Anyolite::RbRef).new

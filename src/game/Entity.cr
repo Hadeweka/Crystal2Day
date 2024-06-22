@@ -179,7 +179,6 @@ module Crystal2Day
       {% end %}
     end
 
-    @[Anyolite::Specialize]
     def set_state(index : String, value : Anyolite::RbRef)
       @state[index] = value
     end
@@ -192,14 +191,12 @@ module Crystal2Day
       end
     end
 
-    @[Anyolite::Exclude]
     def update_sprites
       @sprites.each do |sprite|
         sprite.update
       end
     end
 
-    @[Anyolite::Exclude]
     def acceleration_step
       @velocity += @acceleration * Crystal2Day.physics_time_step
       @velocity.x = @terminal_speed if @velocity.x > @terminal_speed
@@ -208,7 +205,6 @@ module Crystal2Day
       @velocity.y = -@terminal_speed if @velocity.y < -@terminal_speed
     end
 
-    @[Anyolite::Exclude]
     def update_physics_internal
       # TODO: Maybe add other integration schemes like Leapfrog or Runge-Kutta
       @position += @velocity * @current_time_step
@@ -361,7 +357,6 @@ module Crystal2Day
       end
     end
 
-    @[Anyolite::Specialize]
     def check_for_collision_with(other : Entity)
       # Avoid collisions with yourself
       # TODO: Maybe add an option to turn this off
