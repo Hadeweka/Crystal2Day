@@ -4,9 +4,6 @@ Crystal2Day is designed as a tool to develop games with Crystal fast.
 
 Less work for you, therefore more time for actual game design.
 
-IMPORTANT NOTE: This commit doesn't work without Anyolite, but this will be fixed soon.
-Currently, state variables and entities are still broken.
-
 # Why should I use Crystal2Day?
 
 Did you ever want to start a game, but then got frustrated while programming something
@@ -146,7 +143,6 @@ end
 * Should all shards be installed, but their postinstall hooks only be triggered when desired?
 * What examples should be made?
 * How can maps be improved?
-* Fix state variables if Anyolite isn't used
 
 ### Version 1.0.0
 

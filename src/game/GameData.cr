@@ -12,7 +12,6 @@ module Crystal2Day
       @state[index] = Crystal2Day::Interpreter.generate_ref(value)
     end
 
-    @[Anyolite::Specialize]
     def set_state(index : String, value : Crystal2Day::Parameter)
       @state[index] = value
     end

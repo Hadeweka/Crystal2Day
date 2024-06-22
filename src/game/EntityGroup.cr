@@ -91,7 +91,7 @@ module Crystal2Day
         {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
           @members[index].update_physics(@refs[index], time_step)
         {% else %}
-          @members[index].update_physics
+          @members[index].update_physics(time_step)
         {% end %}
       end
     end

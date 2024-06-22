@@ -2,19 +2,37 @@ module Crystal2Day
   class Hook
     PAGES_INITIAL_CAPACITY = 8
 
-    @pages = Hash(String, Coroutine | ProcCoroutine).new(initial_capacity: PAGES_INITIAL_CAPACITY)
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      @pages = Hash(String, Coroutine | ProcCoroutine).new(initial_capacity: PAGES_INITIAL_CAPACITY)
+    {% else %}
+      @pages = Hash(String, ProcCoroutine).new(initial_capacity: PAGES_INITIAL_CAPACITY)
+    {% end %}
     @current_page = "main"
 
-    def add_page(name : String, coroutine : Coroutine | ProcCoroutine)
-      if @pages[name]?
-        Crystal2Day.warning "Coroutine page '#{name}' was defined previously"
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def add_page(name : String, coroutine : Coroutine | ProcCoroutine)
+        if @pages[name]?
+          Crystal2Day.warning "Coroutine page '#{name}' was defined previously"
+        end
+  
+        @pages[name] = coroutine
       end
+    {% else %}
+      def add_page(name : String, coroutine : ProcCoroutine)
+        if @pages[name]?
+          Crystal2Day.warning "Coroutine page '#{name}' was defined previously"
+        end
 
-      @pages[name] = coroutine
-    end
+        @pages[name] = coroutine
+      end
+    {% end %}
 
     def is_currently_ruby?
-      @pages[@current_page].is_a?(Coroutine)
+      {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+        @pages[@current_page].is_a?(Coroutine)
+      {% else %}
+        false
+      {% end %}
     end
 
     def change_page(name : String)
@@ -31,11 +49,11 @@ module Crystal2Day
           current_page.as(ProcCoroutine).call(entity)
         end
       end
+    {% else %}
+      def call(entity : Entity)
+        current_page = @pages[@current_page]
+        current_page.as(ProcCoroutine).call(entity)
+      end
     {% end %}
-
-    def call(entity : Entity)
-      current_page = @pages[@current_page]
-      current_page.as(ProcCoroutine).call(entity)
-    end
   end
 end

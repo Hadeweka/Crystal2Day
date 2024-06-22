@@ -145,12 +145,22 @@ module Crystal2Day
       end
     end
     
-    def add_default_state(name : String, value)
-      @default_state[name] = Crystal2Day::Interpreter.generate_ref(value)
-    end
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def add_default_state(name : String, value)
+        @default_state[name] = Crystal2Day::Interpreter.generate_ref(value)
+      end
+    {% else %}
+      def add_default_state(name : String, value : Crystal2Day::ParamType)
+        @default_state[name] = Crystal2Day::Parameter.new(value)
+      end
+    {% end %}
 
     def add_default_state_from_raw_json(name : String, raw_json : String)
-      @default_state[name] = Crystal2Day::Interpreter.convert_json_to_ref(raw_json)
+      {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+        @default_state[name] = Crystal2Day::Interpreter.convert_json_to_ref(raw_json)
+      {% else %}
+        @default_state[name] = Crystal2Day::Parameter.new(Crystal2Day::Parameter.convert_json_to_value(raw_json))
+      {% end %}
     end
 
     def add_coroutine_template(name : String, template : Crystal2Day::CoroutineTemplate)

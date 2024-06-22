@@ -105,68 +105,148 @@ module Crystal2Day
       @hooks[name] = template.generate_hook
     end
 
-    def init(own_ref : Anyolite::RbRef, initial_param : Crystal2Day::ParamType = nil)
-      @magic_number = self.object_id
-      set_state(INITIAL_PARAM_NAME, initial_param)
-      call_hook("init", own_ref)
-    end
-
-    def update(own_ref : Anyolite::RbRef?)
-      call_hook("update", own_ref)
-    end
-
-    def post_update(own_ref : Anyolite::RbRef)
-      update_sprites
-      call_hook("post_update", own_ref)
-    end
-
-    def handle_event(own_ref : Anyolite::RbRef)
-      call_hook("handle_event", own_ref)
-    end
-
-    def update_physics(own_ref : Anyolite::RbRef, time_step : Float32)
-      @current_time_step = time_step
-      call_hook_or("custom_physics", own_ref) {update_physics_internal}
-    end
-
-    def call_existing_hook(name : String, own_ref : Anyolite::RbRef)
-      @current_hook = name
-      is_ruby = @hooks[name].is_currently_ruby?
-      @hooks[name].call(self, own_ref)
-      if next_hook_name = @next_hook
-        @hook_stack.push name if is_ruby
-        @next_hook = nil
-        call_hook(next_hook_name, own_ref)
-        call_hook(@hook_stack.pop, own_ref) if is_ruby
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def init(own_ref : Anyolite::RbRef, initial_param : Crystal2Day::ParamType = nil)
+        @magic_number = self.object_id
+        set_state(INITIAL_PARAM_NAME, initial_param)
+        call_hook("init", own_ref)
       end
-      @current_hook = ""
-    end
-
-    def call_hook(name : String, own_ref : Anyolite::RbRef)
-      if @hooks[name]?
-        call_existing_hook(name, own_ref)
+    {% else %}
+      def init(initial_param : Crystal2Day::ParamType = nil)
+        @magic_number = self.object_id
+        set_state(INITIAL_PARAM_NAME, initial_param)
+        call_hook("init")
       end
-    end
+    {% end %}
 
-    def call_hook_or(name : String, own_ref : Anyolite::RbRef)
-      if @hooks[name]?
-        call_existing_hook(name, own_ref)
-      else
-        yield
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def update(own_ref : Anyolite::RbRef)
+        call_hook("update", own_ref)
       end
-    end
+    {% else %}
+      def update
+        call_hook("update")
+      end
+    {% end %}
 
-    def delete(own_ref : Anyolite::RbRef)
-      call_hook("delete", own_ref)
-    end
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def post_update(own_ref : Anyolite::RbRef)
+        update_sprites
+        call_hook("post_update", own_ref)
+      end
+    {% else %}
+      def post_update
+        update_sprites
+        call_hook("post_update")
+      end
+    {% end %}
 
-    def call_collision_hooks(own_ref : Anyolite::RbRef)
-      call_hook("tile_collisions", own_ref)
-      @collision_stack_tiles.clear
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def handle_event(own_ref : Anyolite::RbRef)
+        call_hook("handle_event", own_ref)
+      end
+    {% else %}
+      def handle_event
+        call_hook("handle_event")
+      end
+    {% end %}
 
-      call_hook("entity_collisions", own_ref)
-      @collision_stack_entities.clear
-    end
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def update_physics(own_ref : Anyolite::RbRef, time_step : Float32)
+        @current_time_step = time_step
+        call_hook_or("custom_physics", own_ref) {update_physics_internal}
+      end
+    {% else %}
+      def update_physics(time_step : Float32)
+        @current_time_step = time_step
+        call_hook_or("custom_physics") {update_physics_internal}
+      end
+    {% end %}
+
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def delete(own_ref : Anyolite::RbRef)
+        call_hook("delete", own_ref)
+      end
+    {% else %}
+      def delete
+        call_hook("delete")
+      end
+    {% end %}
+
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def call_collision_hooks(own_ref : Anyolite::RbRef)
+        call_hook("tile_collisions", own_ref)
+        @collision_stack_tiles.clear
+
+        call_hook("entity_collisions", own_ref)
+        @collision_stack_entities.clear
+      end
+    {% else %}
+      def call_collision_hooks
+        call_hook("tile_collisions")
+        @collision_stack_tiles.clear
+
+        call_hook("entity_collisions")
+        @collision_stack_entities.clear
+      end
+    {% end %}
+
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def call_existing_hook(name : String, own_ref : Anyolite::RbRef)
+        @current_hook = name
+        is_ruby = @hooks[name].is_currently_ruby?
+        @hooks[name].call(self, own_ref)
+        if next_hook_name = @next_hook
+          @hook_stack.push name if is_ruby
+          @next_hook = nil
+          call_hook(next_hook_name, own_ref)
+          call_hook(@hook_stack.pop, own_ref) if is_ruby
+        end
+        @current_hook = ""
+      end
+    {% else %}
+      def call_existing_hook(name : String)
+        @current_hook = name
+        @hooks[name].call(self)
+        if next_hook_name = @next_hook
+          @next_hook = nil
+          call_hook(next_hook_name)
+        end
+        @current_hook = ""
+      end
+    {% end %}
+
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def call_hook(name : String, own_ref : Anyolite::RbRef)
+        if @hooks[name]?
+          call_existing_hook(name, own_ref)
+        end
+      end
+    {% else %}
+      def call_hook(name : String)
+        if @hooks[name]?
+          call_existing_hook(name)
+        end
+      end
+    {% end %}
+
+    {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
+      def call_hook_or(name : String, own_ref : Anyolite::RbRef)
+        if @hooks[name]?
+          call_existing_hook(name, own_ref)
+        else
+          yield
+        end
+      end
+    {% else %}
+      def call_hook_or(name : String)
+        if @hooks[name]?
+          call_existing_hook(name)
+        else
+          yield
+        end
+      end
+    {% end %}
 
     def get_state(index : String)
       @state[index]
@@ -176,7 +256,7 @@ module Crystal2Day
       {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
         @state[index] = Crystal2Day::Interpreter.generate_ref(value)
       {% else %}
-        # TODO
+        @state[index] = Crystal2Day::Parameter.new(value)
       {% end %}
     end
 

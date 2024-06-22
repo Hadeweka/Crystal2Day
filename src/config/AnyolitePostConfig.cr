@@ -61,6 +61,9 @@
     @[Anyolite::ExcludeInstanceMethod("data")]
     class Event; end
 
+    @[Anyolite::SpecializeInstanceMethod("set_state", [index : String, value : Crystal2Day::Parameter])]
+    class GameData; end
+
     @[Anyolite::ExcludeInstanceMethod("set_key_table_entry")]
     class InputManager; end
 
