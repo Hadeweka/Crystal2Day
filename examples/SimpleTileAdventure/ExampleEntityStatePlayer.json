@@ -5,8 +5,17 @@
 
   "default_state": {
     "moving_direction": 2,
-    "speed": 2
+    "remaining_distance": 0,
+    "speed": 7
   },
+
+  "map_boxes": [
+    {"size": {"x": 50, "y": 50}, "position": {"x": -25, "y": -25}}
+  ],
+
+  "bounding_boxes": [
+    {"size": {"x": 50, "y": 50}, "position": {"x": -25, "y": -25}}
+  ],
 
   "sprite_templates": [
     {
@@ -23,6 +32,7 @@
   ],
 
   "coroutine_templates": {
-    "update": {"proc": "FigureMove"}
+    "update": {"proc": "FigureMove"},
+    "tile_collisions": {"proc": "TileCollision"}
   }
 }

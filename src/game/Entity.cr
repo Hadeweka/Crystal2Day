@@ -440,6 +440,8 @@ module Crystal2Day
       # Avoid collisions with yourself
       # TODO: Maybe add an option to turn this off
       return false if self == other
+
+      # TODO: Maybe make the bounding box check optional, e.g. for maps
       
       # Step 1: Compare boxes
       collision_detected = false
