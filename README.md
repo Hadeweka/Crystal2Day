@@ -23,6 +23,9 @@ having to worry about common implementation details.
 For example, a map class is already implemented, as well as typical collision routines,
 a framerate limiter, z-ordering, cameras and many other things.
 
+Essentially, you can build a game using a number of scenes, which can be considered
+as corkboards. Just pin everything you want on there and let Crystal2Day do the rest.
+
 And even if you want to do everything by yourself, you can just do exactly that, as
 most SDL functions are available in this library.
 
@@ -128,7 +131,8 @@ end
 * Framerate limiter
 * Maps and tilesets
 * 2D collision routines
-* Entity hook scripting in mruby using and Anyolite
+* Entity hook system
+* Optional scripting using Anyolite
 * Entities with flexible states and multiple script pages
 * Entity collision system
 * Simple game state
