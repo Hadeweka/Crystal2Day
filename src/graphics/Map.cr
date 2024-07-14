@@ -149,6 +149,8 @@ module Crystal2Day
       super()
     end
 
+    # TODO: Maybe don't make this a Drawable and instead add methods like draw_layer, pin_layer and pin_all?
+
     def set_as_stream!
       @content = MapCombo.new
     end

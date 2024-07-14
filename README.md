@@ -147,6 +147,8 @@ end
 * Should all shards be installed, but their postinstall hooks only be triggered when desired?
 * What examples should be made?
 * How can maps be improved?
+* How should multilayer map collision be solved (especially with tags)?
+* Could entities be bound to maps?
 
 ### Version 1.0.0
 

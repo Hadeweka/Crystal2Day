@@ -381,6 +381,8 @@ module Crystal2Day
       tile_width = map.tileset.tile_width
       tile_height = map.tileset.tile_height
 
+      # TODO: Why 100 here?
+
       minimum_x = (map_width + 100) * tile_width
       minimum_y = (map_height + 100) * tile_height
       maximum_x = -100.0 * tile_width

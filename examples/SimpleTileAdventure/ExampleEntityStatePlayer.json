@@ -4,7 +4,7 @@
   "description": "The player entity",
 
   "default_state": {
-    "moving_direction": 2,
+    "moving_direction": 0,
     "remaining_distance": 0,
     "speed": 7
   },
