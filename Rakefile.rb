@@ -44,7 +44,7 @@ task :add_feature_imgui do
   if ENV["OS"] == "Windows_NT"
     system("lib /OUT:\"temp/imgui_impl_sdl.lib\" \"temp/imgui_impl_sdl.obj\" \"temp/imgui_impl_renderer.obj\" \"temp/cimgui.obj\" \"temp/imgui_impl.obj\" \"temp/imgui.obj\" \"temp/imgui_draw.obj\" \"temp/imgui_widgets.obj\" \"temp/imgui_tables.obj\" \"temp/imgui_demo.obj\"")
   else
-    system("ar rcs -o \"temp/imgui_impl_sdl.a\" \"temp/imgui_impl_sdl.o\" \"temp/imgui_impl_renderer.o\" \"temp/cimgui.o\" \"temp/imgui_impl.o\" \"temp/imgui.o\" \"temp/imgui_draw.o\" \"temp/imgui_widgets.o\" \"temp/imgui_tables.o\" \"temp/imgui_demo.o\"")
+    system("ar rcs \"temp/imgui_impl_sdl.a\" \"temp/imgui_impl_sdl.o\" \"temp/imgui_impl_renderer.o\" \"temp/cimgui.o\" \"temp/imgui_impl.o\" \"temp/imgui.o\" \"temp/imgui_draw.o\" \"temp/imgui_widgets.o\" \"temp/imgui_tables.o\" \"temp/imgui_demo.o\"")
   end
 end
 
