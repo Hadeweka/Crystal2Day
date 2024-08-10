@@ -135,11 +135,76 @@ module Crystal2Day
     end
   end
 
-  class Map < Crystal2Day::Drawable
+  class Map
+    property layers : Array(MapLayer)
+
+    def initialize
+      @layers = Array(MapLayer).new
+    end
+
+    def add_layer(map_layer)
+      @layers.push(map_layer)
+      return map_layer
+    end
+
+    def add_layer(tileset : Tileset)
+      new_layer = MapLayer.new
+      new_layer.tileset = tileset
+      @layers.push(new_layer)
+      return new_layer
+    end
+
+    def draw_layer(layer_number : UInt8 = 0, offset : Coords = Crystal2Day.xy)
+      @layers[layer_number].draw(offset)
+    end
+
+    def pin_layer(layer_number : UInt8 = 0, offset : Coords = Crystal2Day.xy)
+      @layers[layer_number].pin(offset)
+    end
+
+    def unpin_layer(layer_number : UInt8 = 0, offset : Coords = Crystal2Day.xy)
+      @layers[layer_number].unpin(offset)
+    end
+
+    def number_of_layers
+      return @layers.size
+    end
+
+    def draw_all_layers(offset : Coords = Crystal2Day.xy)
+      0.upto(number_of_layers - 1) do |i|
+        @layers[i].draw(offset)
+      end
+    end
+
+    def pin_all_layers(offset : Coords = Crystal2Day.xy)
+      0.upto(number_of_layers - 1) do |i|
+        @layers[i].pin(offset)
+      end
+    end
+
+    def unpin_all_layers(offset : Coords = Crystal2Day.xy)
+      0.upto(number_of_layers - 1) do |i|
+        @layers[i].unpin(offset)
+      end
+    end
+
+    def check_for_collision_with(other : EntityGroup | Map)
+      if other.is_a?(Map)
+        Crystal2Day.error "Map-Map collisions are not implemented."
+      else
+        # No need to implement this twice
+        other.check_for_collision_with(self)
+      end
+    end
+  end
+
+  class MapLayer < Crystal2Day::Drawable
     property content : MapContent | MapCombo = MapContent.new
     property tileset : Crystal2Day::Tileset = Crystal2Day::Tileset.new
 
     property drawing_rect : Crystal2Day::Rect = Crystal2Day::Rect.new(width: Crystal2Day.current_window.width, height: Crystal2Day.current_window.height)
+
+    # TODO: Add collision check flag and priority system
 
     getter vertices = [] of LibSDL::Vertex
 
@@ -153,15 +218,6 @@ module Crystal2Day
 
     def set_as_stream!
       @content = MapCombo.new
-    end
-
-    def check_for_collision_with(other : EntityGroup | Map)
-      if other.is_a?(Map)
-        Crystal2Day.error "Map-Map collisions are not implemented."
-      else
-        # No need to implement this twice
-        other.check_for_collision_with(self)
-      end
     end
 
     def generate_vertices(view_width : UInt32, view_height : UInt32)

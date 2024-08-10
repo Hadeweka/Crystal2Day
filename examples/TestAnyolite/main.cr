@@ -60,12 +60,15 @@ class CustomScene < CD::Scene
 
     Crystal2Day.custom_loading_path = "examples/TestAnyolite"
 
-    map = add_map("Map1", tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
-    map.set_as_stream!
-    map.content.load_from_text_file!("ExampleWorld.txt")
-    map.content.background_tile = 0
-    map.z = 2
-    map.pin
+    map = add_map("Map1")
+    
+    map_layer = map.add_layer(tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
+    map_layer.set_as_stream!
+    map_layer.content.load_from_text_file!("ExampleWorld.txt")
+    map_layer.content.background_tile = 0
+    map_layer.z = 2
+
+    map.pin_all_layers
 
     texture_bg = CD.rm.load_texture("ExampleSky.png")
     bg = CD::Sprite.new

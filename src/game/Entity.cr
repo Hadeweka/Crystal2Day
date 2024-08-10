@@ -376,10 +376,13 @@ module Crystal2Day
     end
 
     def check_for_collision_with(map : Map)
-      map_width = map.content.width
-      map_height = map.content.height
-      tile_width = map.tileset.tile_width
-      tile_height = map.tileset.tile_height
+      # TODO: Support more layers (and also check for none)
+      map_layer = map.layers[0]
+
+      map_width = map_layer.content.width
+      map_height = map_layer.content.height
+      tile_width = map_layer.tileset.tile_width
+      tile_height = map_layer.tileset.tile_height
 
       # TODO: Why 100 here?
 
@@ -414,16 +417,16 @@ module Crystal2Day
       # TODO: Better map collision system
 
       minimum_map_x.upto(maximum_map_x) do |x|
-        next if x < 0 || x >= map.content.width
+        next if x < 0 || x >= map_layer.content.width
         minimum_map_y.upto(maximum_map_y) do |y|
-          next if y < 0 || y >= map.content.height
-          tile_id = map.content.get_tile(x, y)
-          tile = map.tileset.get_tile(tile_id)
+          next if y < 0 || y >= map_layer.content.height
+          tile_id = map_layer.content.get_tile(x, y)
+          tile = map_layer.tileset.get_tile(tile_id)
           tile_shape = CollisionShapeBox.new(size: Crystal2Day.xy(tile_width, tile_height))
           tile_position = Crystal2Day.xy(x * tile_width, y * tile_height)
           @map_boxes.each do |shape_own|
             if Crystal2Day::Collider.test(shape_own, aligned_position, tile_shape, tile_position)
-              add_tile_collision_reference(tile, tile_position, map.tileset)
+              add_tile_collision_reference(tile, tile_position, map_layer.tileset)
             end
           end
         end
