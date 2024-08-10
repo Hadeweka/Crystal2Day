@@ -95,22 +95,28 @@ class CustomScene < CD::Scene
 
     map = add_map("Map1")
     
-    map_layer = map.add_layer(tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
-    map_layer.set_as_stream!
-    map_layer.content.load_from_text_file!("ExampleWorld.txt")
-    map_layer.content.background_tile = 0
-    map_layer.z = 2
+    map_layer_1 = map.add_layer(tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
+    map_layer_1.set_as_stream!
+    map_layer_1.content.load_from_text_file!("ExampleWorld.txt")
+    map_layer_1.content.background_tile = 0
+    map_layer_1.z = 2
+
+    map_layer_2 = map.add_layer(tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
+    map_layer_2.set_as_stream!
+    map_layer_2.content.load_from_text_file!("ExampleWorld2.txt")
+    map_layer_2.content.background_tile = 0
+    map_layer_2.z = 4
 
     map.pin_all_layers
 
     ui_camera = CD::Camera.new
-    ui_camera.z = 4
+    ui_camera.z = 5
     ui_camera.pin
 
     default_font = CD.rm.load_font(CD::Font.default_font_path, size: 50)
 
     some_text = CD::Text.new("FPS: 0", default_font)
-    some_text.z = 4
+    some_text.z = 5
     some_text.color = CD::Color.black
     some_text.position = CD.xy(0, 0)
 

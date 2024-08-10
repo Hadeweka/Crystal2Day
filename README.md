@@ -79,7 +79,7 @@ It is also possible to install these manually. Crystal2Day will automatically
 include these features, if they are found in the `lib` directory (for example
 after installing them as shards together with Crystal2Day).
 
-NOTE: ImGui currently only works on Windows AND you either need to copy both
+NOTE: For ImGui to work on Windows you need to copy both
 `cimgui.dll` and `cimgui.lib` from the Crystal2Day directory to your working directory or set the Crystal
 environmental variables so that they are included.
 
