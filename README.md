@@ -146,8 +146,6 @@ end
 * What is the best way to install additional features?
 * Should all shards be installed, but their postinstall hooks only be triggered when desired?
 * What examples should be made?
-* How can maps be improved?
-* How should multilayer map collision be solved (especially with tags)?
 * Could entities be bound to maps?
 
 ### Version 1.0.0
@@ -166,7 +164,6 @@ end
 * [ ] Custom shape designs (colors, textures)
 * [ ] Quadriliteral shapes
 * [ ] Map optimization using quadtrees
-* [ ] Multiple map parts
 * [ ] Loading scenes and related objects from JSON files
 * [ ] Also allow symbols as Crystal hash indices
 * [ ] Tiled support

@@ -105,7 +105,6 @@ class CustomScene < CD::Scene
     map_layer_2.set_as_stream!
     map_layer_2.content.load_from_text_file!("ExampleWorld2.txt")
     map_layer_2.content.background_tile = 0
-    map_layer_2.collision_disabled = true
     map_layer_2.z = 4
 
     map.pin_all_layers
