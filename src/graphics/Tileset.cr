@@ -9,7 +9,7 @@ module Crystal2Day
     # Hard-coded options
     property name : String = ""
     property dummy : Bool = false # Marks a tile as being in the tileset for animation purposes only (NOTE: It still has an individual Tile ID!)
-    property no_collision : Bool = false  # The tile will not be tested for any collisions
+    property no_collision : Bool = false  # The tile will not be tested for any collisions, TODO: Do we need this here?
     property animation_template : Crystal2Day::AnimationTemplate = Crystal2Day::AnimationTemplate.new # TODO: Implement this
 
     @flags = Hash(String, Bool).new(initial_capacity: FLAGS_INITIAL_CAPACITY)

@@ -176,10 +176,21 @@ module Crystal2Day
       end
 
       new_map = CD::Map.new
-      @maps[name] = new_map
       new_map.tileset = tileset.not_nil! if tileset
+      @maps[name] = new_map
 
       return new_map
+    end
+
+    def add_map_layer(map_name : String)
+      if !@maps[map_name]?
+        Crystal2Day.error "Map with name '#{map_name}' does not exist"
+      end
+
+      new_layer = CD::MapLayer.new
+      @maps[map_name].add_layer(new_layer)
+
+      return new_layer
     end
 
     # TODO: Methods to delete maps and UIs

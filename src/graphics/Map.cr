@@ -135,24 +135,59 @@ module Crystal2Day
     end
   end
 
-  class Map < Crystal2Day::Drawable
-    property content : MapContent | MapCombo = MapContent.new
+  class Map
+    LAYERS_INITIAL_CAPACITY = 8
+
+    property layers = Array(MapLayer).new(initial_capacity: LAYERS_INITIAL_CAPACITY)
     property tileset : Crystal2Day::Tileset = Crystal2Day::Tileset.new
 
-    property drawing_rect : Crystal2Day::Rect = Crystal2Day::Rect.new(width: Crystal2Day.current_window.width, height: Crystal2Day.current_window.height)
-
-    getter vertices = [] of LibSDL::Vertex
-
-    VERTEX_SIGNATURE = [0, 1, 2, 0, 2, 3]
-
-    def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
-      super()
+    def initialize
     end
 
-    # TODO: Maybe don't make this a Drawable and instead add methods like draw_layer, pin_layer and pin_all?
+    def add_layer(map_layer)
+      @layers.push(map_layer)
+      return map_layer
+    end
 
-    def set_as_stream!
-      @content = MapCombo.new
+    def add_layer
+      new_layer = MapLayer.new(self)
+      @layers.push(new_layer)
+      return new_layer
+    end
+
+    def draw_layer(layer_number : UInt8 = 0, offset : Coords = Crystal2Day.xy)
+      # TODO: Add safeguards
+      @layers[layer_number].draw(offset)
+    end
+
+    def pin_layer(layer_number : UInt8 = 0, offset : Coords = Crystal2Day.xy)
+      @layers[layer_number].pin(offset)
+    end
+
+    def unpin_layer(layer_number : UInt8 = 0, offset : Coords = Crystal2Day.xy)
+      @layers[layer_number].unpin(offset)
+    end
+
+    def number_of_layers
+      return @layers.size
+    end
+
+    def draw_all_layers(offset : Coords = Crystal2Day.xy)
+      0.upto(number_of_layers - 1) do |i|
+        @layers[i].draw(offset)
+      end
+    end
+
+    def pin_all_layers(offset : Coords = Crystal2Day.xy)
+      0.upto(number_of_layers - 1) do |i|
+        @layers[i].pin(offset)
+      end
+    end
+
+    def unpin_all_layers(offset : Coords = Crystal2Day.xy)
+      0.upto(number_of_layers - 1) do |i|
+        @layers[i].unpin(offset)
+      end
     end
 
     def check_for_collision_with(other : EntityGroup | Map)
@@ -163,30 +198,55 @@ module Crystal2Day
         other.check_for_collision_with(self)
       end
     end
+  end
+
+  class MapLayer < Crystal2Day::Drawable
+    property content : MapContent | MapCombo = MapContent.new
+    property parent_map : Map
+
+    property drawing_rect : Crystal2Day::Rect = Crystal2Day::Rect.new(width: Crystal2Day.current_window.width, height: Crystal2Day.current_window.height)
+
+    property collision_disabled : Bool = false
+
+    # TODO: Add collision check flag and priority system
+
+    getter vertices = [] of LibSDL::Vertex
+
+    VERTEX_SIGNATURE = [0, 1, 2, 0, 2, 3]
+
+    def initialize(@parent_map : Map, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+      super()
+    end
+
+    def set_as_stream!
+      @content = MapCombo.new
+    end
 
     def generate_vertices(view_width : UInt32, view_height : UInt32)
       @vertices = Array(LibSDL::Vertex).new(size: view_width * view_height * 6) {LibSDL::Vertex.new}
     end
 
     def reload_vertex_grid(offset : Coords)
-      view_width = (drawing_rect.width / @tileset.tile_width).ceil.to_u32 + 1
-      view_height = (drawing_rect.height / @tileset.tile_height).ceil.to_u32 + 1
+      tileset = @parent_map.tileset
+
+      view_width = (drawing_rect.width / tileset.tile_width).ceil.to_u32 + 1
+      view_height = (drawing_rect.height / tileset.tile_height).ceil.to_u32 + 1
 
       generate_vertices(view_width, view_height)
 
       pos_shift_x = @renderer.position_shift.x + offset.x
       pos_shift_y = @renderer.position_shift.y + offset.y
 
-      exact_shift_x = @drawing_rect.x + @drawing_rect.width / 2 - pos_shift_x - (view_width - 1) * (@tileset.tile_width / 2) - 1
-      exact_shift_y = @drawing_rect.y + @drawing_rect.height / 2 - pos_shift_y - (view_height - 1) * (@tileset.tile_height / 2) - 1
+      exact_shift_x = @drawing_rect.x + @drawing_rect.width / 2 - pos_shift_x - (view_width - 1) * (tileset.tile_width / 2) - 1
+      exact_shift_y = @drawing_rect.y + @drawing_rect.height / 2 - pos_shift_y - (view_height - 1) * (tileset.tile_height / 2) - 1
 
-      n_tiles_x = @tileset.texture.width // @tileset.tile_width
-      n_tiles_y = @tileset.texture.height // @tileset.tile_height
+      n_tiles_x = tileset.texture.width // tileset.tile_width
+      n_tiles_y = tileset.texture.height // tileset.tile_height
 
       0.upto(view_width - 1) do |x|
         0.upto(view_height - 1) do |y|
-          exact_actual_x = x.to_f32 + exact_shift_x / @tileset.tile_width
-          exact_actual_y = y.to_f32 + exact_shift_y / @tileset.tile_height
+          exact_actual_x = x.to_f32 + exact_shift_x / tileset.tile_width
+          exact_actual_y = y.to_f32 + exact_shift_y / tileset.tile_height
 
           # NOTE: The rounding here is to prevent floating point errors for now
           # This should work, but maybe there's a better solution
@@ -204,8 +264,8 @@ module Crystal2Day
             dx = (c == 1 || c == 2 || c == 4) ? 1 : 0
             dy = (c == 2 || c == 4 || c == 5) ? 1 : 0
 
-            vx = ((actual_x + dx) * @tileset.tile_width).to_f32 - @drawing_rect.x + pos_shift_x
-            vy = ((actual_y + dy) * @tileset.tile_height).to_f32 - @drawing_rect.y + pos_shift_y
+            vx = ((actual_x + dx) * tileset.tile_width).to_f32 - @drawing_rect.x + pos_shift_x
+            vy = ((actual_y + dy) * tileset.tile_height).to_f32 - @drawing_rect.y + pos_shift_y
 
             vtx = (tx + dx) / n_tiles_x
             vty = (ty + dy) / n_tiles_y
@@ -220,7 +280,7 @@ module Crystal2Day
 
     def draw_directly(offset : Coords)
       reload_vertex_grid(offset)
-      LibSDL.render_geometry(@tileset.texture.renderer_data, @tileset.texture.data, @vertices, @vertices.size, nil, 0)
+      LibSDL.render_geometry(@parent_map.tileset.texture.renderer_data, @parent_map.tileset.texture.data, @vertices, @vertices.size, nil, 0)
     end
   end
 end

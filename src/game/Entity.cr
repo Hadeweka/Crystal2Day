@@ -376,17 +376,16 @@ module Crystal2Day
     end
 
     def check_for_collision_with(map : Map)
-      map_width = map.content.width
-      map_height = map.content.height
-      tile_width = map.tileset.tile_width
-      tile_height = map.tileset.tile_height
+      return if !@bounding_boxes
 
-      # TODO: Why 100 here?
+      tileset = map.tileset
+      tile_width = tileset.tile_width
+      tile_height = tileset.tile_height
 
-      minimum_x = (map_width + 100) * tile_width
-      minimum_y = (map_height + 100) * tile_height
-      maximum_x = -100.0 * tile_width
-      maximum_y = -100.0 * tile_height
+      minimum_x = 1.0 / 0.0
+      minimum_y = 1.0 / 0.0
+      maximum_x = -1.0 / 0.0
+      maximum_y = -1.0 / 0.0
 
       @bounding_boxes.each do |box|
         box_corner_low = @position + box.position
@@ -411,19 +410,35 @@ module Crystal2Day
 
       # TODO: Add map shifts
 
-      # TODO: Better map collision system
+      # TODO: More optimized map collision system
 
       minimum_map_x.upto(maximum_map_x) do |x|
-        next if x < 0 || x >= map.content.width
+        next if x < 0
         minimum_map_y.upto(maximum_map_y) do |y|
-          next if y < 0 || y >= map.content.height
-          tile_id = map.content.get_tile(x, y)
-          tile = map.tileset.get_tile(tile_id)
-          tile_shape = CollisionShapeBox.new(size: Crystal2Day.xy(tile_width, tile_height))
-          tile_position = Crystal2Day.xy(x * tile_width, y * tile_height)
-          @map_boxes.each do |shape_own|
-            if Crystal2Day::Collider.test(shape_own, aligned_position, tile_shape, tile_position)
-              add_tile_collision_reference(tile, tile_position, map.tileset)
+          next if y < 0
+
+          tile_found = false
+          map.layers.each do |layer|
+            next if layer.collision_disabled
+            break if tile_found
+
+            map_width = layer.content.width
+            map_height = layer.content.height
+
+            next if x >= layer.content.width || y >= layer.content.height
+
+            tile_id = layer.content.get_tile(x, y)
+            tile = tileset.get_tile(tile_id)
+
+            next if tile.no_collision
+
+            tile_shape = CollisionShapeBox.new(size: Crystal2Day.xy(tile_width, tile_height))
+            tile_position = Crystal2Day.xy(x * tile_width, y * tile_height)
+            @map_boxes.each do |shape_own|
+              if Crystal2Day::Collider.test(shape_own, aligned_position, tile_shape, tile_position)
+                add_tile_collision_reference(tile, tile_position, tileset)
+                tile_found = true
+              end
             end
           end
         end
