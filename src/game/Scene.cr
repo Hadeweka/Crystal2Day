@@ -170,24 +170,24 @@ module Crystal2Day
       @entity_groups[group].add_entity(type, position, initial_param)
     end
 
-    def add_map(name : String)
+    def add_map(name : String, tileset : Tileset?)
       if @maps[name]?
         Crystal2Day.warning "Already existing map with name '#{name}' will be overwritten"
       end
 
       new_map = CD::Map.new
+      new_map.tileset = tileset.not_nil! if tileset
       @maps[name] = new_map
 
       return new_map
     end
 
-    def add_map_layer(map_name : String, tileset : Tileset?)
+    def add_map_layer(map_name : String)
       if !@maps[map_name]?
         Crystal2Day.error "Map with name '#{map_name}' does not exist"
       end
 
       new_layer = CD::MapLayer.new
-      new_layer.tileset = tileset.not_nil! if tileset
       @maps[map_name].add_layer(new_layer)
 
       return new_layer

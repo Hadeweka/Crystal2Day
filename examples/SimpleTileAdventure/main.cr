@@ -93,18 +93,19 @@ class CustomScene < CD::Scene
     # Physics steps need to be called manually, as we have no true velocities in this scenario
     Crystal2Day.number_of_physics_steps = 1
 
-    map = add_map("Map1")
+    map = add_map("Map1", tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
     
-    map_layer_1 = map.add_layer(tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
+    map_layer_1 = map.add_layer
     map_layer_1.set_as_stream!
     map_layer_1.content.load_from_text_file!("ExampleWorld.txt")
     map_layer_1.content.background_tile = 0
     map_layer_1.z = 2
 
-    map_layer_2 = map.add_layer(tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
+    map_layer_2 = map.add_layer
     map_layer_2.set_as_stream!
     map_layer_2.content.load_from_text_file!("ExampleWorld2.txt")
     map_layer_2.content.background_tile = 0
+    map_layer_2.collision_disabled = true
     map_layer_2.z = 4
 
     map.pin_all_layers
