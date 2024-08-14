@@ -93,30 +93,15 @@ class CustomScene < CD::Scene
     # Physics steps need to be called manually, as we have no true velocities in this scenario
     Crystal2Day.number_of_physics_steps = 1
 
-    map_2 = add_map("Map2")
-    map_2.load_from_tiled_file!("ExampleMap.tmx")
-    map_2.layers[0].z = 2
-    map_2.layers[1].z = 4
-    map_2.layers[0].content.background_tile = 1
-    map_2.pin_all_layers
+    tileset = CD::Tileset.new
+    tileset.load_from_tiled_file!("ExampleTileset.tsx")
 
-    puts map_2.tileset.inspect
-
-    #map = add_map("Map1", tileset: CD::Tileset.from_json_file("ExampleTileset.json"))
-    
-    #map_layer_1 = map.add_layer
-    #map_layer_1.set_as_stream!
-    #map_layer_1.content.load_from_text_file!("ExampleWorld.txt")
-    #map_layer_1.content.background_tile = 0
-    #map_layer_1.z = 2
-
-    #map_layer_2 = map.add_layer
-    #map_layer_2.set_as_stream!
-    #map_layer_2.content.load_from_text_file!("ExampleWorld2.txt")
-    #map_layer_2.content.background_tile = 0
-    #map_layer_2.z = 4
-
-    #map.pin_all_layers
+    map = add_map("Map1")
+    map.stream_from_file!("ExampleWorld.json", tileset)
+    map.layers[0].z = 2
+    map.layers[1].z = 4
+    map.layers[0].content.background_tile = 4
+    map.pin_all_layers
 
     ui_camera = CD::Camera.new
     ui_camera.z = 5
@@ -145,7 +130,7 @@ class CustomScene < CD::Scene
     CD.im.set_key_table_entry("left", [CD::Keyboard::K_LEFT, CD::Keyboard::K_A])
     CD.im.set_key_table_entry("right", [CD::Keyboard::K_RIGHT, CD::Keyboard::K_D])
 
-    self.collision_matrix.link(entity_groups["PlayerGroup"], maps["Map2"])
+    self.collision_matrix.link(entity_groups["PlayerGroup"], maps["Map1"])
   end
 
   def update

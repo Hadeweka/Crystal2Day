@@ -143,7 +143,7 @@ end
 
 #### Urgent todo list
 
-* [ ] Enable streaming maps from Tiled files
+Currently empty
 
 #### Open design questions:
 
@@ -153,6 +153,7 @@ end
 * What examples should be made?
 * Could entities be bound to maps?
 * How should tilesets with overlapping segments be implemented?
+* Is the current map streaming way really okay?
 
 ### Version 1.0.0
 

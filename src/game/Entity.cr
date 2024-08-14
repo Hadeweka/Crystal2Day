@@ -413,9 +413,7 @@ module Crystal2Day
       # TODO: More optimized map collision system
 
       minimum_map_x.upto(maximum_map_x) do |x|
-        next if x < 0
         minimum_map_y.upto(maximum_map_y) do |y|
-          next if y < 0
 
           tile_found = false
           map.layers.reverse.each do |layer|
@@ -424,8 +422,6 @@ module Crystal2Day
 
             map_width = layer.content.width
             map_height = layer.content.height
-
-            next if x >= layer.content.width || y >= layer.content.height
 
             tile_id = layer.content.get_tile(x, y)
             tile = tileset.get_tile(tile_id)

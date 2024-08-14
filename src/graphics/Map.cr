@@ -3,74 +3,138 @@
 module Crystal2Day
   alias TileID = UInt32
 
-  class MapCombo
-    getter total_width_in_chunks : UInt32 = 0
-    getter total_height_in_chunks : UInt32 = 0
-    getter chunk_width : UInt32 = 0
-    getter chunk_height : UInt32 = 0
-    getter number_of_maps : UInt32 = 0
-    getter chunks : Array(Array(UInt32)) = [] of Array(UInt32)
-    getter map_list : Array(MapContent) = [] of MapContent
-    getter map_starting_points : Array(Tuple(UInt32, UInt32)) = [] of Tuple(UInt32, UInt32)
+  struct MapComboInfo
+    property total_width_in_chunks : UInt32 = 0
+    property total_height_in_chunks : UInt32 = 0
+    property chunk_width : UInt32 = 0
+    property chunk_height : UInt32 = 0
+    property number_of_maps : UInt32 = 0
+    property chunks : Array(Array(UInt32)) = [] of Array(UInt32)
+    property map_starting_points : Array(Tuple(UInt32, UInt32)) = [] of Tuple(UInt32, UInt32)
 
-    property background_tile : TileID = 0u32  # NOTE: This is a background tile for when no chunk is found
+    def intitialize
+    end
+
+    def get_from_parsed_json!(parsed_stream : JSON::Any)
+      @total_width_in_chunks = parsed_stream["total_width_in_chunks"].as_i.to_u32
+      @total_height_in_chunks = parsed_stream["total_height_in_chunks"].as_i.to_u32
+      @chunk_width = parsed_stream["chunk_width"].as_i.to_u32
+      @chunk_height = parsed_stream["chunk_height"].as_i.to_u32
+      @chunks = parsed_stream["data"].as_a.map {|row| row.as_a.map{|element| element.as_i.to_u32}}
+      
+      map_names = parsed_stream["maps"].as_a.map {|name| name.as_s}
+
+      @number_of_maps = map_names.size.to_u32
+      @map_starting_points = Array(Tuple(UInt32, UInt32)).new(size: @number_of_maps, value: {@total_width_in_chunks, @total_height_in_chunks})
+
+      0.upto(@number_of_maps - 1) do |i|
+        0.upto(@total_height_in_chunks - 1) do |current_chunk_y|
+          0.upto(@total_width_in_chunks - 1) do |current_chunk_x|
+            map_index = @chunks[current_chunk_y][current_chunk_x]
+            if map_index != 0
+              old_starting_point = @map_starting_points[map_index - 1]
+              lowest_starting_x = {old_starting_point[0], current_chunk_x}.min.to_u32
+              lowest_starting_y = {old_starting_point[1], current_chunk_y}.min.to_u32
+              @map_starting_points[map_index - 1] = {lowest_starting_x, lowest_starting_y}
+            end
+          end
+        end
+      end
+    end
+  end
+
+  class MapCombo
+    getter background_tile : TileID = 0u32  # NOTE: This is a background tile for when no chunk is found
+    property combo_info : MapComboInfo = MapComboInfo.new
+    property map_list : Array(MapContent) = [] of MapContent
 
     def width
-      @total_width_in_chunks * @chunk_width
+      @combo_info.total_width_in_chunks * @combo_info.chunk_width
     end
 
     def height
-      @total_height_in_chunks * @chunk_height
+      @combo_info.total_height_in_chunks * @combo_info.chunk_height
+    end
+
+    def background_tile=(value : TileID)
+      @background_tile = value
+      @map_list.each {|map_content| map_content.background_tile = @background_tile}
     end
 
     def get_tile(x : Int32, y : Int32)
-      chunk_x = x // chunk_width
-      chunk_y = y // chunk_height
-      if chunk_x < 0 || chunk_y >= @total_width_in_chunks || chunk_y < 0 || chunk_y >= @total_height_in_chunks
+      chunk_x = x // @combo_info.chunk_width
+      chunk_y = y // @combo_info.chunk_height
+      if chunk_x < 0 || chunk_x >= @combo_info.total_width_in_chunks || chunk_y < 0 || chunk_y >= @combo_info.total_height_in_chunks
         return @background_tile
       else
-        chunk = @chunks[chunk_y][chunk_x]
+        chunk = @combo_info.chunks[chunk_y][chunk_x]
         if chunk == 0
           return @background_tile
         else
-          relative_x = x - @map_starting_points[chunk - 1][0] * @chunk_width
-          relative_y = y - @map_starting_points[chunk - 1][1] * @chunk_height
+          relative_x = x - @combo_info.map_starting_points[chunk - 1][0] * @combo_info.chunk_width
+          relative_y = y - @combo_info.map_starting_points[chunk - 1][1] * @combo_info.chunk_height
           return @map_list[chunk - 1].get_tile(relative_x, relative_y)
         end
       end
     end
 
     def load_from_tiled_layer!(parsed_layer : Tiled::ParsedLayer)
-      # TODO
+      # TODO: Error as this should not be implemented
     end
 
-    def load_from_text_file!(filename : String)
+    # TODO: Add loading routine for non-tiled maps (or don't)
+
+    # NOTE: Only use this to stream single layers - might become deprecated eventually
+    def stream_from_file!(filename : String)
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
+      File.open(full_filename, "r") do |f|
+        parsed_stream = JSON.parse(f)
+
+        combo_info = MapComboInfo.new
+        combo_info.get_from_parsed_json!(parsed_stream)
+        
+        map_names = parsed_stream["maps"].as_a.map {|name| name.as_s}
+        parsed_maps = map_names.map {|map_name| Tiled.parse_map(Crystal2Day.convert_to_absolute_path(map_name))}
+
+        @combo_info = combo_info
+        @map_list = Array(MapContent).new(initial_capacity: combo_info.number_of_maps)
+
+        0.upto(map_names.size - 1) do |i|
+          map_content = MapContent.new
+          map_content.load_from_tiled_layer!(parsed_maps[i].layers[layer_id])
+          @map_list.push map_content
+        end
+      end
+    end
+
+    def load_from_legacy_text_file!(filename : String)
       full_filename = Crystal2Day.convert_to_absolute_path(filename)
 
       line_number = 0
       File.each_line(full_filename) do |line|
         if line_number == 0
         elsif line_number == 1
-          @total_width_in_chunks = line.split[0].to_u32
-          @total_height_in_chunks = line.split[1].to_u32
-          @chunk_width = line.split[2].to_u32
-          @chunk_height = line.split[3].to_u32
-          @number_of_maps = line.split[4].to_u32
-          @chunks = Array(Array(UInt32)).new(initial_capacity: @total_height_in_chunks)
-          @map_list = Array(MapContent).new(initial_capacity: @number_of_maps)
-          @map_starting_points = Array(Tuple(UInt32, UInt32)).new(size: @number_of_maps, value: {@total_width_in_chunks, @total_height_in_chunks})
-        elsif line_number < 2 + @total_height_in_chunks
+          @combo_info.total_width_in_chunks = line.split[0].to_u32
+          @combo_info.total_height_in_chunks = line.split[1].to_u32
+          @combo_info.chunk_width = line.split[2].to_u32
+          @combo_info.chunk_height = line.split[3].to_u32
+          @combo_info.number_of_maps = line.split[4].to_u32
+          @combo_info.chunks = Array(Array(UInt32)).new(initial_capacity: @combo_info.total_height_in_chunks)
+          @map_list = Array(MapContent).new(initial_capacity: @combo_info.number_of_maps)
+          @combo_info.map_starting_points = Array(Tuple(UInt32, UInt32)).new(size: @combo_info.number_of_maps, value: {@combo_info.total_width_in_chunks, @combo_info.total_height_in_chunks})
+        elsif line_number < 2 + @combo_info.total_height_in_chunks
           current_chunk_y = line_number - 2
           split_line = line.split
-          @chunks.push Array(UInt32).new(initial_capacity: @total_width_in_chunks)
+          @combo_info.chunks.push Array(UInt32).new(initial_capacity: @combo_info.total_width_in_chunks)
           split_line.each_with_index do |split_part, current_chunk_x|
             map_index = split_part.to_u32
-            @chunks[-1].push map_index
+            @combo_info.chunks[-1].push map_index
             if map_index != 0
-              old_starting_point = @map_starting_points[map_index - 1]
+              old_starting_point = @combo_info.map_starting_points[map_index - 1]
               lowest_starting_x = {old_starting_point[0], current_chunk_x}.min.to_u32
               lowest_starting_y = {old_starting_point[1], current_chunk_y}.min.to_u32
-              @map_starting_points[map_index - 1] = {lowest_starting_x, lowest_starting_y}
+              @combo_info.map_starting_points[map_index - 1] = {lowest_starting_x, lowest_starting_y}
             end
           end
         else
@@ -166,6 +230,8 @@ module Crystal2Day
     end
 
     def load_from_tiled_file!(filename : String, given_tileset : Tileset? = nil)
+      @layers.clear
+
       full_filename = Crystal2Day.convert_to_absolute_path(filename)
 
       parsed_map = Tiled.parse_map(full_filename)
@@ -181,6 +247,40 @@ module Crystal2Day
         new_layer = MapLayer.new(self)
         new_layer.content.load_from_tiled_layer!(parsed_layer)
         add_layer(new_layer)
+      end
+    end
+
+    def stream_from_file!(filename : String, @tileset : Tileset)
+      @layers.clear
+      
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
+      File.open(full_filename, "r") do |f|
+        parsed_stream = JSON.parse(f)
+
+        number_of_layers = parsed_stream["number_of_layers"].as_i.to_u32
+
+        combo_info = MapComboInfo.new
+        combo_info.get_from_parsed_json!(parsed_stream)
+        
+        map_names = parsed_stream["maps"].as_a.map {|name| name.as_s}
+        parsed_maps = map_names.map {|map_name| Tiled.parse_map(Crystal2Day.convert_to_absolute_path(map_name))}
+
+        number_of_layers.times do |layer_id|
+          new_layer = MapLayer.new(self)
+          new_layer.set_as_stream!
+
+          new_layer.content.as(MapCombo).combo_info = combo_info
+          new_layer.content.as(MapCombo).map_list = Array(MapContent).new(initial_capacity: combo_info.number_of_maps)
+
+          0.upto(map_names.size - 1) do |i|
+            map_content = MapContent.new
+            map_content.load_from_tiled_layer!(parsed_maps[i].layers[layer_id])
+            new_layer.content.as(MapCombo).map_list.push map_content
+          end
+
+          add_layer(new_layer)
+        end
       end
     end
 
@@ -247,8 +347,6 @@ module Crystal2Day
     property drawing_rect : Crystal2Day::Rect = Crystal2Day::Rect.new(width: Crystal2Day.current_window.width, height: Crystal2Day.current_window.height)
 
     property collision_disabled : Bool = false
-
-    # TODO: Add collision check flag and priority system
 
     getter vertices = [] of LibSDL::Vertex
 

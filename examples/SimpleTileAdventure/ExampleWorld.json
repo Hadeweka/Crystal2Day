@@ -1,0 +1,17 @@
+{
+  "name": "Example World",
+  "number_of_layers": 2,
+  "total_width_in_chunks": 12,
+  "total_height_in_chunks": 4,
+  "chunk_width": 5,
+  "chunk_height": 5,
+  "maps": [
+    "ExampleMap.tmx"
+  ],
+  "data": [
+    [0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1],
+    [0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
+  ]
+}

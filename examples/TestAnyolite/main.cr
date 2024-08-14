@@ -64,7 +64,7 @@ class CustomScene < CD::Scene
     
     map_layer = map.add_layer
     map_layer.set_as_stream!
-    map_layer.content.load_from_text_file!("ExampleWorld.txt")
+    map_layer.content.load_from_legacy_text_file!("ExampleWorld.txt")
     map_layer.content.background_tile = 0
     map_layer.z = 2
 
