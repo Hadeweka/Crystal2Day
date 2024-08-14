@@ -143,7 +143,7 @@ end
 
 #### Urgent todo list
 
-Currently empty
+* [ ] Add system to differentiate between file formats
 
 #### Open design questions:
 
