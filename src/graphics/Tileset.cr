@@ -103,5 +103,38 @@ module Crystal2Day
     def tiles
       @tiles
     end
+
+    def load_from_tiled_file!(filename : String, given_texture : Texture? = nil)
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
+      parsed_tileset = Tiled.parse_tileset(full_filename)
+
+      @tile_width = parsed_tileset.tile_width
+      @tile_height = parsed_tileset.tile_height
+
+      if given_texture
+        @texture = given_texture
+      else
+        @texture = Crystal2Day.rm.load_texture(Crystal2Day.convert_to_absolute_path(parsed_tileset.image_file))
+      end
+
+      parsed_tileset.tile_count.times do |tile_id|
+        new_tile = Tile.new
+        
+        new_tile.name = "T_#{tile_id}"
+
+        parsed_tileset.tile_properties[tile_id].properties.each do |name, prop|
+          if name == "no_collision"
+            new_tile.no_collision = true
+          elsif prop.is_a?(Bool)
+            new_tile.set_flag(name, prop)
+          else
+            # Currently unsupported, might receive support in the future
+          end
+        end
+        
+        add_tile(new_tile)
+      end
+    end
   end
 end

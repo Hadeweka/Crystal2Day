@@ -8,6 +8,8 @@ require "sdl-crystal-bindings/sdl-mixer-bindings"
 require "sdl-crystal-bindings/sdl-image-bindings"
 require "sdl-crystal-bindings/sdl-ttf-bindings"
 
+require "tiled-crystal"
+
 require "./config/AnyoliteConfig.cr"
 require "./config/ImguiConfig.cr"
 

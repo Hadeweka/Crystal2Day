@@ -130,6 +130,7 @@ end
 * Support for multiple windows
 * Framerate limiter
 * Maps and tilesets
+* Basic support for maps created with the Tiled editor
 * 2D collision routines
 * Entity hook system
 * Optional scripting using Anyolite
@@ -140,6 +141,10 @@ end
 * Special plugin system
 * Imgui support
 
+#### Urgent todo list
+
+* [ ] Enable streaming maps from Tiled files
+
 #### Open design questions:
 
 * How should the examples be structured?
@@ -147,6 +152,7 @@ end
 * Should all shards be installed, but their postinstall hooks only be triggered when desired?
 * What examples should be made?
 * Could entities be bound to maps?
+* How should tilesets with overlapping segments be implemented?
 
 ### Version 1.0.0
 
@@ -166,7 +172,6 @@ end
 * [ ] Map optimization using quadtrees
 * [ ] Loading scenes and related objects from JSON files
 * [ ] Also allow symbols as Crystal hash indices
-* [ ] Tiled support
 * [ ] Particle generator
 * [ ] Hitshapes and hurtshapes
 * [ ] Bytecode loading

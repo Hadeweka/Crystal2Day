@@ -40,6 +40,10 @@ module Crystal2Day
       end
     end
 
+    def load_from_tiled_layer!(parsed_layer : Tiled::ParsedLayer)
+      # TODO
+    end
+
     def load_from_text_file!(filename : String)
       full_filename = Crystal2Day.convert_to_absolute_path(filename)
 
@@ -72,6 +76,8 @@ module Crystal2Day
         else
           unless line.strip.empty?
             @map_list.push MapContent.new
+            
+            # TODO: Enable loading from Tiled files as well!
             @map_list[-1].load_from_text_file!(line.strip)
           end
         end
@@ -104,6 +110,21 @@ module Crystal2Day
 
         line.each do |element|
           @tiles[-1].push element
+        end
+      end
+    end
+
+    def load_from_tiled_layer!(parsed_layer : Tiled::ParsedLayer)
+      @width = parsed_layer.width
+      @height = parsed_layer.height
+
+      @tiles = Array(Array(TileID)).new(initial_capacity: @height)
+
+      0.upto(@height - 1) do |ty|
+        @tiles.push Array(TileID).new(initial_capacity: @width)
+        0.upto(@width - 1) do |tx|
+          parsed_tile = parsed_layer.content[ty * @width + tx]
+          @tiles[ty].push TileID.new(parsed_tile == 0 ? @background_tile : parsed_tile - 1)
         end
       end
     end
@@ -142,6 +163,25 @@ module Crystal2Day
     property tileset : Crystal2Day::Tileset = Crystal2Day::Tileset.new
 
     def initialize
+    end
+
+    def load_from_tiled_file!(filename : String, given_tileset : Tileset? = nil)
+      full_filename = Crystal2Day.convert_to_absolute_path(filename)
+
+      parsed_map = Tiled.parse_map(full_filename)
+
+      # TODO: This might cause issues, test this at some point
+      if given_tileset
+        @tileset = given_tileset
+      else
+        @tileset.load_from_tiled_file!(Crystal2Day.convert_to_absolute_path(parsed_map.tileset_file))
+      end
+
+      parsed_map.layers.each do |parsed_layer|
+        new_layer = MapLayer.new(self)
+        new_layer.content.load_from_tiled_layer!(parsed_layer)
+        add_layer(new_layer)
+      end
     end
 
     def add_layer(map_layer)

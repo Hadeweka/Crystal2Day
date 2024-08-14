@@ -170,7 +170,7 @@ module Crystal2Day
       @entity_groups[group].add_entity(type, position, initial_param)
     end
 
-    def add_map(name : String, tileset : Tileset?)
+    def add_map(name : String, tileset : Tileset? = nil)
       if @maps[name]?
         Crystal2Day.warning "Already existing map with name '#{name}' will be overwritten"
       end

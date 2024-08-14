@@ -418,7 +418,7 @@ module Crystal2Day
           next if y < 0
 
           tile_found = false
-          map.layers.each do |layer|
+          map.layers.reverse.each do |layer|
             next if layer.collision_disabled
             break if tile_found
 
