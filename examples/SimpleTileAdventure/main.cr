@@ -118,7 +118,7 @@ class CustomScene < CD::Scene
     
     CD.db.load_entity_type_from_file("ExampleEntityStatePlayer.json")
     add_entity_group("PlayerGroup", auto_update: true, auto_physics: true, auto_events: true, auto_draw: true, capacity: 1)
-    add_entity(group: "PlayerGroup", type: "Player", position: CD.xy(625, -25))
+    add_entity(group: "PlayerGroup", type: "Player", position: CD.xy(425, 125))
 
     camera = CD::Camera.new
     camera.follow_entity(entity_groups["PlayerGroup"].get_entity(0), shift: CD.xy(-WIDTH/2 + 25, -HEIGHT/2 + 25))
