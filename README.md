@@ -143,7 +143,7 @@ end
 
 #### Urgent todo list
 
-* [ ] Add system to differentiate between file formats
+[ ] Tile animations
 
 #### Open design questions:
 
