@@ -35,6 +35,8 @@ module Crystal2Day
     property tile_height : UInt32 = 50u32
     @tiles : Array(Tile) = Array(Tile).new(initial_capacity: INITIAL_CAPACITY)
 
+    property animated_tiles : Array(Tile) = Array(Tile).new(initial_capacity: INITIAL_CAPACITY)
+
     {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
       @refs : Array(Anyolite::RbRef) = Array(Anyolite::RbRef).new(initial_capacity: INITIAL_CAPACITY)
     {% end %}
@@ -73,6 +75,12 @@ module Crystal2Day
           end
         end
       end
+    end
+
+    def calculate_animated_tiles(time : UInt32)
+      # TODO: Set animated_tiles array to relevant values
+      # TODO: Parse this information from the Tiled files to the tilesets
+      # TODO: Put this all together
     end
 
     def link_texture(texture : Crystal2Day::Texture)
@@ -132,6 +140,17 @@ module Crystal2Day
             # Currently unsupported, might receive support in the future
           end
         end
+
+        frame_time = nil
+        parsed_tileset.tile_animations[tile_id].each do |tile_anim|
+          if frame_time && tile_anim.duration != frame_time
+            Crystal2Day.warning "Different tile animation frame times are currently not supported."
+          else
+            frame_time = tile_anim.duration if !frame_time
+          end
+        end
+        
+        # TODO: Add animations
         
         add_tile(new_tile)
       end

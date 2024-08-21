@@ -143,7 +143,7 @@ end
 
 #### Urgent todo list
 
-[ ] Tile animations
+* [ ] Update animation system to support multiple frames with entirely different positions
 
 #### Open design questions:
 
