@@ -66,6 +66,10 @@ module Crystal2Day
     end
 
     def main_update
+      # TODO: Maybe rearrange the order if necessary
+    
+      @maps.each_value {|map| map.update}
+
       update
 
       @update_groups.each {|member| member.update}

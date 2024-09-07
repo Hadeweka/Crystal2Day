@@ -423,7 +423,7 @@ module Crystal2Day
             map_width = layer.content.width
             map_height = layer.content.height
 
-            tile_id = layer.content.get_tile(x, y)
+            tile_id = layer.get_tile(x, y)
             tile = tileset.get_tile(tile_id)
 
             next if tile.no_collision

@@ -82,6 +82,10 @@ module Crystal2Day
       # TODO: Error as this should not be implemented
     end
 
+    def update_animations(tileset : Tileset)
+      @map_list.each{|content| content.update_animations(tileset)}
+    end
+
     # TODO: Add loading routine for non-tiled maps (or don't)
 
     # NOTE: Only use this to stream single layers - might become deprecated eventually
@@ -330,6 +334,10 @@ module Crystal2Day
       end
     end
 
+    def update
+      @layers.each{|layer| layer.update}
+    end
+
     def check_for_collision_with(other : EntityGroup | Map)
       if other.is_a?(Map)
         Crystal2Day.error "Map-Map collisions are not implemented."
@@ -348,6 +356,9 @@ module Crystal2Day
 
     property collision_disabled : Bool = false
 
+    property animated_tiles : Array(TileID) = Array(TileID).new(initial_capacity: Tileset::INITIAL_CAPACITY)
+    property frame_counter : UInt32 = 0
+
     getter vertices = [] of LibSDL::Vertex
 
     VERTEX_SIGNATURE = [0, 1, 2, 0, 2, 3]
@@ -362,6 +373,18 @@ module Crystal2Day
 
     def generate_vertices(view_width : UInt32, view_height : UInt32)
       @vertices = Array(LibSDL::Vertex).new(size: view_width * view_height * 6) {LibSDL::Vertex.new}
+    end
+
+    def get_tile(x : Int32, y : Int32)
+      @animated_tiles[@content.get_tile(x, y)]
+    end
+
+    def update_animations
+      tileset = @parent_map.tileset
+      @animated_tiles = (0..tileset.size - 1).map{|tile_id| tile_id.to_u32.as(TileID)}
+      # TODO: Parse animation information from the Tiled files to the tilesets
+      # TODO: Calculate this all properly
+      @frame_counter &+= 1  # NOTE: If this actually overflows, maybe use an UInt64 instead
     end
 
     def reload_vertex_grid(offset : Coords)
@@ -391,12 +414,10 @@ module Crystal2Day
           actual_x = exact_actual_x.round(2).floor.to_i32
           actual_y = exact_actual_y.round(2).floor.to_i32
 
-          tile_id = @content.get_tile(actual_x, actual_y)
+          tile_id = get_tile(actual_x, actual_y)
 
-          actual_tile_id = tile_id  # TODO: Animations
-
-          tx = actual_tile_id % n_tiles_x
-          ty = actual_tile_id // n_tiles_x
+          tx = tile_id % n_tiles_x
+          ty = tile_id // n_tiles_x
 
           0u64.upto(5) do |c|
             dx = (c == 1 || c == 2 || c == 4) ? 1 : 0
@@ -414,6 +435,10 @@ module Crystal2Day
           end
         end
       end
+    end
+
+    def update
+      update_animations
     end
 
     def draw_directly(offset : Coords)
