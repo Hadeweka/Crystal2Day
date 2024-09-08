@@ -47,6 +47,8 @@ end
 
 CD.db.add_entity_proc("TileCollision") do |entity|
   entity.each_tile_collision do |collision|
+    next if Crystal2Day.im.key_down?("debug_pass_through")
+
     tile_width = collision.tileset.tile_width
     tile_height = collision.tileset.tile_height
 
@@ -129,6 +131,7 @@ class CustomScene < CD::Scene
     CD.im.set_key_table_entry("down", [CD::Keyboard::K_DOWN, CD::Keyboard::K_S])
     CD.im.set_key_table_entry("left", [CD::Keyboard::K_LEFT, CD::Keyboard::K_A])
     CD.im.set_key_table_entry("right", [CD::Keyboard::K_RIGHT, CD::Keyboard::K_D])
+    CD.im.set_key_table_entry("debug_pass_through", [CD::Keyboard::K_LCTRL, CD::Keyboard::K_RCTRL]) if CD.debug?
 
     self.collision_matrix.link(entity_groups["PlayerGroup"], maps["Map1"])
   end
@@ -154,7 +157,7 @@ class CustomScene < CD::Scene
   end
 end
 
-CD.run do
+CD.run(debug: true) do
   CD::Window.new(title: "Simple Tile Adventure", w: WIDTH, h: HEIGHT)
   CD.scene = CustomScene.new
   CD.main_routine
