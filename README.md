@@ -143,7 +143,7 @@ end
 
 #### Urgent todo list
 
-* [ ] Update animation system to support multiple frames with entirely different positions
+Currently none
 
 #### Open design questions:
 
@@ -166,11 +166,10 @@ end
 #### Features
 
 * [ ] Game controller support
-* [ ] Tile animation
 * [ ] Entity parent-children system with memory management
 * [ ] Custom shape designs (colors, textures)
 * [ ] Quadriliteral shapes
-* [ ] Map optimization using quadtrees
+* [ ] Map entity group optimization using quadtrees
 * [ ] Loading scenes and related objects from JSON files
 * [ ] Also allow symbols as Crystal hash indices
 * [ ] Particle generator
@@ -180,5 +179,4 @@ end
 * [ ] Data serializing
 * [ ] Data obfuscation
 * [ ] Animation phase shift patterns
-* [ ] Collision routines for layered maps
 * [ ] Various optimizations

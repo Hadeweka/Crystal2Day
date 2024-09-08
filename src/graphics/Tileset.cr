@@ -10,7 +10,6 @@ module Crystal2Day
     property name : String = ""
     property dummy : Bool = false # Marks a tile as being in the tileset for animation purposes only (NOTE: It still has an individual Tile ID!)
     property no_collision : Bool = false  # The tile will not be tested for any collisions, TODO: Do we need this here?
-    property animation_template : Crystal2Day::AnimationTemplate = Crystal2Day::AnimationTemplate.new # TODO: Implement this
 
     @flags = Hash(String, Bool).new(initial_capacity: FLAGS_INITIAL_CAPACITY)
     # TODO: More options in other data formats
@@ -27,13 +26,24 @@ module Crystal2Day
     end
   end
 
+  struct TileAnimationFrame
+    property tile : TileID = 0
+    property duration : UInt32 = 0
+    property cumulative_duration : UInt32 = 0
+
+    def initialize(@tile : TileID, @duration : UInt32, @cumulative_duration : UInt32)
+    end
+  end
+
   class Tileset
     INITIAL_CAPACITY = 256
 
     getter texture : Crystal2Day::Texture = Crystal2Day::Texture.new
     property tile_width : UInt32 = 50u32
     property tile_height : UInt32 = 50u32
-    @tiles : Array(Tile) = Array(Tile).new(initial_capacity: INITIAL_CAPACITY)
+    
+    property tiles : Array(Tile) = Array(Tile).new(initial_capacity: INITIAL_CAPACITY)
+    property animations : Array(Array(TileAnimationFrame)) = Array(Array(TileAnimationFrame)).new(initial_capacity: INITIAL_CAPACITY)
 
     {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
       @refs : Array(Anyolite::RbRef) = Array(Anyolite::RbRef).new(initial_capacity: INITIAL_CAPACITY)
@@ -104,6 +114,10 @@ module Crystal2Day
       @tiles
     end
 
+    def max_duration(tile_id : TileID)
+      @animations[tile_id].empty? ? 1 : @animations[tile_id].last.cumulative_duration
+    end
+
     def load_from_tiled_file!(filename : String, given_texture : Texture? = nil)
       full_filename = Crystal2Day.convert_to_absolute_path(filename)
 
@@ -133,16 +147,14 @@ module Crystal2Day
           end
         end
 
-        frame_time = nil
+        @animations.push(Array(TileAnimationFrame).new)
+
+        total_duration = 0u32
         parsed_tileset.tile_animations[tile_id].each do |tile_anim|
-          if frame_time && tile_anim.duration != frame_time
-            Crystal2Day.warning "Different tile animation frame times are currently not supported."
-          else
-            frame_time = tile_anim.duration if !frame_time
-          end
+          total_duration += tile_anim.duration
+          frame = TileAnimationFrame.new(tile_anim.tile_id.as(TileID), tile_anim.duration, total_duration)
+          @animations[tile_id].push(frame)
         end
-        
-        # TODO: Add animations
         
         add_tile(new_tile)
       end

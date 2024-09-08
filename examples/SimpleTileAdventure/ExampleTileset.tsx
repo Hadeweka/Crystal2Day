@@ -12,6 +12,16 @@
   </properties>
  </tile>
  <tile id="4">
+ <animation>
+   <frame tileid="4" duration="500"/>
+   <frame tileid="5" duration="500"/>
+  </animation>
+  <properties>
+   <property name="water" type="bool" value="true"/>
+   <property name="solid" type="bool" value="true"/>
+  </properties>
+ </tile>
+ <tile id="5">
   <properties>
    <property name="water" type="bool" value="true"/>
    <property name="solid" type="bool" value="true"/>

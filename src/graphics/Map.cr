@@ -357,7 +357,9 @@ module Crystal2Day
     property collision_disabled : Bool = false
 
     property animated_tiles : Array(TileID) = Array(TileID).new(initial_capacity: Tileset::INITIAL_CAPACITY)
-    property frame_counter : UInt32 = 0
+    property frame_counter : Float32 = 0.0
+    property milliseconds_per_animation_frame : Float64 = 1000.0 / 60.0 # TODO: Document this properly
+    # TODO: Maybe add another mode that is based on actual time
 
     getter vertices = [] of LibSDL::Vertex
 
@@ -381,10 +383,19 @@ module Crystal2Day
 
     def update_animations
       tileset = @parent_map.tileset
-      @animated_tiles = (0..tileset.size - 1).map{|tile_id| tile_id.to_u32.as(TileID)}
-      # TODO: Parse animation information from the Tiled files to the tilesets
-      # TODO: Calculate this all properly
-      @frame_counter &+= 1  # NOTE: If this actually overflows, maybe use an UInt64 instead
+
+      @animated_tiles = (0u32..tileset.size - 1).map do |tile_id|
+        max_duration = tileset.max_duration(tile_id.as(TileID))
+        final_id = tile_id
+        # TODO: Optimize this using cached frame positions!
+        tileset.animations[tile_id].each do |frame|
+          next if (@frame_counter % max_duration) > frame.cumulative_duration
+          final_id = frame.tile
+          break
+        end
+        final_id.to_u32.as(TileID)
+      end
+      @frame_counter += @milliseconds_per_animation_frame
     end
 
     def reload_vertex_grid(offset : Coords)
