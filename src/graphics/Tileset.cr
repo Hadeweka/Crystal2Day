@@ -72,8 +72,6 @@ module Crystal2Day
                 new_tile.dummy = pull.read_bool
               when "no_collision"
                 new_tile.no_collision = pull.read_bool
-              when "animation_template"
-                new_tile.animation_template = AnimationTemplate.from_json(pull.read_raw)
               else
                 # TODO: Maybe add more options than bools?
                 new_tile.set_flag(tile_property, pull.read_bool)
