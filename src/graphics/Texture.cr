@@ -38,13 +38,13 @@ module Crystal2Day
       @width = loaded_surface.value.w
       @height = loaded_surface.value.h
 
-      LibSDL.free_surface(loaded_surface)
+      LibSDL.destroy_surface(loaded_surface)
     end
 
     def load_text_from_font!(text : String, font : Crystal2Day::Font, color : Crystal2Day::Color = Crystal2Day::Color.black)
       free
 
-      text_surface = LibSDL.ttf_render_utf8_solid_wrapped(font.data, text, color.data, 0)
+      text_surface = LibSDL.ttf_render_text_solid_wrapped(font.data, text, text.size, color.data, 0)
       Crystal2Day.error "Could not create texture from rendered text" unless text_surface
 
       @data = LibSDL.create_texture_from_surface(@renderer.data, text_surface)
@@ -53,7 +53,7 @@ module Crystal2Day
       @width = text_surface.value.w
       @height = text_surface.value.h
 
-      LibSDL.free_surface(text_surface)
+      LibSDL.destroy_surface(text_surface)
     end
 
     def raw_boundary_rect(shifted_by : Crystal2Day::Coords = Crystal2Day.xy)
@@ -72,7 +72,7 @@ module Crystal2Day
       render_rect = raw_boundary_rect
       render_rect.x += @renderer.position_shift.x + offset.x
       render_rect.y += @renderer.position_shift.y + offset.y
-      LibSDL.render_copy_ex_f(@renderer.data, data, nil, pointerof(render_rect), 0.0, nil, LibSDL::RendererFlip::FLIP_NONE)
+      LibSDL.render_texture_rotated(@renderer.data, data, nil, pointerof(render_rect), 0.0, nil, LibSDL::FlipMode::NONE)
     end
 
     def free

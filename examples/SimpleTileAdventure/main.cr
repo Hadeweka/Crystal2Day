@@ -127,11 +127,11 @@ class CustomScene < CD::Scene
     camera.z = 0
     camera.pin
 
-    CD.im.set_key_table_entry("up", [CD::Keyboard::K_UP, CD::Keyboard::K_W])
-    CD.im.set_key_table_entry("down", [CD::Keyboard::K_DOWN, CD::Keyboard::K_S])
-    CD.im.set_key_table_entry("left", [CD::Keyboard::K_LEFT, CD::Keyboard::K_A])
-    CD.im.set_key_table_entry("right", [CD::Keyboard::K_RIGHT, CD::Keyboard::K_D])
-    CD.im.set_key_table_entry("debug_pass_through", [CD::Keyboard::K_LCTRL, CD::Keyboard::K_RCTRL]) if CD.debug?
+    CD.im.set_key_table_entry("up", [CD::Keyboard::UP, CD::Keyboard::W])
+    CD.im.set_key_table_entry("down", [CD::Keyboard::DOWN, CD::Keyboard::S])
+    CD.im.set_key_table_entry("left", [CD::Keyboard::LEFT, CD::Keyboard::A])
+    CD.im.set_key_table_entry("right", [CD::Keyboard::RIGHT, CD::Keyboard::D])
+    CD.im.set_key_table_entry("debug_pass_through", [CD::Keyboard::LCTRL, CD::Keyboard::RCTRL]) if CD.debug?
 
     self.collision_matrix.link(entity_groups["PlayerGroup"], maps["Map1"])
   end
@@ -144,10 +144,8 @@ class CustomScene < CD::Scene
   end
 
   def handle_event(event)
-    if event.type == CD::Event::WINDOW
-      if event.as_window_event.event == CD::WindowEvent::CLOSE
-        CD.next_scene = nil
-      end
+    if event.type == CD::Event::WINDOW_CLOSE_REQUESTED || event.type == CD::Event::QUIT
+      CD.next_scene = nil
     end
   end
 

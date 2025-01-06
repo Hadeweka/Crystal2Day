@@ -2,8 +2,8 @@
 
 module Crystal2Day
   module Keyboard
-    {% for key in LibSDL::KeyCode.constants %}
-      {{key.id}} = {{LibSDL::KeyCode.constant(key)}}
+    {% for key in LibSDL::Keycode.constants %}
+      {{key.id}} = {{LibSDL::Keycode.constant(key)}}
     {% end %}
 
     @@state : State?
@@ -34,9 +34,10 @@ module Crystal2Day
       @@state.not_nil!
     end
 
-    def self.key_down?(key : Int)
+    def self.key_down?(key : LibSDL::Keycode)
       self.reset_state unless @@state
-      @@state.not_nil!.key_down?(LibSDL.get_scancode_from_key(key).to_i)
+      mod_state = LibSDL.get_mod_state
+      @@state.not_nil!.key_down?(LibSDL.get_scancode_from_key(LibSDL::Keycode.new(key), pointerof(mod_state)).to_u32)
     end
   end
 end

@@ -55,6 +55,11 @@ module Crystal2Day
       @data.a = value
     end
 
+    # TODO: Maybe internally represent the color as float in the first place?
+    def to_float_color
+      LibSDL::FColor.new(r: (r / 255.0), g: (g / 255.0), b: (b / 255.0), a: (a / 255.0))
+    end
+
     def self.max_red
       Crystal2Day::Color.new(255, 0, 0)
     end

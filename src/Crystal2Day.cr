@@ -3,10 +3,10 @@
 
 require "json"
 
-require "sdl-crystal-bindings"
-require "sdl-crystal-bindings/sdl-mixer-bindings"
-require "sdl-crystal-bindings/sdl-image-bindings"
-require "sdl-crystal-bindings/sdl-ttf-bindings"
+require "sdl-crystal-bindings/sdl3-crystal-bindings"
+require "sdl-crystal-bindings/sdl3-mixer-bindings"
+require "sdl-crystal-bindings/sdl3-image-bindings"
+require "sdl-crystal-bindings/sdl3-ttf-bindings"
 
 require "tiled-crystal"
 

@@ -441,7 +441,7 @@ module Crystal2Day
             vty = (ty + dy) / n_tiles_y
 
             vertex_no = (x * view_height + y) * 6 + c
-            new_vertex = LibSDL::Vertex.new(position: Crystal2Day::Coords.new(vx, vy).data, tex_coord: Crystal2Day::Coords.new(vtx, vty).data, color: Crystal2Day::Color.white.data)
+            new_vertex = LibSDL::Vertex.new(position: Crystal2Day::Coords.new(vx, vy).data, tex_coord: Crystal2Day::Coords.new(vtx, vty).data, color: Crystal2Day::Color.white.to_float_color)
             @vertices[vertex_no] = new_vertex
           end
         end

@@ -23,7 +23,7 @@ module Crystal2Day
 
     def draw_directly(offset : Coords)
       LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
-      LibSDL.render_draw_point_f(@renderer.data, @position.x + @renderer.position_shift.x + offset.x, @position.y + @renderer.position_shift.y + offset.y)
+      LibSDL.render_point(@renderer.data, @position.x + @renderer.position_shift.x + offset.x, @position.y + @renderer.position_shift.y + offset.y)
     end
   end
 
@@ -42,7 +42,7 @@ module Crystal2Day
       draw_y =  @position.y + @renderer.position_shift.y + offset.y
       draw_end_x = @position.x + @direction.x + @renderer.position_shift.x + offset.x
       draw_end_y = @position.y + @direction.y + @renderer.position_shift.y + offset.y
-      LibSDL.render_draw_line_f(@renderer.data, draw_x, draw_y, draw_end_x, draw_end_y)
+      LibSDL.render_line(@renderer.data, draw_x, draw_y, draw_end_x, draw_end_y)
     end
   end
 
@@ -62,9 +62,9 @@ module Crystal2Day
       rect = LibSDL::FRect.new(x: @position.x + @renderer.position_shift.x + offset.x, y: @position.y + @renderer.position_shift.y + offset.y, w: @size.x, h: @size.y)
       # NOTE: A pointer is passed, but since its contents will be copied immediately, there should be no issues
       if @filled
-        LibSDL.render_fill_rect_f(@renderer.data, pointerof(rect))
+        LibSDL.render_fill_rect(@renderer.data, pointerof(rect))
       else
-        LibSDL.render_draw_rect_f(@renderer.data, pointerof(rect))
+        LibSDL.render_rect(@renderer.data, pointerof(rect))
       end
     end
   end
@@ -99,9 +99,9 @@ module Crystal2Day
         0.upto(3) do |segment_id|
           0.upto(number_of_render_iterations) do |i|
             index = 3 * segment_id * i
-            vertices.push LibSDL::Vertex.new(position: (center_position + base_circle[i]).data, color: @color.data)
-            vertices.push LibSDL::Vertex.new(position: (center_position + base_circle[(i + 1) % base_circle.size]).data, color: @color.data)
-            vertices.push LibSDL::Vertex.new(position: center_position.data, color: @color.data)
+            vertices.push LibSDL::Vertex.new(position: (center_position + base_circle[i]).data, color: @color.to_float_color)
+            vertices.push LibSDL::Vertex.new(position: (center_position + base_circle[(i + 1) % base_circle.size]).data, color: @color.to_float_color)
+            vertices.push LibSDL::Vertex.new(position: center_position.data, color: @color.to_float_color)
           end
         end
 
@@ -114,7 +114,7 @@ module Crystal2Day
           vy1 = (center_position + base_circle[i]).y
           vx2 = (center_position + base_circle[(i + 1) % (number_of_render_iterations + 1)]).x
           vy2 = (center_position + base_circle[(i + 1) % (number_of_render_iterations + 1)]).y
-          LibSDL.render_draw_line_f(@renderer.data, vx1, vy1, vx2, vy2)
+          LibSDL.render_line(@renderer.data, vx1, vy1, vx2, vy2)
         end
       end
     end
@@ -189,18 +189,18 @@ module Crystal2Day
 
     def draw_directly(offset : Coords)
       if @filled
-        sdl_vertex_0 = LibSDL::Vertex.new(position: (vertex_0 + @renderer.position_shift).data, color: @color.data)
-        sdl_vertex_1 = LibSDL::Vertex.new(position: (vertex_1 + @renderer.position_shift).data, color: @color.data)
-        sdl_vertex_2 = LibSDL::Vertex.new(position: (vertex_2 + @renderer.position_shift).data, color: @color.data)
+        sdl_vertex_0 = LibSDL::Vertex.new(position: (vertex_0 + @renderer.position_shift).data, color: @color.to_float_color)
+        sdl_vertex_1 = LibSDL::Vertex.new(position: (vertex_1 + @renderer.position_shift).data, color: @color.to_float_color)
+        sdl_vertex_2 = LibSDL::Vertex.new(position: (vertex_2 + @renderer.position_shift).data, color: @color.to_float_color)
         vertices = [sdl_vertex_0, sdl_vertex_1, sdl_vertex_2]
         LibSDL.render_geometry(@renderer.data, nil, vertices, 3, nil, 0)
       else
         LibSDL.set_render_draw_color(@renderer.data, @color.r, @color.g, @color.b, @color.a)
         shift_x = @renderer.position_shift.x + offset.x
         shift_y = @renderer.position_shift.y + offset.y
-        LibSDL.render_draw_line_f(@renderer.data, vertex_0.x + shift_x, vertex_0.y + shift_y, vertex_1.x + shift_x, vertex_1.y + shift_y)
-        LibSDL.render_draw_line_f(@renderer.data, vertex_1.x + shift_x, vertex_1.y + shift_y, vertex_2.x + shift_x, vertex_2.y + shift_y)
-        LibSDL.render_draw_line_f(@renderer.data, vertex_2.x + shift_x, vertex_2.y + shift_y, vertex_0.x + shift_x, vertex_0.y + shift_y)
+        LibSDL.render_line(@renderer.data, vertex_0.x + shift_x, vertex_0.y + shift_y, vertex_1.x + shift_x, vertex_1.y + shift_y)
+        LibSDL.render_line(@renderer.data, vertex_1.x + shift_x, vertex_1.y + shift_y, vertex_2.x + shift_x, vertex_2.y + shift_y)
+        LibSDL.render_line(@renderer.data, vertex_2.x + shift_x, vertex_2.y + shift_y, vertex_0.x + shift_x, vertex_0.y + shift_y)
       end
     end
   end
@@ -236,9 +236,9 @@ module Crystal2Day
         0.upto(3) do |segment_id|
           0.upto(number_of_render_iterations) do |i|
             index = 3 * segment_id * i
-            vertices.push LibSDL::Vertex.new(position: (center_position + base_ellipse[i]).data, color: @color.data)
-            vertices.push LibSDL::Vertex.new(position: (center_position + base_ellipse[(i + 1) % base_ellipse.size]).data, color: @color.data)
-            vertices.push LibSDL::Vertex.new(position: center_position.data, color: @color.data)
+            vertices.push LibSDL::Vertex.new(position: (center_position + base_ellipse[i]).data, color: @color.to_float_color)
+            vertices.push LibSDL::Vertex.new(position: (center_position + base_ellipse[(i + 1) % base_ellipse.size]).data, color: @color.to_float_color)
+            vertices.push LibSDL::Vertex.new(position: center_position.data, color: @color.to_float_color)
           end
         end
 
@@ -251,7 +251,7 @@ module Crystal2Day
           vy1 = (center_position + base_ellipse[i]).y
           vx2 = (center_position + base_ellipse[(i + 1) % (number_of_render_iterations + 1)]).x
           vy2 = (center_position + base_ellipse[(i + 1) % (number_of_render_iterations + 1)]).y
-          LibSDL.render_draw_line_f(@renderer.data, vx1, vy1, vx2, vy2)
+          LibSDL.render_line(@renderer.data, vx1, vy1, vx2, vy2)
         end
       end
     end

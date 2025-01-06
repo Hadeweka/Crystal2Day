@@ -241,7 +241,7 @@ module Crystal2Day
       {% if CRYSTAL2DAY_CONFIGS_IMGUI %}
         if @using_imgui
           ImGui.render
-          ImGuiImplSDL.render
+          ImGuiImplSDL.render(Crystal2Day.current_window.renderer.data)
         end
       {% end %}
     end

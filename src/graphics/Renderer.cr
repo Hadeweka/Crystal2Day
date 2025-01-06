@@ -13,15 +13,15 @@ module Crystal2Day
     end
 
     # TODO: Put flags in Crystal2Day module
-    def create!(from : Crystal2Day::Window, flags : LibSDL::RendererFlags = LibSDL::RendererFlags::RENDERER_ACCELERATED)
+    def create!(from : Crystal2Day::Window)
       free
-      @data = LibSDL.create_renderer(from.data, -1, flags)
+      @data = LibSDL.create_renderer(from.data, nil)
       @original_view = get_bound_view
       @current_view = get_bound_view
     end
 
     def get_bound_view
-      LibSDL.render_get_viewport(data, out rect)
+      LibSDL.get_render_viewport(data, out rect)
       Crystal2Day::View.new(rect, self)
     end
 
@@ -31,7 +31,7 @@ module Crystal2Day
 
     def view=(value : Crystal2Day::View)
       @current_view = value
-      LibSDL.render_set_viewport(data, value.raw_data_ptr)
+      LibSDL.set_render_viewport(data, value.raw_data_ptr)
     end
 
     def reset_view
