@@ -88,13 +88,13 @@ module Crystal2Day
               case coroutine_type
               when "file"
                 full_filename = Crystal2Day.convert_to_absolute_path(pull.read_string)
-                coroutine = CD::CoroutineTemplate.from_string(File.read(full_filename), "entity")
+                coroutine = Crystal2Day::CoroutineTemplate.from_string(File.read(full_filename), "entity")
                 add_coroutine_template(coroutine_key, coroutine)
               when "code"
-                coroutine = CD::CoroutineTemplate.from_string(pull.read_string, "entity")
+                coroutine = Crystal2Day::CoroutineTemplate.from_string(pull.read_string, "entity")
                 add_coroutine_template(coroutine_key, coroutine)
               when "proc"
-                coroutine = CD::CoroutineTemplate.from_proc_name(pull.read_string)
+                coroutine = Crystal2Day::CoroutineTemplate.from_proc_name(pull.read_string)
                 add_coroutine_template(coroutine_key, coroutine)
               when "pages"
                 string_hash = Hash(String, String).new
@@ -116,7 +116,7 @@ module Crystal2Day
                   end
                 end
 
-                coroutine = CD::CoroutineTemplate.from_hashes(string_hash, proc_hash, "entity")
+                coroutine = Crystal2Day::CoroutineTemplate.from_hashes(string_hash, proc_hash, "entity")
                 add_coroutine_template(coroutine_key, coroutine)
               else
                 Crystal2Day.error "Unknown EntityType loading option: #{coroutine_type}"

@@ -179,7 +179,7 @@ module Crystal2Day
         Crystal2Day.warning "Already existing map with name '#{name}' will be overwritten"
       end
 
-      new_map = CD::Map.new
+      new_map = Crystal2Day::Map.new
       new_map.tileset = tileset.not_nil! if tileset
       @maps[name] = new_map
 
@@ -191,7 +191,7 @@ module Crystal2Day
         Crystal2Day.error "Map with name '#{map_name}' does not exist"
       end
 
-      new_layer = CD::MapLayer.new
+      new_layer = Crystal2Day::MapLayer.new
       @maps[map_name].add_layer(new_layer)
 
       return new_layer
