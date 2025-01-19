@@ -29,7 +29,7 @@ module Crystal2Day
 
     def finalize
       super()
-      LibSDL.destroy_surface(@data) if @data
+      LibSDL.destroy_surface(data) if @data
       @data = nil
     end
   end
