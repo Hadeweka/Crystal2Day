@@ -19,6 +19,14 @@ module Crystal2Day
         @{{(name + plural).id}}[filename + additional_tag]
       end
 
+      def add_{{name.id}}(tag : String, value : Crystal2Day::{{resource_class}})
+        unless @{{(name + plural).id}}[tag]?
+          @{{(name + plural).id}}[tag] = value
+        end
+
+        @{{(name + plural).id}}[tag]
+      end
+
       def unload_{{name.id}}(filename : String, additional_tag : String = "")
         @{{(name + plural).id}}[filename + additional_tag].delete if @{{(name + plural).id}}[filename + additional_tag]?
       end
