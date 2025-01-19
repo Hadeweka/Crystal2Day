@@ -13,7 +13,7 @@ module Crystal2DayHelper
     end
 
     def unsafe_set_data(new_data)
-      if data
+      if @data
         Crystal2Day.warning "Old data value of type {{x}} was overriden without being freed"
       end
       @data = new_data

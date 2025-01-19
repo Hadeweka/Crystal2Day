@@ -75,6 +75,11 @@ module Crystal2Day
       LibSDL.render_texture_rotated(@renderer.data, data, nil, pointerof(render_rect), 0.0, nil, LibSDL::FlipMode::NONE)
     end
 
+    def unsafe_set_size(new_width : Int32, new_height : Int32)
+      @width = new_width
+      @height = new_height
+    end
+
     def free
       if @data
         LibSDL.destroy_texture(data)
