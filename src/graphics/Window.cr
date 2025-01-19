@@ -2,20 +2,13 @@
 # You can even create multiples of these (Crystal2Day keeps track of them for you).
 
 module Crystal2Day
-  class Window
+  class Window < RenderTarget
     Crystal2DayHelper.wrap_type(Pointer(LibSDL::Window))
-
-    property z_offset : UInt8 = 0
-
-    getter renderer : Crystal2Day::Renderer = Crystal2Day::Renderer.new
-    getter render_queue : Crystal2Day::RenderQueue = Crystal2Day::RenderQueue.new
 
     getter width : UInt32
     getter height : UInt32
     getter title : String
     getter fullscreen : Bool
-
-    property resource_manager : Crystal2Day::ResourceManager = Crystal2Day::ResourceManager.new
 
     def initialize(title : String, w : Int, h : Int, x : Int = LibSDL::WINDOWPOS_UNDEFINED, y : Int = LibSDL::WINDOWPOS_UNDEFINED, fullscreen : Bool = false, set_as_current : Bool = true)
       window_flags = fullscreen ? LibSDL::WindowFlags::FULLSCREEN : LibSDL::WindowFlags::None
@@ -31,10 +24,7 @@ module Crystal2Day
 
       @fullscreen = fullscreen
 
-      @renderer.create!(self)
-      Crystal2Day.error "Could not create renderer" unless @renderer.data?
-
-      @resource_manager.renderer = @renderer
+      super()
 
       Crystal2Day.current_window = self if set_as_current
       Crystal2Day.register_window(self)
@@ -74,46 +64,16 @@ module Crystal2Day
       LibSDL.set_window_position(data, coords.x, coords.y)
     end
 
-    def clear
-      LibSDL.set_render_draw_color(@renderer.data, 0xFF, 0xFF, 0xFF, 0xFF)
-      LibSDL.render_clear(@renderer.data)
-    end
-
-    def draw(obj : Crystal2Day::Drawable, offset : Coords = Crystal2Day.xy)
-      @render_queue.add(obj, @z_offset + obj.z, offset)
-    end
-
-    def pin(obj : Crystal2Day::Drawable, offset : Coords = Crystal2Day.xy)
-      @render_queue.add_static(obj, @z_offset + obj.z, offset)
-    end
-
-    def unpin(obj : Crystal2Day::Drawable, offset : Coords = Crystal2Day.xy)
-      @render_queue.delete_static(obj, @z_offset + obj.z, offset)
-    end
-
-    def unpin_all
-      @render_queue.delete_static_content
-    end
-
-    def render
-      @renderer.reset
-      @render_queue.draw
-    end
-
-    def display
-      LibSDL.render_present(@renderer.data)
-    end
-
     def close
       Crystal2Day.current_window = nil if Crystal2Day.current_window_if_any == self
       Crystal2Day.unregister_window(self)
-      @renderer.free
+      @renderer.free  # It's safe to do this twice, the renderer checks this for us, but TODO: Is this necessary at all?
       LibSDL.destroy_window(data)
       @data = nil
     end
 
     def finalize
-      unpin_all
+      super()
       close
     end
   end
