@@ -12,8 +12,8 @@ module Crystal2Day
     def initialize(width : Int, height : Int)
       @data = LibSDL.create_surface(width, height, DEFAULT_PIXEL_FORMAT)
       
-      @width = w.to_u32
-      @height = h.to_u32
+      @width = width.to_u32
+      @height = height.to_u32
 
       super()
     end
