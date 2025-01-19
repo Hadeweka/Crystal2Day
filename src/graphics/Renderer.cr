@@ -13,7 +13,7 @@ module Crystal2Day
     end
 
     # TODO: Put flags in Crystal2Day module
-    def create!(from : Crystal2Day::Window)
+    def create!(from : Crystal2Day::RenderTarget)
       free
       @data = LibSDL.create_renderer(from.data, nil)
       @original_view = get_bound_view
