@@ -52,6 +52,7 @@ module Crystal2Day
     def initialize
     end
 
+    # TODO: Add support for different render targets
     def initialize(pull : JSON::PullParser)
       pull.read_object do |key|
         case key

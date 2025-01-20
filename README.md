@@ -153,6 +153,7 @@ Currently none
 * Could entities be bound to maps?
 * How should tilesets with overlapping segments be implemented?
 * Is the current map streaming way really okay?
+* Should scenes contain a specific batch of variables for Anyolite only?
 
 ### Version 1.0.0
 

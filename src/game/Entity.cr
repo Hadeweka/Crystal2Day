@@ -40,7 +40,7 @@ module Crystal2Day
 
     getter type_name : String = Crystal2Day::EntityType::DEFAULT_NAME
 
-    @renderer : Crystal2Day::Renderer
+    @render_target : Crystal2Day::RenderTarget
 
     getter current_time_step : Float32 = 0.0
 
@@ -55,10 +55,10 @@ module Crystal2Day
 
     property terminal_speed : Float32 = 100.0 # TODO: Implement this as an option
 
-    def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+    def initialize(@render_target : Crystal2Day::RenderTarget = Crystal2Day.current_window)
     end
 
-    def initialize(entity_type : Crystal2Day::EntityType, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+    def initialize(entity_type : Crystal2Day::EntityType, @render_target : Crystal2Day::RenderTarget = Crystal2Day.current_window)
       @state.merge! entity_type.transfer_default_state
       @options.merge! entity_type.transfer_options
 
@@ -67,7 +67,7 @@ module Crystal2Day
       end
 
       entity_type.transfer_sprite_templates.each do |sprite_template|
-        @sprites.push Crystal2Day::Sprite.new(sprite_template)
+        @sprites.push Crystal2Day::Sprite.new(sprite_template, render_target)
       end
 
       entity_type.transfer_bounding_boxes.each do |box|

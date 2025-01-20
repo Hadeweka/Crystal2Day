@@ -41,9 +41,9 @@ module Crystal2Day
       @texture = from_texture
     end
 
-    def initialize(sprite_template : Crystal2Day::SpriteTemplate)
+    def initialize(sprite_template : Crystal2Day::SpriteTemplate, render_target : Crystal2Day::RenderTarget = Crystal2Day.current_window)
       super()
-      @texture = Crystal2Day.rm.load_texture(sprite_template.texture_filename)
+      @texture = render_target.resource_manager.load_texture(sprite_template.texture_filename)
       @position = sprite_template.position
       @source_rect = sprite_template.source_rect
       @render_rect = sprite_template.render_rect

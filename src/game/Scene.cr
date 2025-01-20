@@ -154,12 +154,12 @@ module Crystal2Day
       imgui_draw if @using_imgui
     end
 
-    def add_entity_group(name, auto_update : Bool = false, auto_physics : Bool = false, auto_events : Bool = false, auto_draw : Bool = false, capacity : UInt32 = 0)
+    def add_entity_group(name, auto_update : Bool = false, auto_physics : Bool = false, auto_events : Bool = false, auto_draw : Bool = false, capacity : UInt32 = 0, render_target : RenderTarget = Crystal2Day.current_window)
       if @entity_groups[name]?
         Crystal2Day.warning "Already existing entity group with name '#{name}' will be overwritten"
       end
       
-      new_entity_group = capacity == 0 ? EntityGroup.new : EntityGroup.new(capacity: capacity)
+      new_entity_group = capacity == 0 ? EntityGroup.new(render_target: render_target) : EntityGroup.new(capacity: capacity, render_target: render_target)
       @entity_groups[name] = new_entity_group
 
       @update_groups.push new_entity_group if auto_update
