@@ -144,7 +144,7 @@ class CustomScene < CD::Scene
   end
 
   def handle_event(event)
-    if event.type == CD::Event::WINDOW_CLOSE_REQUESTED || event.type == CD::Event::QUIT
+    if event.is_quit_event?
       CD.next_scene = nil
     end
   end

@@ -94,7 +94,7 @@ require "Crystal2Day.cr"
 class MyOwnScene < Crystal2Day::Scene
   # Any events are passed to this method
   def handle_event(event)
-    if event.type == Crystal2Day::Event::QUIT
+    if event.is_quit_event?
       # Signal the program to stop the main loop
       Crystal2Day.next_scene = nil
     end

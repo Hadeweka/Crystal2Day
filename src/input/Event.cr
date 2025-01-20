@@ -65,6 +65,14 @@ module Crystal2Day
           Crystal2Day.error "Could not cast event with ID #{TYPE_NAMES[type]} to {{name.id}} event"
         end
       end
+
+      def is_{{name.id}}_event?
+        if {{constants.map{|const| "LibSDL::EventType::#{const}.to_i".id}}}.includes?(type)
+          return true
+        else
+          return false
+        end
+      end
     end
 
     generate_event_wrapper(:display, :display, {
@@ -139,35 +147,5 @@ module Crystal2Day
     generate_event_wrapper(:render, :render, {RENDER_TARGETS_RESET, RENDER_DEVICE_RESET, RENDER_DEVICE_LOST})
     generate_event_wrapper(:drop, :drop, {DROP_BEGIN, DROP_FILE, DROP_TEXT, DROP_COMPLETE, DROP_POSITION})
     generate_event_wrapper(:clipboard, :clipboard, {CLIPBOARD_UPDATE})
-
-    # generate_event_wrapper(:display, :display, {DISPLAYEVENT})
-    # generate_event_wrapper(:window, :window, {WINDOWEVENT})
-    # generate_event_wrapper(:key, :key, {KEYDOWN, KEYUP})
-    # generate_event_wrapper(:text_edit, :edit, {TEXTEDITING})
-    # generate_event_wrapper(:text_edit_ext, :edit_ext, {TEXTEDITING_EXT})
-    # generate_event_wrapper(:text_input, :text, {TEXTINPUT})
-    # generate_event_wrapper(:mouse_motion, :motion, {MOUSEMOTION})
-    # generate_event_wrapper(:mouse_button, :button, {MOUSEBUTTONDOWN, MOUSEBUTTONUP})
-    # generate_event_wrapper(:mouse_wheel, :wheel, {MOUSEWHEEL})
-    # generate_event_wrapper(:joy_axis, :jaxis, {JOYAXISMOTION})
-    # generate_event_wrapper(:joy_ball, :jball, {JOYBALLMOTION})
-    # generate_event_wrapper(:joy_hat, :jhat, {JOYHATMOTION})
-    # generate_event_wrapper(:joy_button, :jbutton, {JOYBUTTONDOWN, JOYBUTTONUP})
-    # generate_event_wrapper(:joy_device, :jdevice, {JOYDEVICEADDED, JOYDEVICEREMOVED})
-    # generate_event_wrapper(:joy_battery, :jbattery, {JOYBATTERYUPDATED})
-    # generate_event_wrapper(:controller_axis, :caxis, {CONTROLLERAXISMOTION})
-    # generate_event_wrapper(:controller_button, :cbutton, {CONTROLLERBUTTONDOWN, CONTROLLERBUTTONUP})
-    # generate_event_wrapper(:controller_device, :cdevice, {CONTROLLERDEVICEADDED, CONTROLLERDEVICEREMOVED, CONTROLLERDEVICEREMAPPED})
-    # generate_event_wrapper(:controller_touchpad, :ctouchpad, {CONTROLLERTOUCHPADDOWN, CONTROLLERTOUCHPADMOTION, CONTROLLERTOUCHPADUP})
-    # generate_event_wrapper(:controller_sensor, :csensor, {CONTROLLERSENSORUPDATE})
-    # generate_event_wrapper(:audio_device, :adevice, {AUDIODEVICEADDED, AUDIODEVICEREMOVED})
-    # generate_event_wrapper(:sensor, :sensor, {SENSORUPDATE})
-    # generate_event_wrapper(:quit, :quit, {QUIT})
-    # generate_event_wrapper(:user, :user, {USEREVENT})
-    # generate_event_wrapper(:syswm, :syswm, {SYSWMEVENT})
-    # generate_event_wrapper(:touch_finger, :tfinger, {FINGERDOWN, FINGERUP, FINGERMOTION})
-    # generate_event_wrapper(:multi_gesture, :mgesture, {MULTIGESTURE})
-    # generate_event_wrapper(:dollar_gesture, :dgesture, {DOLLARGESTURE, DOLLARRECORD})
-    # generate_event_wrapper(:drop, :drop, {DROPFILE, DROPTEXT, DROPBEGIN, DROPCOMPLETE})
   end
 end
