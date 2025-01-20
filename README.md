@@ -52,7 +52,7 @@ Note that its syntax may change (frequently) until version 1.0.0.
 ## Essential
 
 * Crystal (obviously)
-* SDL 2 (media library; SDL 3 is not yet supported)
+* SDL 3 (media library)
 
 ## Optional
 
@@ -66,7 +66,7 @@ Note that its syntax may change (frequently) until version 1.0.0.
 Currently, this shard can simply be used by adding it into your `shard.yml`,
 as long as all dependencies are installed correctly.
 
-Make sure to have SDL 2 and its libraries installed, or linking will fail.
+Make sure to have SDL 3 and its libraries installed, or linking will fail.
 
 If you want to add features like Anyolite or ImGui,
 you can install them using `rake add_feature_XXX`, where `XXX` is one of the
@@ -94,11 +94,9 @@ require "Crystal2Day.cr"
 class MyOwnScene < Crystal2Day::Scene
   # Any events are passed to this method
   def handle_event(event)
-    if event.type == Crystal2Day::Event::WINDOW
-      if event.as_window_event.event == Crystal2Day::WindowEvent::CLOSE
-        # Signal the program to stop the main loop
-        Crystal2Day.next_scene = nil
-      end
+    if event.type == CD::Event::QUIT
+      # Signal the program to stop the main loop
+      Crystal2Day.next_scene = nil
     end
   end
 end
@@ -140,6 +138,7 @@ end
 * Resource management system
 * Special plugin system
 * Imgui support
+* SDL3 as main library
 
 #### Urgent todo list
 
