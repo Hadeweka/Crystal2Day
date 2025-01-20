@@ -4,6 +4,11 @@ Crystal2Day is designed as a tool to develop games with Crystal fast.
 
 Less work for you, therefore more time for actual game design.
 
+NOTE: The main branch is currently using SDL 2, but this will eventually superseded by SDL 3 (as soon as SDL 3.2 officially releases).
+
+This branch will then be stored as a SDL 2 branch and become deprecated to focus on SDL 3 only.
+Most of the syntax will still be the same, but keep in mind that Crystal2Day is still in its development phase anyway.
+
 # Why should I use Crystal2Day?
 
 Did you ever want to start a game, but then got frustrated while programming something
@@ -52,7 +57,7 @@ Note that its syntax may change (frequently) until version 1.0.0.
 ## Essential
 
 * Crystal (obviously)
-* SDL 2 (media library; SDL 3 is not yet supported)
+* SDL 2 (media library; SDL 3 will eventually replace this)
 
 ## Optional
 
