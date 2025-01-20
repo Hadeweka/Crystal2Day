@@ -80,6 +80,10 @@ module Crystal2Day
       @height = new_height
     end
 
+    def unsafe_set_renderer(new_renderer : Renderer)
+      @renderer = new_renderer
+    end
+
     def free
       if @data
         LibSDL.destroy_texture(data)
