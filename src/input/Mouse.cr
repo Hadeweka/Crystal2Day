@@ -2,11 +2,11 @@
 
 module Crystal2Day
   module Mouse
-    BUTTON_LEFT = LibSDL::BUTTON_LEFT
-    BUTTON_MIDDLE = LibSDL::BUTTON_MIDDLE
-    BUTTON_RIGHT = LibSDL::BUTTON_RIGHT
-    BUTTON_X1 = LibSDL::BUTTON_X1
-    BUTTON_X2 = LibSDL::BUTTON_X2
+    BUTTON_LEFT = LibSDL::MouseButtonFlags::LEFT.to_u32
+    BUTTON_MIDDLE = LibSDL::MouseButtonFlags::MIDDLE.to_u32
+    BUTTON_RIGHT = LibSDL::MouseButtonFlags::RIGHT.to_u32
+    BUTTON_X1 = LibSDL::MouseButtonFlags::X1.to_u32
+    BUTTON_X2 = LibSDL::MouseButtonFlags::X2.to_u32
 
     def self.position_change
       LibSDL.get_relative_mouse_state(out x, out y)
@@ -41,19 +41,19 @@ module Crystal2Day
 
     def self.button_down?(button : Int)
       mouse_state = LibSDL.get_mouse_state(nil, nil).to_i
-      LibSDLMacro.button(mouse_state) == button
+      LibSDLMacro.button_mask(mouse_state).to_u32 == button
     end
 
     def self.left_button_down?
-      LibSDLMacro.button(LibSDL.get_mouse_state(nil, nil).to_i) == LibSDL::BUTTON_LEFT
+      LibSDLMacro.button_mask(LibSDL.get_mouse_state(nil, nil).to_i).to_u32 == BUTTON_LEFT
     end
 
     def self.right_button_down?
-      LibSDLMacro.button(LibSDL.get_mouse_state(nil, nil).to_i) == LibSDL::BUTTON_RIGHT
+      LibSDLMacro.button_mask(LibSDL.get_mouse_state(nil, nil).to_i).to_u32 == BUTTON_RIGHT
     end
 
     def self.middle_button_down?
-      LibSDLMacro.button(LibSDL.get_mouse_state(nil, nil).to_i) == LibSDL::BUTTON_MIDDLE
+      LibSDLMacro.button_mask(LibSDL.get_mouse_state(nil, nil).to_i).to_u32 == BUTTON_MIDDLE
     end
   end
 end

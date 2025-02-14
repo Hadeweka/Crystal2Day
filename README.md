@@ -4,11 +4,6 @@ Crystal2Day is designed as a tool to develop games with Crystal fast.
 
 Less work for you, therefore more time for actual game design.
 
-NOTE: The main branch is currently using SDL 2, but this will eventually superseded by SDL 3 (as soon as SDL 3.2 officially releases).
-
-This branch will then be stored as a SDL 2 branch and become deprecated to focus on SDL 3 only.
-Most of the syntax will still be the same, but keep in mind that Crystal2Day is still in its development phase anyway.
-
 # Why should I use Crystal2Day?
 
 Did you ever want to start a game, but then got frustrated while programming something
@@ -57,7 +52,7 @@ Note that its syntax may change (frequently) until version 1.0.0.
 ## Essential
 
 * Crystal (obviously)
-* SDL 2 (media library; SDL 3 will eventually replace this)
+* SDL 3 (media library)
 
 ## Optional
 
@@ -71,7 +66,7 @@ Note that its syntax may change (frequently) until version 1.0.0.
 Currently, this shard can simply be used by adding it into your `shard.yml`,
 as long as all dependencies are installed correctly.
 
-Make sure to have SDL 2 and its libraries installed, or linking will fail.
+Make sure to have SDL 3 and its libraries installed, or linking will fail.
 
 If you want to add features like Anyolite or ImGui,
 you can install them using `rake add_feature_XXX`, where `XXX` is one of the
@@ -99,11 +94,9 @@ require "Crystal2Day.cr"
 class MyOwnScene < Crystal2Day::Scene
   # Any events are passed to this method
   def handle_event(event)
-    if event.type == Crystal2Day::Event::WINDOW
-      if event.as_window_event.event == Crystal2Day::WindowEvent::CLOSE
-        # Signal the program to stop the main loop
-        Crystal2Day.next_scene = nil
-      end
+    if event.is_quit_event?
+      # Signal the program to stop the main loop
+      Crystal2Day.next_scene = nil
     end
   end
 end
@@ -145,6 +138,7 @@ end
 * Resource management system
 * Special plugin system
 * Imgui support
+* SDL3 as main library
 
 #### Urgent todo list
 
@@ -159,6 +153,7 @@ Currently none
 * Could entities be bound to maps?
 * How should tilesets with overlapping segments be implemented?
 * Is the current map streaming way really okay?
+* Should scenes contain a specific batch of variables for Anyolite only?
 
 ### Version 1.0.0
 

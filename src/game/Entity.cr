@@ -17,7 +17,6 @@ module Crystal2Day
     # If positive, this will discretize every motion into steps with the given size in each direction
     DEFAULT_OPTION_MOVEMENT_DISCRETIZATION = -1
 
-    # TODO: This does currently nothing
     property z : UInt8 = 0
 
     @state = Hash(String, Crystal2Day::Parameter).new(initial_capacity: STATE_INITIAL_CAPACITY)
@@ -40,7 +39,7 @@ module Crystal2Day
 
     getter type_name : String = Crystal2Day::EntityType::DEFAULT_NAME
 
-    @renderer : Crystal2Day::Renderer
+    @render_target : Crystal2Day::RenderTarget
 
     getter current_time_step : Float32 = 0.0
 
@@ -55,10 +54,10 @@ module Crystal2Day
 
     property terminal_speed : Float32 = 100.0 # TODO: Implement this as an option
 
-    def initialize(@renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+    def initialize(@render_target : Crystal2Day::RenderTarget = Crystal2Day.current_window)
     end
 
-    def initialize(entity_type : Crystal2Day::EntityType, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+    def initialize(entity_type : Crystal2Day::EntityType, @render_target : Crystal2Day::RenderTarget = Crystal2Day.current_window)
       @state.merge! entity_type.transfer_default_state
       @options.merge! entity_type.transfer_options
 
@@ -67,7 +66,7 @@ module Crystal2Day
       end
 
       entity_type.transfer_sprite_templates.each do |sprite_template|
-        @sprites.push Crystal2Day::Sprite.new(sprite_template)
+        @sprites.push Crystal2Day::Sprite.new(sprite_template, render_target)
       end
 
       entity_type.transfer_bounding_boxes.each do |box|
@@ -350,8 +349,10 @@ module Crystal2Day
     # TODO: Integrate parent-child offset
     # TODO: Is there any way to enable pinning this?
     def draw(offset : Coords = Crystal2Day.xy)
-      @sprites.each do |sprite|
-        sprite.draw(@position + offset)
+      Crystal2Day.with_z_offset(@z) do
+        @sprites.each do |sprite|
+          sprite.draw(@position + offset)
+        end
       end
     end
 

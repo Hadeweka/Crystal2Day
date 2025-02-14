@@ -1,7 +1,9 @@
+# NOTE: This version is not in use anymore
+
 {% if flag?(:win32) %}
-  @[Link(ldflags: "\"#{__DIR__}/../../temp/imgui_impl_sdl.lib\"")]
+  @[Link(ldflags: "\"#{__DIR__}/../../temp/imgui_impl_sdl2.lib\"")]
 {% else %}
-  @[Link(ldflags: "\"#{__DIR__}/../../temp/imgui_impl_sdl.a\" -lstdc++")]
+  @[Link(ldflags: "\"#{__DIR__}/../../temp/imgui_impl_sdl2.a\" -lstdc++")]
 {% end %}
 lib ImGuiImplSDL
   fun init = Extern_ImGui_ImplSDL2_InitForSDLRenderer(ctx : Void*, window : LibSDL::Window*, renderer : LibSDL::Renderer*)

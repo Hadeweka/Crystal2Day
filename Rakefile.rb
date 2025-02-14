@@ -24,6 +24,7 @@ task :add_feature_imgui do
   orig_dir = Dir.pwd
   system("git clone --recursive https://github.com/oprypin/crystal-imgui lib/imgui")
   Dir.chdir("lib/imgui/cimgui")
+  system("git checkout master --recurse-submodules")
   system("cmake -DCMAKE_CXX_FLAGS='-DIMGUI_USE_WCHAR32' .")
   system("cmake --build .")
   system("ln -s cimgui.so libcimgui.so")
@@ -33,18 +34,18 @@ task :add_feature_imgui do
     FileUtils.cp("lib/imgui/cimgui/Debug/cimgui.dll", "./cimgui.dll")
   end
   Dir.mkdir("temp") if !Dir.exist?("temp")
-  system("git clone --branch SDL2 https://github.com/libsdl-org/SDL temp/SDL")
+  system("git clone https://github.com/libsdl-org/SDL temp/SDL")
   Utils.compile_imgui_backend("lib/imgui/cimgui/cimgui.cpp", "temp/cimgui")
-  Utils.compile_imgui_backend("src/glue/imgui_impl_sdl.cpp", "temp/imgui_impl_sdl")
-  Utils.compile_imgui_backend("lib/imgui/cimgui/imgui/backends/imgui_impl_sdl2.cpp", "temp/imgui_impl")
-  Utils.compile_imgui_backend("lib/imgui/cimgui/imgui/backends/imgui_impl_sdlrenderer2.cpp", "temp/imgui_impl_renderer")
+  Utils.compile_imgui_backend("src/glue/imgui_impl_sdl3.cpp", "temp/imgui_impl_sdl3")
+  Utils.compile_imgui_backend("lib/imgui/cimgui/imgui/backends/imgui_impl_sdl3.cpp", "temp/imgui_impl")
+  Utils.compile_imgui_backend("lib/imgui/cimgui/imgui/backends/imgui_impl_sdlrenderer3.cpp", "temp/imgui_impl_renderer")
   ["imgui", "imgui_draw", "imgui_widgets", "imgui_tables", "imgui_demo"].each do |name|
     Utils.compile_imgui_backend("lib/imgui/cimgui/imgui/#{name}.cpp", "temp/#{name}")
   end
   if ENV["OS"] == "Windows_NT"
-    system("lib /OUT:\"temp/imgui_impl_sdl.lib\" \"temp/imgui_impl_sdl.obj\" \"temp/imgui_impl_renderer.obj\" \"temp/cimgui.obj\" \"temp/imgui_impl.obj\" \"temp/imgui.obj\" \"temp/imgui_draw.obj\" \"temp/imgui_widgets.obj\" \"temp/imgui_tables.obj\" \"temp/imgui_demo.obj\"")
+    system("lib /OUT:\"temp/imgui_impl_sdl3.lib\" \"temp/imgui_impl_sdl3.obj\" \"temp/imgui_impl_renderer.obj\" \"temp/cimgui.obj\" \"temp/imgui_impl.obj\" \"temp/imgui.obj\" \"temp/imgui_draw.obj\" \"temp/imgui_widgets.obj\" \"temp/imgui_tables.obj\" \"temp/imgui_demo.obj\"")
   else
-    system("ar rcs \"temp/imgui_impl_sdl.a\" \"temp/imgui_impl_sdl.o\" \"temp/imgui_impl_renderer.o\" \"temp/cimgui.o\" \"temp/imgui_impl.o\" \"temp/imgui.o\" \"temp/imgui_draw.o\" \"temp/imgui_widgets.o\" \"temp/imgui_tables.o\" \"temp/imgui_demo.o\"")
+    system("ar rcs \"temp/imgui_impl_sdl3.a\" \"temp/imgui_impl_sdl3.o\" \"temp/imgui_impl_renderer.o\" \"temp/cimgui.o\" \"temp/imgui_impl.o\" \"temp/imgui.o\" \"temp/imgui_draw.o\" \"temp/imgui_widgets.o\" \"temp/imgui_tables.o\" \"temp/imgui_demo.o\"")
   end
 end
 

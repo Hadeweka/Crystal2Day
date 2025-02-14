@@ -6,9 +6,9 @@ module Crystal2Day
   class InputManager
     KEY_TABLE_INITIAL_CAPACITY = 32
 
-    @key_table = Hash(String, Array(LibSDL::Keycode)).new(initial_capacity: KEY_TABLE_INITIAL_CAPACITY)
+    @key_table = Hash(String, Array(UInt32)).new(initial_capacity: KEY_TABLE_INITIAL_CAPACITY)
 
-    def set_key_table_entry(name : String, keys : Array(LibSDL::Keycode))
+    def set_key_table_entry(name : String, keys : Array(UInt32))
       @key_table[name] = keys
     end
 
@@ -20,17 +20,17 @@ module Crystal2Day
       return false unless @key_table[name]?
 
       @key_table[name].each do |actual_key|
-        return true if Crystal2Day::Keyboard.key_down?(actual_key)
+        return true if Crystal2Day::Keyboard.key_down?(LibSDL::Keycode.new(actual_key))
       end
       false
     end
 
     def check_event_for_key_press(event : Crystal2Day::Event, name : String)
-      if event.type == Crystal2Day::Event::KEYDOWN
+      if event.type == Crystal2Day::Event::KEY_DOWN
         return false unless @key_table[name]?
 
         @key_table[name].each do |actual_key|
-          return true if actual_key.to_i == event.as_key_event.key
+          return true if actual_key.to_u32 == event.as_key_event.key.to_u32
         end
         false
       else

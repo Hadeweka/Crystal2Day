@@ -41,9 +41,9 @@ module Crystal2Day
       @texture = from_texture
     end
 
-    def initialize(sprite_template : Crystal2Day::SpriteTemplate)
+    def initialize(sprite_template : Crystal2Day::SpriteTemplate, render_target : Crystal2Day::RenderTarget = Crystal2Day.current_window)
       super()
-      @texture = Crystal2Day.rm.load_texture(sprite_template.texture_filename)
+      @texture = render_target.resource_manager.load_texture(sprite_template.texture_filename)
       @position = sprite_template.position
       @source_rect = sprite_template.source_rect
       @render_rect = sprite_template.render_rect
@@ -80,16 +80,16 @@ module Crystal2Day
 
     def draw_directly(offset : Coords)
       return unless active
-      final_source_rect = (source_rect = @source_rect) ? source_rect.int_data : @texture.raw_int_boundary_rect
+      final_source_rect = (source_rect = @source_rect) ? source_rect.data : @texture.raw_boundary_rect
       final_offset = @position + @texture.renderer.position_shift.scale(@parallax) + offset
       final_render_rect = (render_rect = @render_rect) ? (render_rect + final_offset).data : (source_rect ? (source_rect.unshifted + final_offset).data : @texture.raw_boundary_rect(shifted_by: final_offset))
-      flip_flag = (@flip_x ? LibSDL::RendererFlip::FLIP_HORIZONTAL : LibSDL::RendererFlip::FLIP_NONE) | (@flip_y ? LibSDL::RendererFlip::FLIP_VERTICAL : LibSDL::RendererFlip::FLIP_NONE)
+      flip_flag = (@flip_x ? LibSDL::FlipMode::HORIZONTAL : LibSDL::FlipMode::NONE) | (@flip_y ? LibSDL::FlipMode::VERTICAL : LibSDL::FlipMode::NONE)
       # TODO: Cache flip flag
       if center = @center
         final_center_point = center.data
-        LibSDL.render_copy_ex_f(@texture.renderer_data, @texture.data, pointerof(final_source_rect), pointerof(final_render_rect), @angle, pointerof(final_center_point), flip_flag)
+        LibSDL.render_texture_rotated(@texture.renderer_data, @texture.data, pointerof(final_source_rect), pointerof(final_render_rect), @angle, pointerof(final_center_point), flip_flag)
       else
-        LibSDL.render_copy_ex_f(@texture.renderer_data, @texture.data, pointerof(final_source_rect), pointerof(final_render_rect), @angle, nil, flip_flag)
+        LibSDL.render_texture_rotated(@texture.renderer_data, @texture.data, pointerof(final_source_rect), pointerof(final_render_rect), @angle, nil, flip_flag)
       end
     end
   end

@@ -3,10 +3,10 @@
 
 require "json"
 
-require "sdl-crystal-bindings"
-require "sdl-crystal-bindings/sdl-mixer-bindings"
-require "sdl-crystal-bindings/sdl-image-bindings"
-require "sdl-crystal-bindings/sdl-ttf-bindings"
+require "sdl-crystal-bindings/sdl3-crystal-bindings"
+require "sdl-crystal-bindings/sdl3-mixer-bindings"
+require "sdl-crystal-bindings/sdl3-image-bindings"
+require "sdl-crystal-bindings/sdl3-ttf-bindings"
 
 require "tiled-crystal"
 
@@ -25,6 +25,7 @@ require "./audio/Sound.cr"
 require "./audio/SoundBoard.cr"
 
 require "./graphics/Drawable.cr"
+require "./graphics/RenderTarget.cr"
 
 require "./graphics/Animation.cr"
 require "./graphics/Camera.cr"
@@ -33,6 +34,7 @@ require "./graphics/Font.cr"
 require "./graphics/Map.cr"
 require "./graphics/Renderer.cr"
 require "./graphics/RenderQueue.cr"
+require "./graphics/RenderSurface.cr"
 require "./graphics/Shapes.cr"
 require "./graphics/Sprite.cr"
 require "./graphics/Text.cr"

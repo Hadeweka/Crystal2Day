@@ -12,9 +12,9 @@ module Crystal2Day
       @refs : Array(Anyolite::RbRef) = [] of Anyolite::RbRef
     {% end %}
     
-    @renderer : Crystal2Day::Renderer
+    @render_target : Crystal2Day::RenderTarget
 
-    def initialize(capacity : UInt32 = BASE_INITIAL_CAPACITY, @renderer : Crystal2Day::Renderer = Crystal2Day.current_window.renderer)
+    def initialize(capacity : UInt32 = BASE_INITIAL_CAPACITY, @render_target : Crystal2Day::RenderTarget = Crystal2Day.current_window)
       @members = Array(Crystal2Day::Entity).new(initial_capacity: capacity)
 
       {% if CRYSTAL2DAY_CONFIGS_ANYOLITE %}
@@ -28,15 +28,17 @@ module Crystal2Day
 
     def add_entity(entity_type_name : String, position : Crystal2Day::Coords = Crystal2Day.xy, initial_param : Crystal2Day::ParamType = nil)
       entity_type = Crystal2Day.database.get_entity_type(entity_type_name)
-      new_entity = Crystal2Day::Entity.new(entity_type, renderer: @renderer)
+      new_entity = Crystal2Day::Entity.new(entity_type, render_target: @render_target)
       new_entity.position = position
       register_new_entity(new_entity, initial_param)
+      return new_entity
     end
 
     def add_entity(entity_type : Crystal2Day::EntityType, position : Crystal2Day::Coords = Crystal2Day.xy, initial_param : Crystal2Day::ParamType = nil)
-      new_entity = Crystal2Day::Entity.new(entity_type, renderer: @renderer)
+      new_entity = Crystal2Day::Entity.new(entity_type, render_target: @render_target)
       new_entity.position = position
       register_new_entity(new_entity, initial_param)
+      return new_entity
     end
 
     def register_new_entity(entity : Crystal2Day::Entity, initial_param : Crystal2Day::ParamType = nil)

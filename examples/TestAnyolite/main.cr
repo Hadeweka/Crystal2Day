@@ -7,8 +7,8 @@ alias CD = Crystal2Day
 CD.db.add_entity_proc("FigureHandleEvent") do |entity|
   event = Crystal2Day.last_event
   if valid_event = event
-    if valid_event.type == Crystal2Day::Event::WINDOW
-      puts "You triggered a Window Event!"
+    if valid_event.type == Crystal2Day::Event::WINDOW_MOUSE_ENTER
+      puts "You entered the window!"
     end
   end
 end
@@ -107,12 +107,12 @@ class CustomScene < CD::Scene
     camera.pin
 
     # TODO: Make it possible to load this from JSON
-    CD.im.set_key_table_entry("action_key", [CD::Keyboard::K_SPACE])
-    CD.im.set_key_table_entry("up", [CD::Keyboard::K_UP, CD::Keyboard::K_W])
-    CD.im.set_key_table_entry("down", [CD::Keyboard::K_DOWN, CD::Keyboard::K_S])
-    CD.im.set_key_table_entry("left", [CD::Keyboard::K_LEFT, CD::Keyboard::K_A])
-    CD.im.set_key_table_entry("right", [CD::Keyboard::K_RIGHT, CD::Keyboard::K_D])
-    CD.im.set_key_table_entry("fast_mode", [CD::Keyboard::K_L])
+    CD.im.set_key_table_entry("action_key", [CD::Keyboard::SPACE])
+    CD.im.set_key_table_entry("up", [CD::Keyboard::UP, CD::Keyboard::W])
+    CD.im.set_key_table_entry("down", [CD::Keyboard::DOWN, CD::Keyboard::S])
+    CD.im.set_key_table_entry("left", [CD::Keyboard::LEFT, CD::Keyboard::A])
+    CD.im.set_key_table_entry("right", [CD::Keyboard::RIGHT, CD::Keyboard::D])
+    CD.im.set_key_table_entry("fast_mode", [CD::Keyboard::L])
 
     self.collision_matrix.link(entity_groups["FigureGroup"])
     self.collision_matrix.link(entity_groups["FigureGroup"], maps["Map1"])
@@ -136,10 +136,8 @@ class CustomScene < CD::Scene
   end
 
   def handle_event(event)
-    if event.type == CD::Event::WINDOW
-      if event.as_window_event.event == CD::WindowEvent::CLOSE
-        CD.next_scene = nil
-      end
+    if event.is_quit_event?
+      CD.next_scene = nil
     end
 
     if CD.im.check_event_for_key_press(event, "action_key")

@@ -139,24 +139,18 @@ module Crystal2Day
   end
 
   def self.init(debug : Bool = false)
-    if LibSDL.init(LibSDL::INIT_EVERYTHING) != 0
+    # TODO: Do we need more flags?
+    if LibSDL.init(LibSDL::InitFlags::VIDEO | LibSDL::InitFlags::AUDIO) == 0
       Crystal2Day.error "Could not initialize SDL"
     end
     
-    if LibSDL.set_hint(LibSDL::HINT_RENDER_SCALE_QUALITY, "1") == 0
-      Crystal2Day.warning "Linear texture filtering not enabled!"
-    end
-
-    img_flags = LibSDL::IMGInitFlags::IMG_INIT_PNG
-    if (LibSDL.img_init(img_flags) | img_flags.to_i) == 0
-      Crystal2Day.error "Could not initialize SDL_image"
-    end
-
-    if LibSDL.ttf_init == -1
+    if LibSDL.ttf_init == 0
       Crystal2Day.error "Could not initialize SDL_ttf"
     end
 
-    if LibSDL.mix_open_audio(44100, LibSDL::MIX_DEFAULT_FORMAT, 2, 2048) < 0
+    spec = LibSDL::AudioSpec.new(freq: LibSDL::MIX_DEFAULT_FREQUENCY, format: LibSDL::MIX_DEFAULT_FORMAT, channels: LibSDL::MIX_DEFAULT_CHANNELS)
+
+    if LibSDL.mix_open_audio(0, pointerof(spec)) == 0
       Crystal2Day.error "Could not initialize SDL_mixer"
     end
 
@@ -205,16 +199,15 @@ module Crystal2Day
 
   def self.with_z_offset(z_offset : Number)
     if win = @@current_window
-      win.z_offset += z_offset.to_u8
-      yield nil
-      win.z_offset -= z_offset.to_u8
+      win.with_z_offset(z_offset) do
+        yield nil
+      end
     end
   end
 
   def self.with_view(view : Crystal2Day::View, z_offset : Number = 0u8)
     if win = @@current_window
-      self.with_z_offset(z_offset) do
-        win.draw view
+      win.with_view(view, z_offset) do
         yield nil
       end
     end
@@ -222,8 +215,7 @@ module Crystal2Day
 
   def self.with_pinned_view(view : Crystal2Day::View, z_offset : Number = 0u8)
     if win = @@current_window
-      self.with_z_offset(z_offset) do
-        win.pin view
+      win.with_pinned_view(view, z_offset) do
         yield nil
       end
     end
@@ -250,9 +242,9 @@ module Crystal2Day
   end
 
   def self.quit
+    # TODO: Close audio device if necessary
     LibSDL.mix_quit
     LibSDL.ttf_quit
-    LibSDL.img_quit
     LibSDL.quit
   end
 
