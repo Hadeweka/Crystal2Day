@@ -4,10 +4,7 @@ Crystal2Day is designed as a tool to develop games with Crystal fast.
 
 Less work for you, therefore more time for actual game design.
 
-NOTE: The main branch is currently using SDL 2, but this will eventually superseded by SDL 3 (as soon as SDL 3.2 officially releases).
-
-This branch will then be stored as a SDL 2 branch and become deprecated to focus on SDL 3 only.
-Most of the syntax will still be the same, but keep in mind that Crystal2Day is still in its development phase anyway.
+NOTE: This branch will NOT be supported anymore, this is just a backup of the SDL 2 version.
 
 # Why should I use Crystal2Day?
 
@@ -57,7 +54,7 @@ Note that its syntax may change (frequently) until version 1.0.0.
 ## Essential
 
 * Crystal (obviously)
-* SDL 2 (media library; SDL 3 will eventually replace this)
+* SDL 2 (media library; SDL 3 has replaced this in the main branch)
 
 ## Optional
 
@@ -118,70 +115,3 @@ Crystal2Day.run do
   Crystal2Day.main_routine
 end
 ```
-
-# Roadmap
-
-## Version releases
-
-### Version 0.1.0
-
-#### Features
-
-* Music and sounds
-* Textures, sprites, fonts, texts
-* Basic shapes (points, lines, boxes, circles, triangles, ellipses)
-* Z-Ordering
-* Scene system
-* Support for multiple windows
-* Framerate limiter
-* Maps and tilesets
-* Basic support for maps created with the Tiled editor
-* 2D collision routines
-* Entity hook system
-* Optional scripting using Anyolite
-* Entities with flexible states and multiple script pages
-* Entity collision system
-* Simple game state
-* Resource management system
-* Special plugin system
-* Imgui support
-
-#### Urgent todo list
-
-Currently none
-
-#### Open design questions:
-
-* How should the examples be structured?
-* What is the best way to install additional features?
-* Should all shards be installed, but their postinstall hooks only be triggered when desired?
-* What examples should be made?
-* Could entities be bound to maps?
-* How should tilesets with overlapping segments be implemented?
-* Is the current map streaming way really okay?
-
-### Version 1.0.0
-
-#### Features
-
-* [ ] Documentation
-
-### Idea list for future versions
-
-#### Features
-
-* [ ] Game controller support
-* [ ] Entity parent-children system with memory management
-* [ ] Custom shape designs (colors, textures)
-* [ ] Quadriliteral shapes
-* [ ] Map entity group optimization using quadtrees
-* [ ] Loading scenes and related objects from JSON files
-* [ ] Also allow symbols as Crystal hash indices
-* [ ] Particle generator
-* [ ] Hitshapes and hurtshapes
-* [ ] Bytecode loading
-* [ ] Adding static JSON resources at compiletime
-* [ ] Data serializing
-* [ ] Data obfuscation
-* [ ] Animation phase shift patterns
-* [ ] Various optimizations
