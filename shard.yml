@@ -7,7 +7,7 @@ authors:
 dependencies:
   sdl-crystal-bindings:
     github: Hadeweka/SDL-Crystal-Bindings
-    branch: main
+    branch: sdl2v0_2_1
   tiled-crystal:
     github: Hadeweka/tiled-crystal
     branch: main
