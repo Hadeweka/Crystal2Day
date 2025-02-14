@@ -37,6 +37,26 @@ module Crystal2Day
       @render_queue.delete_static_content
     end
 
+    def with_z_offset(z_offset : Number)
+      @z_offset += z_offset.to_u8
+      yield nil
+      @z_offset -= z_offset.to_u8
+    end
+  
+    def with_view(view : Crystal2Day::View, z_offset : Number = 0u8)
+      with_z_offset(z_offset) do
+        self.draw view
+        yield nil
+      end
+    end
+  
+    def with_pinned_view(view : Crystal2Day::View, z_offset : Number = 0u8)
+      with_z_offset(z_offset) do
+        self.pin view
+        yield nil
+      end
+    end
+
     def render
       @renderer.reset
       @render_queue.draw

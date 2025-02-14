@@ -17,7 +17,6 @@ module Crystal2Day
     # If positive, this will discretize every motion into steps with the given size in each direction
     DEFAULT_OPTION_MOVEMENT_DISCRETIZATION = -1
 
-    # TODO: This does currently nothing
     property z : UInt8 = 0
 
     @state = Hash(String, Crystal2Day::Parameter).new(initial_capacity: STATE_INITIAL_CAPACITY)
@@ -350,8 +349,10 @@ module Crystal2Day
     # TODO: Integrate parent-child offset
     # TODO: Is there any way to enable pinning this?
     def draw(offset : Coords = Crystal2Day.xy)
-      @sprites.each do |sprite|
-        sprite.draw(@position + offset)
+      Crystal2Day.with_z_offset(@z) do
+        @sprites.each do |sprite|
+          sprite.draw(@position + offset)
+        end
       end
     end
 

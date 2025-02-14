@@ -199,16 +199,15 @@ module Crystal2Day
 
   def self.with_z_offset(z_offset : Number)
     if win = @@current_window
-      win.z_offset += z_offset.to_u8
-      yield nil
-      win.z_offset -= z_offset.to_u8
+      win.with_z_offset(z_offset) do
+        yield nil
+      end
     end
   end
 
   def self.with_view(view : Crystal2Day::View, z_offset : Number = 0u8)
     if win = @@current_window
-      self.with_z_offset(z_offset) do
-        win.draw view
+      win.with_view(view, z_offset) do
         yield nil
       end
     end
@@ -216,8 +215,7 @@ module Crystal2Day
 
   def self.with_pinned_view(view : Crystal2Day::View, z_offset : Number = 0u8)
     if win = @@current_window
-      self.with_z_offset(z_offset) do
-        win.pin view
+      win.with_pinned_view(view, z_offset) do
         yield nil
       end
     end
