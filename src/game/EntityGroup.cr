@@ -31,12 +31,14 @@ module Crystal2Day
       new_entity = Crystal2Day::Entity.new(entity_type, render_target: @render_target)
       new_entity.position = position
       register_new_entity(new_entity, initial_param)
+      return new_entity
     end
 
     def add_entity(entity_type : Crystal2Day::EntityType, position : Crystal2Day::Coords = Crystal2Day.xy, initial_param : Crystal2Day::ParamType = nil)
       new_entity = Crystal2Day::Entity.new(entity_type, render_target: @render_target)
       new_entity.position = position
       register_new_entity(new_entity, initial_param)
+      return new_entity
     end
 
     def register_new_entity(entity : Crystal2Day::Entity, initial_param : Crystal2Day::ParamType = nil)
