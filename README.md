@@ -1,3 +1,9 @@
+NOTE: This repository remains for compatibility.
+
+For the current version, please refer to:
+
+https://github.com/Crystal2Day/Crystal2Day
+
 # What is Crystal2Day?
 
 Crystal2Day is designed as a tool to develop games with Crystal fast.
